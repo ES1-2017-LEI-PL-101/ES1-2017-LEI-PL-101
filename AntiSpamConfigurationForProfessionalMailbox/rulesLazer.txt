@@ -1,2 +1,1 @@
-diagrama de classes do software desenvolvido pelo grupo. O diagrama deverá ser gerado
-com recurso a uma ferramenta de reverse engineering (plugin Eclipse ModelGoon), ou seja, o diagrama deve ser gerado a partir do código fonte do projeto.
+ficheiro gerado pelo software desenvolvido pelos grupos que implementam a variante do projeto para filtragem antispam de caixas de email usadas para fins de lazer (não profissional);

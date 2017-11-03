@@ -1,0 +1,2 @@
+diagrama de classes do software desenvolvido pelo grupo. O diagrama deverá ser gerado
+com recurso a uma ferramenta de reverse engineering (plugin Eclipse ModelGoon), ou seja, o diagrama deve ser gerado a partir do código fonte do projeto.

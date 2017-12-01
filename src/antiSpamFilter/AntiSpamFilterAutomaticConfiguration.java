@@ -16,6 +16,8 @@ import org.uma.jmetal.util.experiment.component.*;
 import org.uma.jmetal.util.experiment.util.ExperimentAlgorithm;
 import org.uma.jmetal.util.experiment.util.ExperimentProblem;
 
+import Tools.Debug;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,14 +27,19 @@ public class AntiSpamFilterAutomaticConfiguration {
   private static final int INDEPENDENT_RUNS = 5 ;
 
   public static void main(String[] args) throws IOException {
+	Debug.getInstance().IN("AntiSpamFilterAutomaticConfiguration [MAIN]");
     String experimentBaseDirectory = "experimentBaseDirectory";
 
     List<ExperimentProblem<DoubleSolution>> problemList = new ArrayList<>();
     problemList.add(new ExperimentProblem<>(new AntiSpamFilterProblem()));
-
+    
+    //Debug.getInstance().msg("ProblemList"+problemList.toString());
+    
     List<ExperimentAlgorithm<DoubleSolution, List<DoubleSolution>>> algorithmList =
             configureAlgorithmList(problemList);
-
+    
+    //Debug.getInstance().msg("algorithmList"+algorithmList.toString());
+    
     Experiment<DoubleSolution, List<DoubleSolution>> experiment =
         new ExperimentBuilder<DoubleSolution, List<DoubleSolution>>("AntiSpamStudy")
             .setAlgorithmList(algorithmList)
@@ -45,30 +52,38 @@ public class AntiSpamFilterAutomaticConfiguration {
             .setIndependentRuns(INDEPENDENT_RUNS)
             .setNumberOfCores(8)
             .build();
-
+    
+    //Debug.getInstance().msg("experiment"+experiment.toString());
+    
     new ExecuteAlgorithms<>(experiment).run();
     new GenerateReferenceParetoSetAndFrontFromDoubleSolutions(experiment).run();
     new ComputeQualityIndicators<>(experiment).run() ;
     new GenerateLatexTablesWithStatistics(experiment).run() ;
     new GenerateBoxplotsWithR<>(experiment).setRows(1).setColumns(1).run() ;
     
+    Debug.getInstance().OUT("AntiSpamFilterAutomaticConfiguration [MAIN]");
   }
 
   static List<ExperimentAlgorithm<DoubleSolution, List<DoubleSolution>>> configureAlgorithmList(
           List<ExperimentProblem<DoubleSolution>> problemList) {
-    List<ExperimentAlgorithm<DoubleSolution, List<DoubleSolution>>> algorithms = new ArrayList<>();
+	  Debug.getInstance().IN("AntiSpamFilterAutomaticConfiguration [configureAlgorithmList]");
+   
+	  List<ExperimentAlgorithm<DoubleSolution, List<DoubleSolution>>> algorithms = new ArrayList<>();
 
+	  //Debug.getInstance().msg("algorithms "+algorithms.toString());
     for (int i = 0; i < problemList.size(); i++) {
       Algorithm<List<DoubleSolution>> algorithm = new NSGAIIBuilder<>(
               problemList.get(i).getProblem(),
               new SBXCrossover(1.0, 5),
-              new PolynomialMutation(1.0 / problemList.get(i).getProblem().getNumberOfVariables(), 10.0))
-              .setMaxEvaluations(25000)
-              .setPopulationSize(100)
-              .build();
+              new PolynomialMutation(1.0 / problemList.get(i).getProblem().getNumberOfVariables(), 10.0)
+              )
+      .setMaxEvaluations(25000)
+      .setPopulationSize(100)
+      .build();
       algorithms.add(new ExperimentAlgorithm<>(algorithm, "NSGAII", problemList.get(i).getTag()));
+      //Debug.getInstance().msg("algorithms "+algorithms.toString());
     }
-   
+    Debug.getInstance().OUT("AntiSpamFilterAutomaticConfiguration [configureAlgorithmList]");
     return algorithms;
   }
 

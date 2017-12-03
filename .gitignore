@@ -1,3 +1,11 @@
 /bin/
 *.cf
 *.cf
+*.cf
+*.txt
+*.tsv
+*.tex
+*.rf
+*.rs
+*.log
+*.txt

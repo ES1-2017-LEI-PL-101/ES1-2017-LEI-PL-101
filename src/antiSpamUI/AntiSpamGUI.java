@@ -21,7 +21,7 @@ public class AntiSpamGUI {
 
 	private void start() {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setPreferredSize(new Dimension(500, 500));
+		frame.getContentPane().setPreferredSize(new Dimension(500, 600));
 		frame.getContentPane().setLayout(new GridLayout(0,1));
 		frame.pack();
 		frame = Frame.createFrame(frame);

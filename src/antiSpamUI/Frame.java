@@ -3,6 +3,8 @@
  */
 package antiSpamUI;
 
+import java.awt.BorderLayout;
+import java.awt.Button;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -11,56 +13,66 @@ import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.Label;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
 
 import javax.swing.BorderFactory;
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
+import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
 
+import org.apache.commons.math3.optim.nonlinear.scalar.noderiv.BOBYQAOptimizer;
+
 public class Frame {
+	
+	private JFrame frame;
 
-	public static JFrame createFrame(JFrame frame) {
-
-		JPanel mainPanel = new JPanel(new GridLayout(0, 1));
-		mainPanel.add(createSpinnersPanel());
-		mainPanel.add(createResultPanel("areaFPManual", "areaFNManual", true));
-		mainPanel.add(createResultPanel("areaFPAuth", "areaFNAuth", false));
-		mainPanel.add(createPathsPanel());
-		mainPanel.add(createButtons());
-		
+	public Frame(JFrame frame) {
+		this.frame = frame;
+		JPanel mainPanel = new JPanel(new BorderLayout());
+		mainPanel.add(createSpinnersPanel(), BorderLayout.PAGE_START);
+		JPanel centerPanel = new JPanel(new GridLayout(0, 1));
+		centerPanel.add(createRulesPanel("rulesManual", "weightManual", true));
+		centerPanel.add(createRulesPanel("rulesAuth", "weightAuth", false));
+		centerPanel.add(createPathsPanel());
+		mainPanel.add(createButtons(), BorderLayout.SOUTH);
+		mainPanel.add(centerPanel, BorderLayout.CENTER);
 
 		frame.add(mainPanel);
 
-		return frame;
-
 	}
 
+	public JFrame getFrame () {
+		return this.frame;
+	}
 	private static JPanel createSpinnersPanel() {
 		JPanel topLayout = new JPanel(new GridLayout(0, 2));
-		JLabel topTextManual = new JLabel("Manual Configuration");
-		JLabel topTextAuth = new JLabel("Auth Configuration");
-
-		topLayout.add(topTextManual);
-		topLayout.add(topTextAuth);
 
 		JPanel spinnerManualLayout = new JPanel(new GridLayout(0, 4));
 		JPanel textAuthLayout = new JPanel(new GridLayout(0, 4));
 
-		JSpinner spinnerFP = new JSpinner();
+		JTextField spinnerFP = new JTextField("-");
 		spinnerFP.setName("spinnerFP");
-		JSpinner spinnerFN = new JSpinner();
-		spinnerFP.setName("spinnerFN");
+		spinnerFP.setEditable(false);
+		JTextField spinnerFN = new JTextField("-");
+		spinnerFN.setName("spinnerFN");
+		spinnerFN.setEditable(false);
 
-		JTextField fieldAuthFP = new JTextField("0");
+		JTextField fieldAuthFP = new JTextField("-");
 		fieldAuthFP.setName("authFP");
 		fieldAuthFP.setEditable(false);
-		JTextField fieldAuthFN = new JTextField("0");
+		JTextField fieldAuthFN = new JTextField("-");
 		fieldAuthFN.setName("authFN");
 		fieldAuthFN.setEditable(false);
 
@@ -81,33 +93,36 @@ public class Frame {
 
 	}
 
-	private static JPanel createResultPanel(String nameOne, String nameTwo, boolean enable) {
+	private static JPanel createRulesPanel(String nameOne, String nameTwo, boolean enable) {
 
+		DefaultListModel<String> rulesList = new DefaultListModel<>();
+		DefaultListModel<Integer> weightList = new DefaultListModel<>();
+		
 		Border blackline = BorderFactory.createLineBorder(Color.black);
-		JPanel listPanel = new JPanel(new GridLayout(0, 2));
+		JPanel listPanel = new JPanel(new GridLayout(0,1));
+		
+		String[] columnNames = {"Rules", "Weight"};
+		
+		Object[][] data = {};
+				
+				
 
-		JList<String> areaFP = new JList<>();
-		areaFP.setName(nameOne);
-		areaFP.setBorder(blackline);
-		areaFP.setEnabled(enable);
-
-		JList<String> areaFN = new JList<>();
-		areaFN.setName(nameTwo);
-		areaFN.setBorder(blackline);
-		areaFN.setEnabled(enable);
-
-		if (enable == true) {
-			listPanel = insertTitle(listPanel, 2, "Manual Configuration");
-		} else {
-			listPanel = insertTitle(listPanel, 2, "Auth Configuration");
+		JTable table = new JTable(data, columnNames);
+		
+				
+		if (enable == false) {
+			table.setBackground(Color.LIGHT_GRAY);
+			table.setEnabled(false);
 		}
 		
-		listPanel.add(areaFP);
-		listPanel.add(areaFN);
-		
+		JScrollPane scrollPane = new JScrollPane(table);
+		table.setFillsViewportHeight(true);
 
+		listPanel.add(scrollPane);
+		
 		return listPanel;
 	}
+	
 
 	private static JPanel createPathsPanel() {
 		JPanel gridLayout = new JPanel(new GridLayout(0, 3));
@@ -119,6 +134,13 @@ public class Frame {
 		choisenPathRules.setEnabled(false);
 		JButton buttonChangeRulesPath = new JButton("Browse");
 		buttonChangeRulesPath.setName("buttonRules");
+		buttonChangeRulesPath.addActionListener(e -> {
+			
+		e.getActionCommand();
+		JFileChooser theFileChooser = (JFileChooser)e.getSource();
+		theFileChooser.getSelectedFile();
+		
+		});
 
 		JTextField pathHam = new JTextField("Ham.log");
 		JTextField choisenPathHam = new JTextField();
@@ -185,4 +207,14 @@ public class Frame {
 		}
 		return panel;
 	}
+
+//	private ActionListener actionListener = new ActionListener() {
+//		
+//		@Override
+//	      public void actionPerformed(ActionEvent actionEvent) {
+//			Object o = actionEvent.getSource();
+//	       if (o instanceof Button) {
+//	    	   if (((Button) o).getName()).equals("buttonRules")
+//	       }
+//	    };
 }

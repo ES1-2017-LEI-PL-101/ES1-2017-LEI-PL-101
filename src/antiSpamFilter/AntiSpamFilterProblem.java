@@ -2,17 +2,13 @@ package antiSpamFilter;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.uma.jmetal.problem.impl.AbstractDoubleProblem;
 import org.uma.jmetal.solution.DoubleSolution;
 
 import Tools.Debug;
 
 public class AntiSpamFilterProblem extends AbstractDoubleProblem {
-
-	  /**
-	 * 
-	 */
+	
 	private static final long serialVersionUID = -8036102488474183100L;
 	private String [] rulesDummy = {"BAYES_05",
 			"SPF_FAIL",

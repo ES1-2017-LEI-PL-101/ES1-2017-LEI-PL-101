@@ -23,11 +23,11 @@ public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 	
 	public AntiSpamFilterProblem() {
 	    // 10 variables (anti-spam filter rules) by default 
-		//TODO getNumberOfRules
+		//TODO getNumberOfRules file rules
 		this(10);  
 	    
 		
-	    //TODO Create GetPath's to Rules, Ham, Spam 
+	    //TODO Create GetPath's to Rules, Ham, Spam of GUI
 	    Debug.getInstance();
 		Debug.IN("AntiSpamFilterProblem [Constructor]");
 	    Debug.OUT("AntiSpamFilterProblem [Constructor]");
@@ -85,7 +85,7 @@ public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 	    //TODO HAM
 	    fx[0] = 0.0; //FP
 	    for (String result : hamDummy){
-	    	//if relesDummy Contains result sum 
+	    	//if rulesDummy Contains result sum 
 	    	//create list's
 	    	for(int i=0; i!=rulesDummy.length; i++){
 	    		fx[0] += x[i];

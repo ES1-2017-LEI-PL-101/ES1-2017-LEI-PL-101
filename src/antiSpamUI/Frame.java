@@ -3,6 +3,7 @@
  */
 package antiSpamUI;
 
+import java.awt.Adjustable;
 import java.awt.BorderLayout;
 import java.awt.Button;
 import java.awt.Color;
@@ -16,6 +17,7 @@ import java.awt.Label;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.IOException;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
@@ -25,18 +27,26 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.border.Border;
 
 import org.apache.commons.math3.optim.nonlinear.scalar.noderiv.BOBYQAOptimizer;
 
+import fileReader.FileLoader;
+
 public class Frame {
 	
 	private JFrame frame;
+
+	private JTextField choisenPathRules;
+	private JTextField choisenPathHam;
+	private JTextField choisenPathSpam;
 
 	public Frame(JFrame frame) {
 		this.frame = frame;
@@ -120,39 +130,54 @@ public class Frame {
 
 		listPanel.add(scrollPane);
 		
+		
 		return listPanel;
+		
+	
 	}
 	
 
-	private static JPanel createPathsPanel() {
+	private JPanel createPathsPanel() {
 		JPanel gridLayout = new JPanel(new GridLayout(0, 3));
 		
 		gridLayout = insertEmptyRow(gridLayout, 3);
 
 		JTextField pathRules = new JTextField("Rules.cf");
-		JTextField choisenPathRules = new JTextField();
+		choisenPathRules = new JTextField();
 		choisenPathRules.setEnabled(false);
-		JButton buttonChangeRulesPath = new JButton("Browse");
+		JButton buttonChangeRulesPath = new JButton("Browse Rules");
 		buttonChangeRulesPath.setName("buttonRules");
-		buttonChangeRulesPath.addActionListener(e -> {
-			
-		e.getActionCommand();
-		JFileChooser theFileChooser = (JFileChooser)e.getSource();
-		theFileChooser.getSelectedFile();
 		
-		});
+		buttonChangeRulesPath.addActionListener(actionListener);
 
+		JScrollPane scrollR = new JScrollPane(choisenPathRules);
+		scrollR.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+		
+		
+		
 		JTextField pathHam = new JTextField("Ham.log");
-		JTextField choisenPathHam = new JTextField();
+		choisenPathHam = new JTextField();
 		choisenPathHam.setEnabled(false);
-		JButton buttonChangeHamPath = new JButton("Browse");
+		JButton buttonChangeHamPath = new JButton("Browse Ham");
 		buttonChangeRulesPath.setName("buttonHam");
+		
+		buttonChangeHamPath.addActionListener(actionListener);
+		
+		JScrollPane scrollH = new JScrollPane(choisenPathHam);
+		scrollH.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 
+		
 		JTextField pathSpam = new JTextField("Spam.log");
-		JTextField choisenPathSpam = new JTextField();
+		choisenPathSpam = new JTextField();
 		choisenPathRules.setEnabled(false);
-		JButton buttonChangeSpamPath = new JButton("Browse");
+		JButton buttonChangeSpamPath = new JButton("Browse Spam");
 		buttonChangeRulesPath.setName("buttonSpam");
+		
+		buttonChangeSpamPath.addActionListener(actionListener);
+		
+		JScrollPane scrollS = new JScrollPane(choisenPathSpam);
+		scrollS.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+
 
 		gridLayout.add(pathRules);
 		gridLayout.add(choisenPathRules);
@@ -168,19 +193,51 @@ public class Frame {
 
 		return gridLayout;
 	}
+	
+	
 
 	private static JPanel createButtons() {
 		JPanel buttonsLayout = new JPanel(new GridLayout(0, 3));
 		
 		JButton testButton = new JButton("Run Test");
 		testButton.setName("test");
+		
+		//TODO
+		testButton.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
 
+		
 		JButton generateButton = new JButton("Generate");
 		generateButton.setName("generate");
+		
+		//TODO
+		generateButton.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
+		
 
 		JButton saveButton = new JButton("Save");
 		saveButton.setName("save");
+		
+		//TODO
+		saveButton.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
 
+		
 		saveButton.setPreferredSize(new Dimension(100, 10));
 
 		buttonsLayout = insertEmptyRow(buttonsLayout, 3);
@@ -192,6 +249,7 @@ public class Frame {
 		return buttonsLayout;
 
 	}
+		
 	
 	private static JPanel insertEmptyRow (JPanel panel, int columns) {
 		for (int i = 0; i != columns; i++) {
@@ -208,13 +266,47 @@ public class Frame {
 		return panel;
 	}
 
-//	private ActionListener actionListener = new ActionListener() {
-//		
-//		@Override
-//	      public void actionPerformed(ActionEvent actionEvent) {
-//			Object o = actionEvent.getSource();
-//	       if (o instanceof Button) {
-//	    	   if (((Button) o).getName()).equals("buttonRules")
-//	       }
-//	    };
+	private ActionListener actionListener = new ActionListener() {
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			e.getActionCommand();
+			JFileChooser fileChooser = new JFileChooser();
+			int returnName = fileChooser.showOpenDialog(null);
+			String path = null;
+			
+			if (returnName == JFileChooser.APPROVE_OPTION) {
+	            File f = fileChooser.getSelectedFile();
+	            if (f != null) { // Make sure the user didn't choose a directory.
+	           	 
+	                path = f.getAbsolutePath();//get the absolute path to selected file
+	            }
+			}
+	            
+			System.out.println("Path" + path);
+			
+		
+			if(e.getActionCommand().equals("Browse Rules")) {
+				FileLoader.readFile(path);
+				choisenPathRules.setText(path);
+			}
+			else if(e.getActionCommand().equals("Browse Ham")) {
+				FileLoader.readFile(path);
+				choisenPathHam.setText(path);
+
+			}
+			else if(e.getActionCommand().equals("Browse Spam")) {
+				FileLoader.readFile(path);
+				choisenPathSpam.setText(path);
+
+			}
+			
+			
+		}
+	};
+
+	
+	
+	
+	
 }

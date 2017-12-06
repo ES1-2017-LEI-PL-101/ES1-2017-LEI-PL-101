@@ -38,7 +38,7 @@ import javax.swing.border.Border;
 
 import org.apache.commons.math3.optim.nonlinear.scalar.noderiv.BOBYQAOptimizer;
 
-import fileReader.FileScanner;
+import fileReader.FileLoader;
 
 public class Frame {
 	
@@ -287,16 +287,16 @@ public class Frame {
 			
 		
 			if(e.getActionCommand().equals("Browse Rules")) {
-				FileScanner.readFile(path);
+				FileLoader.readFile(path);
 				choisenPathRules.setText(path);
 			}
 			else if(e.getActionCommand().equals("Browse Ham")) {
-				FileScanner.readFile(path);
+				FileLoader.readFile(path);
 				choisenPathHam.setText(path);
 
 			}
 			else if(e.getActionCommand().equals("Browse Spam")) {
-				FileScanner.readFile(path);
+				FileLoader.readFile(path);
 				choisenPathSpam.setText(path);
 
 			}

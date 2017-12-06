@@ -1,28 +1,31 @@
 package antiSpamFilter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
 import org.uma.jmetal.problem.impl.AbstractDoubleProblem;
 import org.uma.jmetal.solution.DoubleSolution;
 
 import Tools.Debug;
+import fileReader.FileLoader;
 
 public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 	
 	private static final long serialVersionUID = -8036102488474183100L;
-	private String [] rulesDummy = {"BAYES_05",
-			"SPF_FAIL",
-			"SUBJECT_NEEDS_ENCODING",
-						};
-	private String [] hamDummy = {"BAYES_00","HTML_FONT_SIZE_LARGE",	"HTML_MESSAGE" ,	"MIME_HTML_ONLY",	"SPF_FAIL"};
-	private String [] SpamDummy = {"BAYES_99","BUG6152_INVALID_DATE_TZ_ABSURD","DATE_IN_PAST_06_12","EXCUSE_4"};
+	
+	private HashMap <String,Double> Rules = FileLoader.getInstance().getRulesMap();
+	private HashMap<String, ArrayList<String>> Ham = FileLoader.getInstance().getHamRulesMap();
+	private HashMap<String, ArrayList<String>> Spam = FileLoader.getInstance().getSpamRulesMap();
+	
 	
 	public AntiSpamFilterProblem() {
 	    // 10 variables (anti-spam filter rules) by default 
 		//TODO getNumberOfRules file rules
-		this(10);  
-	    
-		
+		this(FileLoader.getInstance().getRulesMap().size());  
+	   
 	    //TODO Create GetPath's to Rules, Ham, Spam of GUI
 	    Debug.getInstance();
 		Debug.IN("AntiSpamFilterProblem [Constructor]");
@@ -55,7 +58,7 @@ public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 	      lowerLimit.add(-5.0);
 	      upperLimit.add(5.0);
 	    }
-	    
+	   
 	    setLowerLimit(lowerLimit);
 	    setUpperLimit(upperLimit);
 	    
@@ -66,50 +69,44 @@ public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 	  /** Evaluate() method */
 	  public void evaluate(DoubleSolution solution){
 		Debug.IN("AntiSpamFilterProblem [evaluate(DoubleSolution)]");
+		
 		double aux, xi, xj;
 		
 		double[] fx = new double[getNumberOfObjectives()];
 	    double[] x = new double[getNumberOfVariables()];
 	    String msg = "";
 	    
-	    for (int i = 0; i < solution.getNumberOfVariables(); i++) {
-	      x[i] = solution.getVariableValue(i) ;
-	      Debug.msg("x : "+x[i]);
+	    
+//	    for (int i = 0; i < solution.getNumberOfVariables(); i++) {
+//	      x[i] = solution.getVariableValue(i) ;
+//	      Debug.msg("x : "+x[i]);
+//	    }
+	    
+	    int iterator = 0;
+	    for (HashMap.Entry<String, Double> rule : Rules.entrySet()){
+			rule.setValue(solution.getVariableValue(iterator));
+	    	iterator++;
 	    }
 	    
 	    
-	    //TODO HAM
+	    //TODO HAM 
+	    //if rulesDummy Contains result sum 
 	    fx[0] = 0.0; //FP
-	    for (String result : hamDummy){
-	    	//if rulesDummy Contains result sum 
-	    	//create list's
-	    	for(int i=0; i!=rulesDummy.length; i++){
-	    		fx[0] += x[i];
+	    for (Entry<String, ArrayList<String>> hamRule : Ham.entrySet()){
+	    	if(Rules.containsKey(hamRule.getKey())){
+	    		fx[0] += Rules.get(hamRule.getKey());
 	    	}
 	    }
-	    
-	   /*
-	    for (int var = 0; var < solution.getNumberOfVariables() - 1; var++) {
-	      xi = x[var] * x[var];
-	      xj = x[var + 1] * x[var + 1];
-	      aux = (-0.2) * Math.sqrt(xi + xj);
-	      fx[0] += (-10.0) * Math.exp(aux);
-	    }
-	    	Debug.msg("FX [0] = "+ fx[0]);
-	    */
-	    
-	    
-	    
+	    Debug.msg("FX [0] = "+ fx[0]);
 	    
 	    //TODO SPAM
 	    fx[1] = 0.0; //FN
-	    /*
-	    for (int var = 0; var < solution.getNumberOfVariables(); var++) {
-	      fx[1] += Math.pow(Math.abs(x[var]), 0.8) +
-	        5.0 * Math.sin(Math.pow(x[var], 3.0));
+	    for (Entry<String, ArrayList<String>> spamRule : Spam.entrySet()){
+	    	if(Rules.containsKey(spamRule.getKey())){
+	    		fx[1] += Rules.get(spamRule.getKey());
+	    	}
 	    }
-	    	Debug.msg("FX [1] = "+ fx[1]);
-	   */
+	    Debug.msg("FX [1] = "+ fx[1]);
 	    
 	    
 	    solution.setObjective(0, fx[0]); //objective 0
@@ -118,5 +115,12 @@ public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 	  }
 	  
 	  
+	  //Este petodo existe apenas para efeitos de teste antes da finalização do fileReader
+	  private void insertDummyValues(){
+		  Rules.put("BAYES_05", -1.0);
+		  Rules.put("SPF_FAIL", -1.0);
+		  Rules.put("SUBJECT_NEEDS_ENCODING", -1.0);
+	  }
+
 	  
 	}

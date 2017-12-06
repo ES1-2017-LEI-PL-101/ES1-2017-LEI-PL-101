@@ -76,19 +76,19 @@ public class FileLoader {
 	}
 	
 	//Test file to hashMap
-	public static void main(String[] args) {
-		FileLoader.getInstance().readFile("AntiSpamConfigurationForBalancedProfessionalAndLeisureMailbox/rules.cf");
-		FileLoader.getInstance().readLogFile("AntiSpamConfigurationForBalancedProfessionalAndLeisureMailbox/ham.log");
-		System.out.println(FileLoader.getInstance().getRulesMap().toString());
-		System.out.println(FileLoader.getInstance().getHamRulesMap().toString());
-		
-		//FileLoader rulesFileScanner = new FileLoader("AntiSpamConfigurationForBalancedProfessionalAndLeisureMailbox/rules.cf");
-		//FileLoader hamFileScanner = new FileLoader("/ES1-2017/AntiSpamConfigurationForBalancedProfessionalAndLeisureMailbox/ham.log");
-		//FileLoader spamFileScanner = new FileLoader("/ES1-2017/AntiSpamConfigurationForBalancedProfessionalAndLeisureMailbox/spam.log");
-		//System.out.println(rulesFileScanner.getRulesMap());
-		//System.out.println(hamFileScanner.getLogMap());
-		//System.out.println(spamFileScanner.getLogMap());
-	}
+//	public static void main(String[] args) {
+//		FileLoader.getInstance().readFile("AntiSpamConfigurationForBalancedProfessionalAndLeisureMailbox/rules.cf");
+//		FileLoader.getInstance().readLogFile("AntiSpamConfigurationForBalancedProfessionalAndLeisureMailbox/ham.log");
+//		System.out.println(FileLoader.getInstance().getRulesMap().toString());
+//		System.out.println(FileLoader.getInstance().getHamRulesMap().toString());
+//		
+//		//FileLoader rulesFileScanner = new FileLoader("AntiSpamConfigurationForBalancedProfessionalAndLeisureMailbox/rules.cf");
+//		//FileLoader hamFileScanner = new FileLoader("/ES1-2017/AntiSpamConfigurationForBalancedProfessionalAndLeisureMailbox/ham.log");
+//		//FileLoader spamFileScanner = new FileLoader("/ES1-2017/AntiSpamConfigurationForBalancedProfessionalAndLeisureMailbox/spam.log");
+//		//System.out.println(rulesFileScanner.getRulesMap());
+//		//System.out.println(hamFileScanner.getLogMap());
+//		//System.out.println(spamFileScanner.getLogMap());
+//	}
 	
 	public HashMap<String, Double> getRulesMap() {
 		return rulesMap;

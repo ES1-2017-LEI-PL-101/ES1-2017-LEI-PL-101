@@ -81,7 +81,7 @@ public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 //	      x[i] = solution.getVariableValue(i) ;
 //	      Debug.msg("x : "+x[i]);
 //	    }
-	    
+	    //verificar ordfem do hashmaplinked -> sort by key order
 	    int iterator = 0;
 	    for (HashMap.Entry<String, Double> rule : Rules.entrySet()){
 			rule.setValue(solution.getVariableValue(iterator));
@@ -90,7 +90,8 @@ public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 	    
 	    
 	    //TODO HAM 
-	    //if rulesDummy Contains result sum 
+	    //check if is FN or FP and countTotal -> send count to setObjective
+	    // calcule FN e FP to auth and manual configuration
 	    fx[0] = 0.0; //FP
 	    for (Entry<String, ArrayList<String>> hamRule : Ham.entrySet()){
 	    	if(Rules.containsKey(hamRule.getKey())){
@@ -109,8 +110,8 @@ public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 	    Debug.msg("FX [1] = "+ fx[1]);
 	    
 	    
-	    solution.setObjective(0, fx[0]); //objective 0
-	    solution.setObjective(1, fx[1]); //objective 1
+	    solution.setObjective(0, fx[0]); //objective 0 fx[0] will be subst by FN
+	    solution.setObjective(1, fx[1]); //objective 1 fx[1] will be subst by FP
 	    Debug.OUT("AntiSpamFilterProblem [evaluate(DoubleSolution)]");
 	  }
 	  

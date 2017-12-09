@@ -79,6 +79,9 @@ public class Frame {
 		spinnerFN.setName("spinnerFN");
 		spinnerFN.setEditable(false);
 
+		//lê dos files AntiSpamFilterProblem.NSGAII -> Pesos e FN/FP
+		// AntiSpamConfigurationForLeisureMailbox -> escolher menor FN
+		
 		JTextField fieldAuthFP = new JTextField("-");
 		fieldAuthFP.setName("authFP");
 		fieldAuthFP.setEditable(false);
@@ -212,6 +215,8 @@ public class Frame {
 		});
 
 		
+		//instanciar AntiSpamConfiguration e correr o Main
+		// lançar os fixeiros R e tex quando gerar
 		JButton generateButton = new JButton("Generate");
 		generateButton.setName("generate");
 		
@@ -224,7 +229,6 @@ public class Frame {
 			}
 		});
 		
-
 		JButton saveButton = new JButton("Save");
 		saveButton.setName("save");
 		

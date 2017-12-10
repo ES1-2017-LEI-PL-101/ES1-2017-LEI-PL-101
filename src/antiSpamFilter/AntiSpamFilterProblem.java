@@ -1,7 +1,9 @@
 package antiSpamFilter;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -16,9 +18,9 @@ public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 	
 	private static final long serialVersionUID = -8036102488474183100L;
 	
-	private HashMap <String,Double> Rules = FileLoader.getInstance().getRulesMap();
-	private HashMap<String, ArrayList<String>> Ham = FileLoader.getInstance().getHamRulesMap();
-	private HashMap<String, ArrayList<String>> Spam = FileLoader.getInstance().getSpamRulesMap();
+	private LinkedHashMap <String,Double> rules = FileLoader.getInstance().getRulesMap();
+	private LinkedHashMap<String, ArrayList<String>> ham = FileLoader.getInstance().getHamRulesMap();
+	private LinkedHashMap<String, ArrayList<String>> spam = FileLoader.getInstance().getSpamRulesMap();
 	
 	
 	public AntiSpamFilterProblem() {
@@ -83,7 +85,7 @@ public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 //	    }
 	    //verificar ordfem do hashmaplinked -> sort by key order
 	    int iterator = 0;
-	    for (HashMap.Entry<String, Double> rule : Rules.entrySet()){
+	    for (HashMap.Entry<String, Double> rule : rules.entrySet()){
 			rule.setValue(solution.getVariableValue(iterator));
 	    	iterator++;
 	    }
@@ -93,18 +95,18 @@ public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 	    //check if is FN or FP and countTotal -> send count to setObjective
 	    // calcule FN e FP to auth and manual configuration
 	    fx[0] = 0.0; //FP
-	    for (Entry<String, ArrayList<String>> hamRule : Ham.entrySet()){
-	    	if(Rules.containsKey(hamRule.getKey())){
-	    		fx[0] += Rules.get(hamRule.getKey());
+	    for (Entry<String, ArrayList<String>> hamRule : ham.entrySet()){
+	    	if(rules.containsKey(hamRule.getKey())){
+	    		fx[0] += rules.get(hamRule.getKey());
 	    	}
 	    }
 	    Debug.msg("FX [0] = "+ fx[0]);
 	    
 	    //TODO SPAM
 	    fx[1] = 0.0; //FN
-	    for (Entry<String, ArrayList<String>> spamRule : Spam.entrySet()){
-	    	if(Rules.containsKey(spamRule.getKey())){
-	    		fx[1] += Rules.get(spamRule.getKey());
+	    for (Entry<String, ArrayList<String>> spamRule : spam.entrySet()){
+	    	if(rules.containsKey(spamRule.getKey())){
+	    		fx[1] += rules.get(spamRule.getKey());
 	    	}
 	    }
 	    Debug.msg("FX [1] = "+ fx[1]);
@@ -114,14 +116,40 @@ public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 	    solution.setObjective(1, fx[1]); //objective 1 fx[1] will be subst by FP
 	    Debug.OUT("AntiSpamFilterProblem [evaluate(DoubleSolution)]");
 	  }
+
+
+	public LinkedHashMap<String, Double> getRules() {
+		return rules;
+	}
+
+
+	public LinkedHashMap<String, ArrayList<String>> getHam() {
+		return ham;
+	}
+
+
+	public LinkedHashMap<String, ArrayList<String>> getSpam() {
+		return spam;
+	}
+
+
+	
+	
+	
+	//Manual calculation of FN and FP
+	public int[] getFN_FP(){
+		int[] result = new int[2];
+		
+		
+		
+		return result;
+	}
+	
+	public boolean validLists() {
+		return !rules.isEmpty() && !ham.isEmpty() && !spam.isEmpty();
+	}
 	  
-	  
-	  //Este petodo existe apenas para efeitos de teste antes da finalização do fileReader
-	  private void insertDummyValues(){
-		  Rules.put("BAYES_05", -1.0);
-		  Rules.put("SPF_FAIL", -1.0);
-		  Rules.put("SUBJECT_NEEDS_ENCODING", -1.0);
-	  }
+	
 
 	  
 	}

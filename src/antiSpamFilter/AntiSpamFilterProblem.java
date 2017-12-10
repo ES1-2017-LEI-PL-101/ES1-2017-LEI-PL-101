@@ -21,7 +21,9 @@ public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 	private LinkedHashMap <String,Double> rules = FileLoader.getInstance().getRulesMap();
 	private LinkedHashMap<String, ArrayList<String>> ham = FileLoader.getInstance().getHamRulesMap();
 	private LinkedHashMap<String, ArrayList<String>> spam = FileLoader.getInstance().getSpamRulesMap();
-	
+		private double countFP = 0.0;
+		private double countFN = 0.0;
+		private final double algorithmLimit = 5.0;
 	
 	public AntiSpamFilterProblem() {
 	    // 10 variables (anti-spam filter rules) by default 
@@ -71,50 +73,52 @@ public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 	  /** Evaluate() method */
 	  public void evaluate(DoubleSolution solution){
 		Debug.IN("AntiSpamFilterProblem [evaluate(DoubleSolution)]");
-		
-		double aux, xi, xj;
-		
-		double[] fx = new double[getNumberOfObjectives()];
-	    double[] x = new double[getNumberOfVariables()];
-	    String msg = "";
-	    
-	    
-//	    for (int i = 0; i < solution.getNumberOfVariables(); i++) {
-//	      x[i] = solution.getVariableValue(i) ;
-//	      Debug.msg("x : "+x[i]);
-//	    }
-	    //verificar ordfem do hashmaplinked -> sort by key order
+
+		//tratamento de dados
 	    int iterator = 0;
 	    for (HashMap.Entry<String, Double> rule : rules.entrySet()){
 			rule.setValue(solution.getVariableValue(iterator));
 	    	iterator++;
 	    }
 	    
-	    
-	    //TODO HAM 
-	    //check if is FN or FP and countTotal -> send count to setObjective
-	    // calcule FN e FP to auth and manual configuration
-	    fx[0] = 0.0; //FP
-	    for (Entry<String, ArrayList<String>> hamRule : ham.entrySet()){
-	    	if(rules.containsKey(hamRule.getKey())){
-	    		fx[0] += rules.get(hamRule.getKey());
-	    	}
-	    }
-	    Debug.msg("FX [0] = "+ fx[0]);
-	    
-	    //TODO SPAM
-	    fx[1] = 0.0; //FN
-	    for (Entry<String, ArrayList<String>> spamRule : spam.entrySet()){
-	    	if(rules.containsKey(spamRule.getKey())){
-	    		fx[1] += rules.get(spamRule.getKey());
-	    	}
-	    }
-	    Debug.msg("FX [1] = "+ fx[1]);
-	    
+	    Debug.msg("Call evaluate(rules)");
+	    double [] fx = evaluate(rules);
 	    
 	    solution.setObjective(0, fx[0]); //objective 0 fx[0] will be subst by FN
 	    solution.setObjective(1, fx[1]); //objective 1 fx[1] will be subst by FP
 	    Debug.OUT("AntiSpamFilterProblem [evaluate(DoubleSolution)]");
+	  }
+	  
+	 
+	  public double[] evaluate(LinkedHashMap <String,Double> rules){
+		  
+		  double[] fx = new double[getNumberOfObjectives()];
+		  	//TODO HAM 
+		    //check if is FN or FP and countTotal -> send count to setObjective
+		    // calcule FN e FP to auth and manual configuration
+		    fx[0] = 0.0; //FP
+		    for (Entry<String, ArrayList<String>> hamRule : ham.entrySet()){
+		    	if(rules.containsKey(hamRule.getKey())){
+		    		fx[0] += rules.get(hamRule.getKey());
+		    	}
+		    }
+		    Debug.msg("FX [0] = "+ fx[0]);
+		    
+		    //TODO SPAM
+		    fx[1] = 0.0; //FN
+		    for (Entry<String, ArrayList<String>> spamRule : spam.entrySet()){
+		    	if(rules.containsKey(spamRule.getKey())){
+		    		fx[1] += rules.get(spamRule.getKey());
+		    	}
+		    }
+		    Debug.msg("FX [1] = "+ fx[1]);
+		    
+		    //verificar valor de Status
+		    double Status = (fx[0] > algorithmLimit ? countFP++ : (fx[1] < algorithmLimit ? countFN++ :null) );
+		    Debug.msg("Status =[" +Status+ "]");		    
+		    fx[0] = countFP;
+    		fx[1] = countFN;
+		    return fx;
 	  }
 
 

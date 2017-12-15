@@ -76,7 +76,7 @@ public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 
 		//tratamento de dados
 	    int iterator = 0;
-	    for (HashMap.Entry<String, Double> rule : rules.entrySet()){
+	    for (Entry<String, Double> rule : rules.entrySet()){
 			rule.setValue(solution.getVariableValue(iterator));
 	    	iterator++;
 	    }

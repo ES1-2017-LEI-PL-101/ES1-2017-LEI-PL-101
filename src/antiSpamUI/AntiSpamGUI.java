@@ -35,26 +35,37 @@ public class AntiSpamGUI {
 
 	@Override public void actionPerformed(ActionEvent e){
 
-	e.getActionCommand();File userDir=new File(System.getProperty("user.dir"));JFileChooser fileChooser=new JFileChooser(userDir);int returnName=fileChooser.showOpenDialog(null);String path=null;
+	e.getActionCommand();
+	File userDir=new File(System.getProperty("user.dir"));
+	
+	JFileChooser fileChooser=new JFileChooser(userDir);
+	
+	int returnName = fileChooser.showOpenDialog(null);
+	
+	String path = null;
 
-	if(returnName==JFileChooser.APPROVE_OPTION){File f=fileChooser.getSelectedFile();if(f!=null){ // Make sure the user
-																									// didn't choose a
-																									// directory.
-
+	if(returnName==JFileChooser.APPROVE_OPTION){
+		File f=fileChooser.getSelectedFile();
+			if(f!=null){ // Make sure the user
+						// didn't choose a
+						// directory.
 	path=f.getAbsolutePath();// get the absolute path to selected file
 	}}
 
 	System.out.println("Path"+path);
 
-	if(e.getActionCommand().equals("Browse Rules")){FileLoader.readFile(path);frame.getChoisenPathRules().setText(path);setRules("Manual");setRules("Auth");
-	/*
-	 * } else if (e.getActionCommand().equals("Browse Ham")) {
-	 * FileLoader.readFile(path); choisenPathHam.setText(path);
-	 * 
-	 * } else if (e.getActionCommand().equals("Browse Spam")) {
-	 * FileLoader.readFile(path); choisenPathSpam.setText(path);
-	 */
-
+	if(e.getActionCommand().equals("Browse Rules")){
+		FileLoader.readFile(path);
+		frame.getChoisenPathRules().setText(path);
+		setRules("Manual");
+		setRules("Auth");
+	}
+	else if (e.getActionCommand().equals("Browse Ham")) {
+	  FileLoader.readFile(path); 
+	  frame.getChoisenPathHam().setText(path);
+	} else if (e.getActionCommand().equals("Browse Spam")) {
+	 FileLoader.readFile(path); 
+	 frame.getChoisenPathSpam().setText(path);
 	}
 
 	}};
@@ -64,6 +75,7 @@ public class AntiSpamGUI {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			e.getActionCommand();
+			
 		//	antiSpamFilterProblem.setRules(rules);
 		}
 		

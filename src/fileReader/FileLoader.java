@@ -18,25 +18,15 @@ import java.util.Map.Entry;
 public class FileLoader {
 
 	private static LinkedHashMap<String, Double> rulesMap = new LinkedHashMap<String, Double>();
-	private static LinkedHashMap<String, ArrayList<String>> hamRulesMap = new LinkedHashMap<String, ArrayList<String>>();
-	private static LinkedHashMap<String, ArrayList<String>> spamRulesMap = new LinkedHashMap<String, ArrayList<String>>();
+	private static LinkedHashMap<String, ArrayList<String>> HamRulesMap = new LinkedHashMap<String, ArrayList<String>>();
+	private static LinkedHashMap<String, ArrayList<String>> SpamRulesMap = new LinkedHashMap<String, ArrayList<String>>();
 	private static final FileLoader INSTANCE = new FileLoader();
 
-	/**
-	 * This method is used to get the FileLoader Instance.
-	 * 
-	 * @return FileLoader This method returns the FileLoader Instance.
-	 */
 	public static FileLoader getInstance() {
 		return INSTANCE;
-	} 
+	}
 
 	// Write on hashmap the content of the file
-	/**
-	 * This method is used to read rules.
-	 * 
-	 * @param filePath
-	 */
 	public static void readFile(String filePath) {
 		BufferedReader br = null;
 		try {
@@ -65,11 +55,6 @@ public class FileLoader {
 		}
 	}
 
-	/**
-	 * This method is used to read logs files, that is, spam rules and ham rules.
-	 * 
-	 * @param filePath
-	 */
 	public static void readLogFile(String filePath) {
 		BufferedReader br = null;
 		try {
@@ -82,9 +67,9 @@ public class FileLoader {
 					a.add(parts[i]);
 				}
 				if (filePath.contains("spam.log")) {
-					spamRulesMap.put(parts[0], a);
+					SpamRulesMap.put(parts[0], a);
 				} else {
-					hamRulesMap.put(parts[0], a);
+					HamRulesMap.put(parts[0], a);
 				}
 
 				// System.out.println(sCurrentLine);
@@ -120,38 +105,19 @@ public class FileLoader {
 	// //System.out.println(spamFileScanner.getLogMap());
 	// }
 
-	/**
-	 * This method is used to get the rules HashMap.
-	 * 
-	 * @return LinkedHashMap This method returns the rules map.
-	 */
 	public LinkedHashMap<String, Double> getRulesMap() {
 		return rulesMap;
 	}
 
-	/**
-	 * This method is used to get the hamRules HashMap.
-	 * 
-	 * @return LinkedHashMap This method returns the hamRules map.
-	 */
 	public LinkedHashMap<String, ArrayList<String>> getHamRulesMap() {
-		return hamRulesMap;
+		return HamRulesMap;
 	}
 
-	/**
-	 * This method is used to get the spamRules HashMap.
-	 * 
-	 * @return LinkedHashMap This method returns the spamRules map.
-	 */
 	public LinkedHashMap<String, ArrayList<String>> getSpamRulesMap() {
-		return spamRulesMap;
+		return SpamRulesMap;
 	}
 
-	/**
-	 * @param filePath
-	 * @param rules
-	 */
-	public static void writeFile(String filePath, LinkedHashMap<String, Double> rules) {
+	public static void writeFile(String filePath, LinkedHashMap <String,Double> rules) {
 
 		try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filePath), "utf-8"))) {
 			for (Entry<String, Double> entry : rules.entrySet()) {
@@ -172,12 +138,7 @@ public class FileLoader {
 			e.printStackTrace();
 		}
 	}
-
-	/**
-	 * This method is used to set new rules in rules map.
-	 * 
-	 * @param newRules
-	 */
+	
 	public void setRules(LinkedHashMap<String, Double> newRules) {
 		this.rulesMap = newRules;
 	}

@@ -11,19 +11,15 @@ import javax.swing.table.TableModel;
 import antiSpamFilter.AntiSpamFilterProblem;
 
 public class Extensions {
-
-	/**
-	 * This method is used to put rules in tables.
-	 * 
-	 * @param map
-	 * @return DefaultTableModel This method returns the model.
-	 */
-	public static DefaultTableModel toTableModel(Map<?, ?> map) {
-		DefaultTableModel model = new DefaultTableModel(new Object[] { "Rules", "Weight" }, 0);
-		for (Map.Entry<?, ?> entry : map.entrySet()) {
-			model.addRow(new Object[] { entry.getKey(), entry.getValue() });
-		}
-		return model;
+	
+	public static DefaultTableModel toTableModel(Map<?,?> map) {
+	    DefaultTableModel model = new DefaultTableModel(
+	        new Object[] { "Rules", "Weight" }, 0
+	    );
+	    for (Map.Entry<?,?> entry : map.entrySet()) {
+	        model.addRow(new Object[] { entry.getKey(), entry.getValue() });
+	    }
+	    return model;
 	}
 
 }

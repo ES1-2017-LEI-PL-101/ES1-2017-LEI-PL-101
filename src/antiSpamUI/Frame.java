@@ -57,15 +57,10 @@ public class Frame {
 	private JTextField choisenPathSpam;
 
 	private JTable tableManual = new JTable();
-	private JTable tableAuto = new JTable();
+	private JTable tableAuth = new JTable();
 
 	private AntiSpamGUI gui;
 
-	/**
-	 * Constructor. Creates a new Frame.
-	 * 
-	 * @param gui
-	 */
 	public Frame(AntiSpamGUI gui) {
 		this.gui = gui;
 		this.frame = new JFrame();
@@ -95,23 +90,15 @@ public class Frame {
 
 	}
 
-	/**
-	 * This method is used to get the frame.
-	 * 
-	 * @return JFrame This method returns the frame.
-	 */
 	public JFrame getFrame() {
 		return this.frame;
 	}
 
-	/**
-	 * @return
-	 */
 	private JPanel createSpinnersPanel() {
 		JPanel topLayout = new JPanel(new GridLayout(0, 2));
 
 		JPanel spinnerManualLayout = new JPanel(new GridLayout(0, 4));
-		JPanel textAutoLayout = new JPanel(new GridLayout(0, 4));
+		JPanel textAuthLayout = new JPanel(new GridLayout(0, 4));
 
 		JTextField spinnerFP = new JTextField("-");
 		spinnerFP.setName("spinnerFP");
@@ -123,40 +110,37 @@ public class Frame {
 		// lê dos files AntiSpamFilterProblem.NSGAII -> Pesos e FN/FP
 		// AntiSpamConfigurationForLeisureMailbox -> escolher menor FN
 
-		JTextField fieldAutoFP = new JTextField("-");
-		fieldAutoFP.setName("autoFP");
-		fieldAutoFP.setEditable(false);
-		JTextField fieldAutoFN = new JTextField("-");
-		fieldAutoFN.setName("autoFN");
-		fieldAutoFN.setEditable(false);
+		JTextField fieldAuthFP = new JTextField("-");
+		fieldAuthFP.setName("authFP");
+		fieldAuthFP.setEditable(false);
+		JTextField fieldAuthFN = new JTextField("-");
+		fieldAuthFN.setName("authFN");
+		fieldAuthFN.setEditable(false);
 
 		spinnerManualLayout.add(new JLabel("FP - Manual"));
 		spinnerManualLayout.add(spinnerFP);
 		spinnerManualLayout.add(new JLabel("FN - Manual"));
 		spinnerManualLayout.add(spinnerFN);
 
-		textAutoLayout.add(new JLabel("FP - Auto"));
-		textAutoLayout.add(fieldAutoFP);
-		textAutoLayout.add(new JLabel("FN - Auto"));
-		textAutoLayout.add(fieldAutoFN);
+		textAuthLayout.add(new JLabel("FP - Auth"));
+		textAuthLayout.add(fieldAuthFP);
+		textAuthLayout.add(new JLabel("FN - Auth"));
+		textAuthLayout.add(fieldAuthFN);
 
 		topLayout.add(spinnerManualLayout);
-		topLayout.add(textAutoLayout);
+		topLayout.add(textAuthLayout);
 
 		return topLayout;
 
 	}
 
-	/**
-	 * @return
-	 */
 	private JPanel createTables() {
 
 		Border blackline = BorderFactory.createLineBorder(Color.black);
 		JPanel listPanel = new JPanel(new GridLayout(0, 1));
 		DefaultTableModel model = new DefaultTableModel(new Object[] { "Rules", "Weight" }, 0);
 
-		tableAuto = new JTable(model);
+		tableAuth = new JTable(model);
 
 		tableManual = new JTable(model) {
 			@Override
@@ -169,15 +153,15 @@ public class Frame {
 			}
 		};
 
-		tableAuto.setBorder(blackline);
+		tableAuth.setBorder(blackline);
 		tableManual.setBorder(blackline);
-		tableAuto.setBackground(Color.LIGHT_GRAY);
-		tableAuto.setEnabled(false);
+		tableAuth.setBackground(Color.LIGHT_GRAY);
+		tableAuth.setEnabled(false);
 
 		JScrollPane scrollPane = new JScrollPane(tableManual);
-		JScrollPane scrollPane2 = new JScrollPane(tableAuto);
+		JScrollPane scrollPane2 = new JScrollPane(tableAuth);
 		tableManual.setFillsViewportHeight(true);
-		tableAuto.setFillsViewportHeight(true);
+		tableAuth.setFillsViewportHeight(true);
 
 		listPanel.add(scrollPane);
 		listPanel.add(scrollPane2);
@@ -186,9 +170,6 @@ public class Frame {
 
 	}
 
-	/**
-	 * @return
-	 */
 	private JPanel createPathsPanel() {
 		JPanel gridLayout = new JPanel(new GridLayout(0, 3));
 
@@ -239,9 +220,6 @@ public class Frame {
 		return gridLayout;
 	}
 
-	/**
-	 * @return
-	 */
 	private JPanel createButtons() {
 		JPanel buttonsLayout = new JPanel(new GridLayout(0, 4));
 
@@ -253,30 +231,30 @@ public class Frame {
 			public void actionPerformed(ActionEvent e) {
 				e.getActionCommand();
 
-				// if (gui.getAntiSpamFilterProblem().validLists()) {
-				LinkedHashMap<String, Double> rules = new LinkedHashMap<String, Double>();
-				for (int count = 0; count < tableManual.getModel().getRowCount(); count++) {
-					rules.put(tableManual.getModel().getValueAt(count, 0).toString(),
-							Double.parseDouble(tableManual.getModel().getValueAt(count, 1).toString()));
+				//if (gui.getAntiSpamFilterProblem().validLists()) {
+					LinkedHashMap<String, Double> rules = new LinkedHashMap<String, Double>();
+					for (int count = 0; count < tableManual.getModel().getRowCount(); count++) {
+						rules.put(tableManual.getModel().getValueAt(count, 0).toString(),
+								Double.parseDouble(tableManual.getModel().getValueAt(count, 1).toString()));
 
-				}
-				FileLoader.getInstance().setRules(rules);
-				gui.setRules("Manual");
-				// }
-				// System.out.println("Listas não adicionadas");
+					}
+					FileLoader.getInstance().setRules(rules);
+					gui.setRules("Manual");
+			//	}
+			//	System.out.println("Listas não adicionadas");
 
 			}
 
 		});
 
 		JButton saveButtonTest = new JButton("Save Manual");
-
+		
 		// TODO
 		saveButtonTest.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-
+				
 				FileLoader.writeFile(getChoisenPathRules().getText(), FileLoader.getInstance().getRulesMap());
 
 			}
@@ -291,16 +269,16 @@ public class Frame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// if (gui.getAntiSpamFilterProblem().validLists()) {
-
-				// }
+				//if (gui.getAntiSpamFilterProblem().validLists()) {
+					
+			//	}
 			}
 		});
 
-		JButton saveButtonAuto = new JButton("Save Auto");
+		JButton saveButtonAuth = new JButton("Save Auth");
 
 		// TODO
-		saveButtonAuto.addActionListener(new ActionListener() {
+		saveButtonAuth.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -308,24 +286,19 @@ public class Frame {
 			}
 		});
 
-		saveButtonAuto.setPreferredSize(new Dimension(100, 10));
+		saveButtonAuth.setPreferredSize(new Dimension(100, 10));
 
 		buttonsLayout = insertEmptyRow(buttonsLayout, 4);
 
 		buttonsLayout.add(testButton);
 		buttonsLayout.add(saveButtonTest);
 		buttonsLayout.add(generateButton);
-		buttonsLayout.add(saveButtonAuto);
+		buttonsLayout.add(saveButtonAuth);
 
 		return buttonsLayout;
 
 	}
 
-	/**
-	 * @param panel
-	 * @param columns
-	 * @return
-	 */
 	private static JPanel insertEmptyRow(JPanel panel, int columns) {
 		for (int i = 0; i != columns; i++) {
 			panel.add(new Label(" "));
@@ -333,56 +306,26 @@ public class Frame {
 		return panel;
 	}
 
-	/**
-	 * This method is used to get the rules file path.
-	 * 
-	 * @return JTextField This method returns the rules file path.
-	 */
 	public JTextField getChoisenPathRules() {
 		return choisenPathRules;
 	}
 
-	/**
-	 * This method is used to get the ham file path.
-	 * 
-	 * @return JTextField This method returns the ham file path.
-	 */
 	public JTextField getChoisenPathHam() {
 		return choisenPathHam;
 	}
 
-	/**
-	 * This method is used to get the spam file path.
-	 * 
-	 * @return JTextField This method returns the spam file path.
-	 */
 	public JTextField getChoisenPathSpam() {
 		return choisenPathSpam;
 	}
 
-	/**
-	 * This method is used to get the manual table.
-	 * 
-	 * @return JTable This method returns the manual table.
-	 */
 	public JTable getTableManual() {
 		return tableManual;
 	}
 
-	/**
-	 * This method is used to get the automatic table.
-	 * 
-	 * @return JTable This method returns the automatic table.
-	 */
-	public JTable getTableAuto() {
-		return tableAuto;
+	public JTable getTableAuth() {
+		return tableAuth;
 	}
 
-	/**
-	 * This method is used to get the AntiSpam gui.
-	 * 
-	 * @return JTable This method returns the AntiSpam gui.
-	 */
 	public AntiSpamGUI getGui() {
 		return gui;
 	}

@@ -82,24 +82,23 @@ public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 		}
 
 		Debug.msg("Call evaluate(rules)");
-		int[] fx = evaluate(rules);
+		double[] fx = evaluate(rules);
 
-		solution.setObjective(0, fx[0]); // objective 0 fx[0] will be subst by FN
-		solution.setObjective(1, fx[1]); // objective 1 fx[1] will be subst by FP
+		solution.setObjective(0, fx[0]); // objective 0 fx[0] will be subst by FP
+		solution.setObjective(1, fx[1]); // objective 1 fx[1] will be subst by FN
 		Debug.out("AntiSpamFilterProblem [evaluate(DoubleSolution)]");
 	}
 
-	public int[] evaluate(LinkedHashMap<String, Double> rules) {
+	public double[] evaluate(LinkedHashMap<String, Double> rules) {
 
-		int[] fx = new int[getNumberOfObjectives()];
+		double[] fx = new double[getNumberOfObjectives()];
 
-		fx[0] = 0; // FN
+		fx[0] = 0.0; // FP
 		for (Entry<String, ArrayList<String>> hamRule : ham.entrySet()) {
 			double count = 0.0;
 			for (String hamRules : hamRule.getValue()) {
 				if (rules.containsKey(hamRules)) {
 					count += rules.get(hamRules);
-					System.out.println("countHam" + count);
 				}
 			}
 			if (count > algorithmLimit) {
@@ -107,23 +106,20 @@ public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 			}
 
 		}
-		System.out.println("FN " + fx[0]);
 
-		fx[1] = 0; // FP
+		fx[1] = 0.0; // FN
 		for (Entry<String, ArrayList<String>> spamRule : spam.entrySet()) {
 			double count = 0.0;
 			for (String spamRules : spamRule.getValue()) {
 				if (rules.containsKey(spamRules)) {
 					count += rules.get(spamRules);
-					System.out.println("countSPam " + count);
 				}
 			}
-			if (count > algorithmLimit) {
+			if (count < algorithmLimit) {
 				fx[1]++;
 			}
 
 		}
-		System.out.println("FP " + fx[1]);
 
 		return fx;
 	}

@@ -41,7 +41,7 @@ public class AntiSpamFilterAutomaticConfiguration {
 				problemList);
 
 		// Debug.getInstance().msg("algorithmList"+algorithmList.toString());
-    try{
+
 		Experiment<DoubleSolution, List<DoubleSolution>> experiment = new ExperimentBuilder<DoubleSolution, List<DoubleSolution>>(
 				"AntiSpamStudy").setAlgorithmList(algorithmList).setProblemList(problemList)
 				.setExperimentBaseDirectory(experimentBaseDirectory).setOutputParetoFrontFileName("FUN")
@@ -58,9 +58,6 @@ public class AntiSpamFilterAutomaticConfiguration {
 		new ComputeQualityIndicators<>(experiment).run();
 		new GenerateLatexTablesWithStatistics(experiment).run();
 		new GenerateBoxplotsWithR<>(experiment).setRows(1).setColumns(1).run();
-    }catch (Exception e) {
-		// TODO: handle exception
-	}
 
     
 	}
@@ -76,7 +73,7 @@ public class AntiSpamFilterAutomaticConfiguration {
 			Algorithm<List<DoubleSolution>> algorithm = new NSGAIIBuilder<>(problemList.get(i).getProblem(),
 					new SBXCrossover(1.0, 5),
 					new PolynomialMutation(1.0 / problemList.get(i).getProblem().getNumberOfVariables(), 10.0))
-					.setMaxEvaluations(25000).setPopulationSize(100).build();
+					.setMaxEvaluations(1).setPopulationSize(100).build();
 			algorithms.add(new ExperimentAlgorithm<>(algorithm, "NSGAII", problemList.get(i).getTag()));
 			// Debug.getInstance().msg("algorithms "+algorithms.toString());
 		}

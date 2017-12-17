@@ -89,7 +89,7 @@ public class AntiSpamGUI {
 			}
 		
 			antiSpamFilterProblem.setRules(rules);
-			int[] fxCount = antiSpamFilterProblem.evaluate(rules);
+			double[] fxCount = antiSpamFilterProblem.evaluate(rules);
 			frame.setSpinnerFN(String.valueOf(fxCount[0]));
 			frame.setSpinnerFP(String.valueOf(fxCount[1]));
 			setRules("Manual");
@@ -107,6 +107,7 @@ public class AntiSpamGUI {
 	                public void run() {
 	                	try {
 	                		AntiSpamFilterAutomaticConfiguration.setAntiSpamFilterProblem(antiSpamFilterProblem);
+	                		System.out.println("Rules " + antiSpamFilterProblem.getRules().size());
 	                		AntiSpamFilterAutomaticConfiguration.main(null);
 	                		frame.setSpinnerFP(AntiSpamFilterAutomaticConfiguration.getAntiSpamFilterProblem().getCountFP()+"");
 							frame.setSpinnerFN(AntiSpamFilterAutomaticConfiguration.getAntiSpamFilterProblem().getCountFN()+"");

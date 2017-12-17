@@ -28,7 +28,7 @@ public class AntiSpamGUI {
 
 	public AntiSpamGUI() {
 		frame = new Frame(this);
-		antiSpamFilterProblem = new AntiSpamFilterProblem();
+		//antiSpamFilterProblem = new AntiSpamFilterProblem();
 	}
 
 	public ActionListener actionListenerBrowser=new ActionListener(){

@@ -45,16 +45,23 @@ import javax.swing.table.TableModel;
 
 import org.apache.commons.math3.optim.nonlinear.scalar.noderiv.BOBYQAOptimizer;
 
+import antiSpamFilter.AntiSpamFilterAutomaticConfiguration;
 import antiSpamFilter.AntiSpamFilterProblem;
 import fileReader.FileLoader;
 
 public class Frame {
 
 	private JFrame frame;
-
+	
+	//Path's
 	private JTextField choisenPathRules;
 	private JTextField choisenPathHam;
 	private JTextField choisenPathSpam;
+	
+	//FP e FN
+	private JTextField spinnerFP;
+	private JTextField spinnerFN;
+	
 
 	private JTable tableManual = new JTable();
 	private JTable tableAuth = new JTable();
@@ -100,14 +107,14 @@ public class Frame {
 		JPanel spinnerManualLayout = new JPanel(new GridLayout(0, 4));
 		JPanel textAuthLayout = new JPanel(new GridLayout(0, 4));
 
-		JTextField spinnerFP = new JTextField("-");
+		spinnerFP = new JTextField("-");
 		spinnerFP.setName("spinnerFP");
 		spinnerFP.setEditable(false);
-		JTextField spinnerFN = new JTextField("-");
+		spinnerFN = new JTextField("-");
 		spinnerFN.setName("spinnerFN");
 		spinnerFN.setEditable(false);
 
-		// lê dos files AntiSpamFilterProblem.NSGAII -> Pesos e FN/FP
+		// lï¿½ dos files AntiSpamFilterProblem.NSGAII -> Pesos e FN/FP
 		// AntiSpamConfigurationForLeisureMailbox -> escolher menor FN
 
 		JTextField fieldAuthFP = new JTextField("-");
@@ -241,7 +248,7 @@ public class Frame {
 					FileLoader.getInstance().setRules(rules);
 					gui.setRules("Manual");
 			//	}
-			//	System.out.println("Listas não adicionadas");
+			//	System.out.println("Listas nï¿½o adicionadas");
 
 			}
 
@@ -261,7 +268,7 @@ public class Frame {
 		});
 
 		// instanciar AntiSpamConfiguration e correr o Main
-		// lançar os fixeiros R e tex quando gerar
+		// lanï¿½ar os fixeiros R e tex quando gerar
 		JButton generateButton = new JButton("Generate");
 
 		// TODO
@@ -269,11 +276,50 @@ public class Frame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//if (gui.getAntiSpamFilterProblem().validLists()) {
+				//TODO correctPath
+				
+				if(correctPath(choisenPathRules.getText()) && correctPath(choisenPathHam.getText()) && correctPath(choisenPathSpam.getText())) {
+
+					FileLoader.getInstance().manualStart(	choisenPathRules.getText(), 
+															choisenPathHam.getText(), 
+															choisenPathSpam.getText()
+														);
+//					AntiSpamFilterProblem.setPathHam(choisenPathHam.getText());
+//					AntiSpamFilterProblem.setPathSpam(choisenPathSpam.getText());
+//					AntiSpamFilterProblem.setPathrules(choisenPathRules.getText());
+				AntiSpamFilterProblem AntiSpamFilterProblem=new AntiSpamFilterProblem();
+				
+				AntiSpamFilterProblem = new AntiSpamFilterProblem(AntiSpamFilterProblem.getRules().size());
 					
-			//	}
+					AntiSpamFilterAutomaticConfiguration AntiSpamFilterAutomaticConfiguration = new AntiSpamFilterAutomaticConfiguration(AntiSpamFilterProblem);
+					//INIT
+		            Runnable task = new Runnable() {
+		                public void run() {
+		                	try {
+		                		AntiSpamFilterAutomaticConfiguration.main(null);
+								spinnerFP.setText(AntiSpamFilterAutomaticConfiguration.getAntiSpamFilterProblem().getCountFP()+"");
+								spinnerFN.setText(AntiSpamFilterAutomaticConfiguration.getAntiSpamFilterProblem().getCountFN()+"");
+							} catch (IOException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+		                }
+		            };
+		            
+		            Thread t=new Thread(task);
+		            t.start();
+			
+					try {
+						t.join();
+					} catch (InterruptedException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
 			}
 		});
+		
+		
 
 		JButton saveButtonAuth = new JButton("Save Auth");
 
@@ -298,6 +344,10 @@ public class Frame {
 		return buttonsLayout;
 
 	}
+	
+	public boolean correctPath(String path) {
+		return true;
+		}
 
 	private static JPanel insertEmptyRow(JPanel panel, int columns) {
 		for (int i = 0; i != columns; i++) {

@@ -25,6 +25,15 @@ public class FileLoader {
 	public static FileLoader getInstance() {
 		return INSTANCE;
 	}
+	
+	public void manualStart(String pathrules, String pathHam, String pathSpam){
+		//Os Path's não podem entrar vazios
+		if(!pathrules.isEmpty() && !pathHam.isEmpty() && !pathSpam.isEmpty() ){
+		readFile(pathrules);
+		readLogFile(pathHam);
+		readLogFile(pathSpam);
+		}
+	}
 
 	// Write on hashmap the content of the file
 	public static void readFile(String filePath) {

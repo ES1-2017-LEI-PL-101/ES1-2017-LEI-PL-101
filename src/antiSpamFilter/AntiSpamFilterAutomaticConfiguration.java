@@ -25,14 +25,17 @@ import java.util.List;
 
 public class AntiSpamFilterAutomaticConfiguration {
   private static final int INDEPENDENT_RUNS = 5 ;
-
+  private static AntiSpamFilterProblem AntiSpamFilterProblem = new AntiSpamFilterProblem();
+  
+  public AntiSpamFilterAutomaticConfiguration (){}
+  public AntiSpamFilterAutomaticConfiguration (AntiSpamFilterProblem AntiSpamFilterProblem){this.AntiSpamFilterProblem = AntiSpamFilterProblem;}
   public static void main(String[] args) throws IOException {
 	Debug.IN("AntiSpamFilterAutomaticConfiguration [MAIN]");
     String experimentBaseDirectory = "experimentBaseDirectory";
 
     List<ExperimentProblem<DoubleSolution>> problemList = new ArrayList<>();
     
-    problemList.add(new ExperimentProblem<>(new AntiSpamFilterProblem(), "AntiSpamFilterProblem"));
+    problemList.add(new ExperimentProblem<>(AntiSpamFilterProblem, "AntiSpamFilterProblem"));
     
     //Debug.getInstance().msg("ProblemList"+problemList.toString());
     
@@ -40,7 +43,7 @@ public class AntiSpamFilterAutomaticConfiguration {
             configureAlgorithmList(problemList);
     
     //Debug.getInstance().msg("algorithmList"+algorithmList.toString());
-    
+    try{
     Experiment<DoubleSolution, List<DoubleSolution>> experiment =
         new ExperimentBuilder<DoubleSolution, List<DoubleSolution>>("AntiSpamStudy")
             .setAlgorithmList(algorithmList)
@@ -55,6 +58,7 @@ public class AntiSpamFilterAutomaticConfiguration {
             	.setIndependentRuns(INDEPENDENT_RUNS)
             	.setNumberOfCores(8)
             	.build();
+ 
     
     //Debug.getInstance().msg("experiment"+experiment.toString());
     
@@ -64,6 +68,10 @@ public class AntiSpamFilterAutomaticConfiguration {
     new GenerateLatexTablesWithStatistics(experiment).run() ;
     new GenerateBoxplotsWithR<>(experiment).setRows(1).setColumns(1).run() ;
     
+    
+    } catch (IOException e) {
+    	System.out.println("Erro no experiment jmetal");
+	}
     Debug.OUT("AntiSpamFilterAutomaticConfiguration [MAIN]");
   }
 
@@ -90,4 +98,9 @@ public class AntiSpamFilterAutomaticConfiguration {
     return algorithms;
   }
 
+public AntiSpamFilterProblem getAntiSpamFilterProblem() {
+	return AntiSpamFilterProblem;
+}
+  
+  
 }

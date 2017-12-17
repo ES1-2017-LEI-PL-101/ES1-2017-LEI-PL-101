@@ -16,18 +16,33 @@ import fileReader.FileLoader;
 
 public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 	
+	private LinkedHashMap<String, ArrayList<String>> ham;
+	private LinkedHashMap<String, ArrayList<String>> spam;
+	private double countFP = 0.0;
+	private double countFN = 0.0;
+	private final double algorithmLimit = 5.0;
 	private static final long serialVersionUID = -8036102488474183100L;
+	private String pathHam;
+	private String pathSpam;
+	private String pathrules;
 	
 	private LinkedHashMap <String,Double> rules = FileLoader.getInstance().getRulesMap();
-	private LinkedHashMap<String, ArrayList<String>> ham = FileLoader.getInstance().getHamRulesMap();
-	private LinkedHashMap<String, ArrayList<String>> spam = FileLoader.getInstance().getSpamRulesMap();
-		private double countFP = 0.0;
-		private double countFN = 0.0;
-		private final double algorithmLimit = 5.0;
+	
+	public double getCountFP() {
+		return countFP;
+	}
+
+
+	public double getCountFN() {
+		return countFN;
+	}
+
+	
 	
 	public AntiSpamFilterProblem() {
 	    // 10 variables (anti-spam filter rules) by default 
 		//TODO getNumberOfRules file rules
+		//FileLoader.getInstance().manualStart(pathrules, pathHam, pathSpam);
 		this(FileLoader.getInstance().getRulesMap().size());  
 	   
 	    //TODO Create GetPath's to Rules, Ham, Spam of GUI
@@ -48,7 +63,8 @@ public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 		Debug.IN("AntiSpamFilterProblem [Constructor(INTEGER)]");
 		
 		//TODO
-		//Get rules, ham , spam   
+		ham = FileLoader.getInstance().getHamRulesMap();
+		spam= FileLoader.getInstance().getSpamRulesMap(); 
 		
 		
 	    setNumberOfVariables(numberOfVariables);  
@@ -57,7 +73,7 @@ public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 
 	    List<Double> lowerLimit = new ArrayList<>(getNumberOfVariables()) ;
 	    List<Double> upperLimit = new ArrayList<>(getNumberOfVariables()) ;
-	    
+	    int y = getNumberOfVariables();
 	    for (int i = 0; i < getNumberOfVariables(); i++) {
 	      lowerLimit.add(-5.0);
 	      upperLimit.add(5.0);
@@ -69,7 +85,7 @@ public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 	    Debug.OUT("AntiSpamFilterProblem [Constructor(INTEGER)]");
 	  }
 
-	  //ver metodo
+	  //ver metodo rules a entrar vazias.
 	  /** Evaluate() method */
 	  public void evaluate(DoubleSolution solution){
 		Debug.IN("AntiSpamFilterProblem [evaluate(DoubleSolution)]");
@@ -81,6 +97,7 @@ public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 	    	iterator++;
 	    }
 	    
+	   
 	    Debug.msg("Call evaluate(rules)");
 	    double [] fx = evaluate(rules);
 	    
@@ -141,7 +158,7 @@ public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 	
 	
 	//Manual calculation of FN and FP
-	public int[] getFN_FP(){
+	public int[] getManualFN_FP(){
 		int[] result = new int[2];
 		
 		
@@ -152,8 +169,25 @@ public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 	public boolean validLists() {
 		return !rules.isEmpty() && !ham.isEmpty() && !spam.isEmpty();
 	}
+
+
+	public void setPathHam(String pathHam) {
+		this.pathHam = pathHam;
+	}
+
+
+	public void setPathSpam(String pathSpam) {
+		this.pathSpam = pathSpam;
+	}
+
+
+	public void setPathrules(String pathrules) {
+		this.pathrules = pathrules;
+	}
 	  
 	
-
+	
+		
+	
 	  
 	}

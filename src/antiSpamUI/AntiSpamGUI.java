@@ -21,7 +21,6 @@ import javax.swing.table.TableModel;
 import antiSpamFilter.AntiSpamFilterProblem;
 import fileReader.FileLoader;
 
-
 public class AntiSpamGUI {
 
 	private Frame frame;
@@ -56,20 +55,19 @@ public class AntiSpamGUI {
 				}
 			}
 
-			System.out.println("Path" + path);
-
 			if (e.getActionCommand().equals("Browse Rules")) {
-				FileLoader.readFile(path);
+				antiSpamFilterProblem.readRules(path);
 				frame.getChoisenPathRules().setText(path);
 				setRules("Manual");
 				setRules("Auto");
-				/*
-				 * } else if (e.getActionCommand().equals("Browse Ham")) {
-				 * FileLoader.readFile(path); choisenPathHam.setText(path);
-				 * 
-				 * } else if (e.getActionCommand().equals("Browse Spam")) {
-				 * FileLoader.readFile(path); choisenPathSpam.setText(path);
-				 */
+
+			} else if (e.getActionCommand().equals("Browse Ham")) {
+				antiSpamFilterProblem.readHam(path);
+				frame.getChoisenPathHam().setText(path);
+
+			} else if (e.getActionCommand().equals("Browse Spam")) {
+				antiSpamFilterProblem.readSpam(path);
+				frame.getChoisenPathSpam().setText(path);
 
 			}
 
@@ -81,19 +79,31 @@ public class AntiSpamGUI {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			e.getActionCommand();
-			// antiSpamFilterProblem.setRules(rules);
-		}
+			LinkedHashMap<String, Double> rules = new LinkedHashMap<String, Double>();
+			for (int count = 0; count < frame.getTableManual().getModel().getRowCount(); count++) {
+				rules.put(frame.getTableManual().getModel().getValueAt(count, 0).toString(),
+						Double.parseDouble(frame.getTableManual().getModel().getValueAt(count, 1).toString()));
 
+			}
+		
+			antiSpamFilterProblem.setRules(rules);
+			int[] fxCount = antiSpamFilterProblem.evaluate(rules);
+			frame.setSpinnerFN(String.valueOf(fxCount[0]));
+			frame.setSpinnerFP(String.valueOf(fxCount[1]));
+			setRules("Manual");
+		
+			
+	}
 	};
 
 	/**
-	 * This method is used to differentiate between Manual weight and Automatic weight and set the rules
-	 * in Manual or Auto table.
+	 * This method is used to differentiate between Manual weight and Automatic
+	 * weight and set the rules in Manual or Auto table.
 	 * 
 	 * @param option
 	 */
 	public void setRules(String option) {
-		LinkedHashMap<String, Double> newRules = FileLoader.getInstance().getRulesMap();
+		LinkedHashMap<String, Double> newRules = antiSpamFilterProblem.getRules();
 		DefaultTableModel model = Extensions.toTableModel(newRules);
 		if (option.equals("Manual")) {
 			this.frame.getTableManual().setModel(Extensions.toTableModel(newRules));
@@ -101,14 +111,6 @@ public class AntiSpamGUI {
 		if (option.equals("Auto")) {
 			this.frame.getTableAuto().setModel(model);
 		}
-
-		// Test
-		// for (Entry<String, Double> entry : antiSpamFilter.entrySet()) {
-		// String key = entry.getKey();
-		// Double value = entry.getValue();
-		// System.out.println(key.toString() + " " + value.toString());
-		// }
-
 	}
 
 	/**

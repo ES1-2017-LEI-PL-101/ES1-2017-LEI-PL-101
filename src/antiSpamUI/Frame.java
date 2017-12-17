@@ -55,6 +55,8 @@ public class Frame {
 	private JTextField choisenPathRules;
 	private JTextField choisenPathHam;
 	private JTextField choisenPathSpam;
+	private JTextField spinnerFN;
+	private JTextField spinnerFP;
 
 	private JTable tableManual = new JTable();
 	private JTable tableAuto = new JTable();
@@ -113,10 +115,10 @@ public class Frame {
 		JPanel spinnerManualLayout = new JPanel(new GridLayout(0, 4));
 		JPanel textAutoLayout = new JPanel(new GridLayout(0, 4));
 
-		JTextField spinnerFP = new JTextField("-");
+		spinnerFP = new JTextField("-");
 		spinnerFP.setName("spinnerFP");
 		spinnerFP.setEditable(false);
-		JTextField spinnerFN = new JTextField("-");
+		spinnerFN = new JTextField("-");
 		spinnerFN.setName("spinnerFN");
 		spinnerFN.setEditable(false);
 
@@ -215,7 +217,7 @@ public class Frame {
 
 		JTextField pathSpam = new JTextField("Spam.log");
 		choisenPathSpam = new JTextField();
-		choisenPathRules.setEnabled(false);
+		choisenPathSpam.setEnabled(false);
 		JButton buttonChangeSpamPath = new JButton("Browse Spam");
 		buttonChangeRulesPath.setName("buttonSpam");
 
@@ -247,27 +249,7 @@ public class Frame {
 
 		JButton testButton = new JButton("Run Test");
 
-		testButton.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				e.getActionCommand();
-
-				// if (gui.getAntiSpamFilterProblem().validLists()) {
-				LinkedHashMap<String, Double> rules = new LinkedHashMap<String, Double>();
-				for (int count = 0; count < tableManual.getModel().getRowCount(); count++) {
-					rules.put(tableManual.getModel().getValueAt(count, 0).toString(),
-							Double.parseDouble(tableManual.getModel().getValueAt(count, 1).toString()));
-
-				}
-				FileLoader.getInstance().setRules(rules);
-				gui.setRules("Manual");
-				// }
-				// System.out.println("Listas não adicionadas");
-
-			}
-
-		});
+		testButton.addActionListener(gui.actionListenerTest);
 
 		JButton saveButtonTest = new JButton("Save Manual");
 
@@ -277,7 +259,7 @@ public class Frame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 
-				FileLoader.writeFile(getChoisenPathRules().getText(), FileLoader.getInstance().getRulesMap());
+				FileLoader.writeFile(getChoisenPathRules().getText(), gui.getAntiSpamFilterProblem().getRules());
 
 			}
 		});
@@ -387,4 +369,13 @@ public class Frame {
 		return gui;
 	}
 
+	public void setSpinnerFN(String spinnerFN) {
+		this.spinnerFN.setText(spinnerFN);
+	}
+
+	public void setSpinnerFP(String spinnerFP) {
+		this.spinnerFP.setText(spinnerFP);
+	}
+
+	
 }

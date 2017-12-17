@@ -18,22 +18,18 @@ public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 
 	private static final long serialVersionUID = -8036102488474183100L;
 
-	private LinkedHashMap<String, Double> rules = FileLoader.getInstance().getRulesMap();
-	private LinkedHashMap<String, ArrayList<String>> ham = FileLoader.getInstance().getHamRulesMap();
-	private LinkedHashMap<String, ArrayList<String>> spam = FileLoader.getInstance().getSpamRulesMap();
-	private double countFP = 0.0;
-	private double countFN = 0.0;
+	private LinkedHashMap<String, Double> rules;
+	private LinkedHashMap<String, ArrayList<String>> ham;
+	private LinkedHashMap<String, ArrayList<String>> spam;
+	private int countFP = 0;
+	private int countFN = 0;
 	private final double algorithmLimit = 5.0;
 
 	public AntiSpamFilterProblem() {
-		// 10 variables (anti-spam filter rules) by default
-		// TODO getNumberOfRules file rules
-		this(FileLoader.getInstance().getRulesMap().size());
 
-		// TODO Create GetPath's to Rules, Ham, Spam of GUI
-		Debug.getInstance();
-		Debug.in("AntiSpamFilterProblem [Constructor]");
-		Debug.out("AntiSpamFilterProblem [Constructor]");
+		rules = new LinkedHashMap<String, Double>();
+		ham = new LinkedHashMap<String, ArrayList<String>>();
+		spam = new LinkedHashMap<String, ArrayList<String>>();
 	}
 
 	// definimos o lower limit e upper limit
@@ -43,11 +39,7 @@ public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 	 * @param numberOfVariables
 	 *            Number of variables of the problem
 	 */
-	public AntiSpamFilterProblem(Integer numberOfVariables) {
-		Debug.in("AntiSpamFilterProblem [Constructor(INTEGER)]");
-
-		// TODO
-		// Get rules, ham , spam
+	public void updateAntiSpamFilterProblem(Integer numberOfVariables) {
 
 		setNumberOfVariables(numberOfVariables);
 		setNumberOfObjectives(2);// FN & FP
@@ -63,11 +55,23 @@ public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 
 		setLowerLimit(lowerLimit);
 		setUpperLimit(upperLimit);
-
-		Debug.out("AntiSpamFilterProblem [Constructor(INTEGER)]");
 	}
 
-	// ver metodo
+	public void readRules(String path) {
+		rules = FileLoader.readRulesFile(path);
+		updateAntiSpamFilterProblem(getRules().size());
+	}
+
+	public void readHam(String path) {
+		ham = FileLoader.readHamOrSpamFile(path);
+		updateAntiSpamFilterProblem(getRules().size());
+	}
+
+	public void readSpam(String path) {
+		spam = FileLoader.readHamOrSpamFile(path);
+		updateAntiSpamFilterProblem(getRules().size());
+	}
+
 	/** Evaluate() method */
 	public void evaluate(DoubleSolution solution) {
 		Debug.in("AntiSpamFilterProblem [evaluate(DoubleSolution)]");
@@ -80,43 +84,82 @@ public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 		}
 
 		Debug.msg("Call evaluate(rules)");
-		double[] fx = evaluate(rules);
+		int[] fx = evaluate(rules);
 
 		solution.setObjective(0, fx[0]); // objective 0 fx[0] will be subst by FN
 		solution.setObjective(1, fx[1]); // objective 1 fx[1] will be subst by FP
 		Debug.out("AntiSpamFilterProblem [evaluate(DoubleSolution)]");
 	}
 
-	public double[] evaluate(LinkedHashMap<String, Double> rules) {
+	public int[] evaluate(LinkedHashMap<String, Double> rules) {
 
-		double[] fx = new double[getNumberOfObjectives()];
-		// TODO HAM
-		// check if is FN or FP and countTotal -> send count to setObjective
-		// calcule FN e FP to auth and manual configuration
-		fx[0] = 0.0; // FP
+		int[] fx = new int[getNumberOfObjectives()];
+
+		fx[0] = 0; // FN
 		for (Entry<String, ArrayList<String>> hamRule : ham.entrySet()) {
-			if (rules.containsKey(hamRule.getKey())) {
-				fx[0] += rules.get(hamRule.getKey());
+			int count = 0;
+			for (String hamRules : hamRule.getValue()) {
+				if (rules.containsKey(hamRules)) {
+					count += rules.get(hamRules);
+					System.out.println("countHam" + count);
+				}
 			}
-		}
-		Debug.msg("FX [0] = " + fx[0]);
+			if (count > algorithmLimit) {
+				fx[0]++;
+			}
 
-		// TODO SPAM
-		fx[1] = 0.0; // FN
+		}
+		System.out.println("FN " + fx[0]);
+
+		fx[1] = 0; // FP
 		for (Entry<String, ArrayList<String>> spamRule : spam.entrySet()) {
-			if (rules.containsKey(spamRule.getKey())) {
-				fx[1] += rules.get(spamRule.getKey());
+			int count = 0;
+			for (String spamRules : spamRule.getValue()) {
+				if (rules.containsKey(spamRules)) {
+					count += rules.get(spamRules);
+					System.out.println("countSPam " + count);
+				}
 			}
-		}
-		Debug.msg("FX [1] = " + fx[1]);
+			if (count > algorithmLimit ) {
+				fx[1]++;
+			}
 
-		// verificar valor de Status
-		double Status = (fx[0] > algorithmLimit ? countFP++ : (fx[1] < algorithmLimit ? countFN++ : null));
-		Debug.msg("Status =[" + Status + "]");
-		fx[0] = countFP;
-		fx[1] = countFN;
+		}
+		System.out.println("FP " + fx[1]);
+
 		return fx;
 	}
+	// public double[] evaluate(LinkedHashMap<String, Double> rules) {
+	//
+	// double[] fx = new double[getNumberOfObjectives()];
+	// // TODO HAM
+	// // check if is FN or FP and countTotal -> send count to setObjective
+	// // calcule FN e FP to auth and manual configuration
+	// fx[0] = 0.0; // FP
+	// for (Entry<String, ArrayList<String>> hamRule : ham.entrySet()) {
+	// if (rules.containsKey(hamRule.getKey())) {
+	// fx[0] += rules.get(hamRule.getKey());
+	// }
+	// }
+	// Debug.msg("FX [0] = " + fx[0]);
+	//
+	// // TODO SPAM
+	// fx[1] = 0.0; // FN
+	// for (Entry<String, ArrayList<String>> spamRule : spam.entrySet()) {
+	// if (rules.containsKey(spamRule.getKey())) {
+	// fx[1] += rules.get(spamRule.getKey());
+	// }
+	// }
+	// Debug.msg("FX [1] = " + fx[1]);
+	//
+	// // verificar valor de Status
+	// double Status = (fx[0] > algorithmLimit ? countFP++ : (fx[1] < algorithmLimit
+	// ? countFN++ : null));
+	// Debug.msg("Status =[" + Status + "]");
+	// fx[0] = countFP;
+	// fx[1] = countFN;
+	// return fx;
+	// }
 
 	public LinkedHashMap<String, Double> getRules() {
 		return rules;
@@ -139,6 +182,15 @@ public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 
 	public boolean validLists() {
 		return !rules.isEmpty() && !ham.isEmpty() && !spam.isEmpty();
+	}
+
+	/**
+	 * This method is used to set new rules in rules map.
+	 * 
+	 * @param newRules
+	 */
+	public void setRules(LinkedHashMap<String, Double> newRules) {
+		this.rules = newRules;
 	}
 
 }

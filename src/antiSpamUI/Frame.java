@@ -269,15 +269,8 @@ public class Frame {
 		JButton generateButton = new JButton("Generate");
 
 		// TODO
-		generateButton.addActionListener(new ActionListener() {
+		generateButton.addActionListener(gui.actionListenerGenerate);
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// if (gui.getAntiSpamFilterProblem().validLists()) {
-
-				// }
-			}
-		});
 
 		JButton saveButtonAuto = new JButton("Save Auto");
 

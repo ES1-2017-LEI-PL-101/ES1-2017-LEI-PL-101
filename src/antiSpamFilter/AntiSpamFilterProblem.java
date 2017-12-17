@@ -64,12 +64,10 @@ public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 
 	public void readHam(String path) {
 		ham = FileLoader.readHamOrSpamFile(path);
-		updateAntiSpamFilterProblem(getRules().size());
 	}
 
 	public void readSpam(String path) {
 		spam = FileLoader.readHamOrSpamFile(path);
-		updateAntiSpamFilterProblem(getRules().size());
 	}
 
 	/** Evaluate() method */
@@ -97,7 +95,7 @@ public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 
 		fx[0] = 0; // FN
 		for (Entry<String, ArrayList<String>> hamRule : ham.entrySet()) {
-			int count = 0;
+			double count = 0.0;
 			for (String hamRules : hamRule.getValue()) {
 				if (rules.containsKey(hamRules)) {
 					count += rules.get(hamRules);
@@ -113,14 +111,14 @@ public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 
 		fx[1] = 0; // FP
 		for (Entry<String, ArrayList<String>> spamRule : spam.entrySet()) {
-			int count = 0;
+			double count = 0.0;
 			for (String spamRules : spamRule.getValue()) {
 				if (rules.containsKey(spamRules)) {
 					count += rules.get(spamRules);
 					System.out.println("countSPam " + count);
 				}
 			}
-			if (count > algorithmLimit ) {
+			if (count > algorithmLimit) {
 				fx[1]++;
 			}
 
@@ -184,13 +182,23 @@ public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 		return !rules.isEmpty() && !ham.isEmpty() && !spam.isEmpty();
 	}
 
-	/**
-	 * This method is used to set new rules in rules map.
+	/** This method is used to set new rules in rules map.
 	 * 
 	 * @param newRules
 	 */
 	public void setRules(LinkedHashMap<String, Double> newRules) {
 		this.rules = newRules;
+
 	}
 
+	public int getCountFN() {
+		// TODO Auto-generated method stub
+		return countFN;
+	}
+
+	public int getCountFP() {
+		return countFP;
+	}
+	
+	
 }

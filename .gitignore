@@ -9,3 +9,5 @@
 *.rs
 *.log
 *.txt
+*.orig
+jMetal.log.lck

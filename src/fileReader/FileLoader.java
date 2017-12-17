@@ -18,7 +18,6 @@ import java.util.Map.Entry;
 public class FileLoader {
 
 
-
 	// Write on hashmap the content of the file
 	/**
 	 * This method is used to read rules.

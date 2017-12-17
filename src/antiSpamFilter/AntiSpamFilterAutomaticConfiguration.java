@@ -25,6 +25,7 @@ import java.util.List;
 
 public class AntiSpamFilterAutomaticConfiguration {
 	private static final int INDEPENDENT_RUNS = 5;
+	private static AntiSpamFilterProblem antiSpamFilterProblem;
 
 	public static void main(String[] args) throws IOException {
 		Debug.in("AntiSpamFilterAutomaticConfiguration [MAIN]");
@@ -32,7 +33,7 @@ public class AntiSpamFilterAutomaticConfiguration {
 
 		List<ExperimentProblem<DoubleSolution>> problemList = new ArrayList<>();
 
-		problemList.add(new ExperimentProblem<>(new AntiSpamFilterProblem(), "AntiSpamFilterProblem"));
+    problemList.add(new ExperimentProblem<>(antiSpamFilterProblem, "AntiSpamFilterProblem"));
 
 		// Debug.getInstance().msg("ProblemList"+problemList.toString());
 
@@ -40,7 +41,7 @@ public class AntiSpamFilterAutomaticConfiguration {
 				problemList);
 
 		// Debug.getInstance().msg("algorithmList"+algorithmList.toString());
-
+    try{
 		Experiment<DoubleSolution, List<DoubleSolution>> experiment = new ExperimentBuilder<DoubleSolution, List<DoubleSolution>>(
 				"AntiSpamStudy").setAlgorithmList(algorithmList).setProblemList(problemList)
 				.setExperimentBaseDirectory(experimentBaseDirectory).setOutputParetoFrontFileName("FUN")
@@ -48,7 +49,8 @@ public class AntiSpamFilterAutomaticConfiguration {
 				.setReferenceFrontDirectory(experimentBaseDirectory + "/referenceFronts")
 				.setIndicatorList(Arrays.asList(new PISAHypervolume<DoubleSolution>()))
 				.setIndependentRuns(INDEPENDENT_RUNS).setNumberOfCores(8).build();
-
+ 
+    
 		// Debug.getInstance().msg("experiment"+experiment.toString());
 
 		new ExecuteAlgorithms<>(experiment).run();
@@ -56,8 +58,11 @@ public class AntiSpamFilterAutomaticConfiguration {
 		new ComputeQualityIndicators<>(experiment).run();
 		new GenerateLatexTablesWithStatistics(experiment).run();
 		new GenerateBoxplotsWithR<>(experiment).setRows(1).setColumns(1).run();
+    }catch (Exception e) {
+		// TODO: handle exception
+	}
 
-		Debug.out("AntiSpamFilterAutomaticConfiguration [MAIN]");
+    
 	}
 
 	static List<ExperimentAlgorithm<DoubleSolution, List<DoubleSolution>>> configureAlgorithmList(
@@ -79,4 +84,14 @@ public class AntiSpamFilterAutomaticConfiguration {
 		return algorithms;
 	}
 
+	public static AntiSpamFilterProblem getAntiSpamFilterProblem() {
+		return antiSpamFilterProblem;
+	}
+
+	public static void setAntiSpamFilterProblem(AntiSpamFilterProblem antiSpamFilterProblem) {
+		AntiSpamFilterAutomaticConfiguration.antiSpamFilterProblem = antiSpamFilterProblem;
+	}
+
+	
+	
 }

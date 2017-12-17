@@ -7,6 +7,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -18,6 +19,7 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
+import antiSpamFilter.AntiSpamFilterAutomaticConfiguration;
 import antiSpamFilter.AntiSpamFilterProblem;
 import fileReader.FileLoader;
 
@@ -91,6 +93,51 @@ public class AntiSpamGUI {
 			frame.setSpinnerFN(String.valueOf(fxCount[0]));
 			frame.setSpinnerFP(String.valueOf(fxCount[1]));
 			setRules("Manual");
+		
+			
+	}
+	};
+	
+	public ActionListener actionListenerGenerate = new ActionListener() {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			e.getActionCommand();
+			 Runnable task = new Runnable() {
+	                public void run() {
+	                	try {
+	                		AntiSpamFilterAutomaticConfiguration.setAntiSpamFilterProblem(antiSpamFilterProblem);
+	                		AntiSpamFilterAutomaticConfiguration.main(null);
+	                		frame.setSpinnerFP(AntiSpamFilterAutomaticConfiguration.getAntiSpamFilterProblem().getCountFP()+"");
+							frame.setSpinnerFN(AntiSpamFilterAutomaticConfiguration.getAntiSpamFilterProblem().getCountFN()+"");
+							setRules("Auto");
+							
+							//TEST
+							System.out.println("anti: " + AntiSpamFilterAutomaticConfiguration.getAntiSpamFilterProblem().getRules().size());
+							for (String name: antiSpamFilterProblem.getRules().keySet()){
+
+					            String key =name.toString();
+					            String value = antiSpamFilterProblem.getRules().get(name).toString();  
+					            System.out.println(key + " " + value);  
+
+
+					} 
+	                	} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+                }
+            };
+            Thread t=new Thread(task);
+            t.start();
+	
+			try {
+				t.join();
+			} catch (InterruptedException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			
 		
 			
 	}

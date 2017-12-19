@@ -11,7 +11,6 @@ import java.util.Map.Entry;
 import org.uma.jmetal.problem.impl.AbstractDoubleProblem;
 import org.uma.jmetal.solution.DoubleSolution;
 
-import Tools.Debug;
 import fileReader.FileLoader;
 
 public class AntiSpamFilterProblem extends AbstractDoubleProblem {
@@ -30,10 +29,6 @@ public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 		// TODO getNumberOfRules file rules
 		this(FileLoader.getInstance().getRulesMap().size());
 
-		// TODO Create GetPath's to Rules, Ham, Spam of GUI
-		Debug.getInstance();
-		Debug.in("AntiSpamFilterProblem [Constructor]");
-		Debug.out("AntiSpamFilterProblem [Constructor]");
 	}
 
 	// definimos o lower limit e upper limit
@@ -44,7 +39,6 @@ public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 	 *            Number of variables of the problem
 	 */
 	public AntiSpamFilterProblem(Integer numberOfVariables) {
-		Debug.in("AntiSpamFilterProblem [Constructor(INTEGER)]");
 
 		// TODO
 		// Get rules, ham , spam
@@ -64,27 +58,23 @@ public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 		setLowerLimit(lowerLimit);
 		setUpperLimit(upperLimit);
 
-		Debug.out("AntiSpamFilterProblem [Constructor(INTEGER)]");
 	}
 
 	// ver metodo
 	/** Evaluate() method */
 	public void evaluate(DoubleSolution solution) {
-		Debug.in("AntiSpamFilterProblem [evaluate(DoubleSolution)]");
 
 		// tratamento de dados
 		int iterator = 0;
-		for (HashMap.Entry<String, Double> rule : rules.entrySet()) {
+		for (Entry<String, Double> rule : rules.entrySet()) {
 			rule.setValue(solution.getVariableValue(iterator));
 			iterator++;
 		}
 
-		Debug.msg("Call evaluate(rules)");
 		double[] fx = evaluate(rules);
 
 		solution.setObjective(0, fx[0]); // objective 0 fx[0] will be subst by FN
 		solution.setObjective(1, fx[1]); // objective 1 fx[1] will be subst by FP
-		Debug.out("AntiSpamFilterProblem [evaluate(DoubleSolution)]");
 	}
 
 	public double[] evaluate(LinkedHashMap<String, Double> rules) {
@@ -99,7 +89,6 @@ public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 				fx[0] += rules.get(hamRule.getKey());
 			}
 		}
-		Debug.msg("FX [0] = " + fx[0]);
 
 		// TODO SPAM
 		fx[1] = 0.0; // FN
@@ -108,11 +97,9 @@ public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 				fx[1] += rules.get(spamRule.getKey());
 			}
 		}
-		Debug.msg("FX [1] = " + fx[1]);
 
 		// verificar valor de Status
 		double Status = (fx[0] > algorithmLimit ? countFP++ : (fx[1] < algorithmLimit ? countFN++ : null));
-		Debug.msg("Status =[" + Status + "]");
 		fx[0] = countFP;
 		fx[1] = countFN;
 		return fx;

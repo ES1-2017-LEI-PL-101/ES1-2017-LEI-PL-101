@@ -148,6 +148,8 @@ public class FileLoader {
 	}
 
 	/**
+	 * This method is used to write the new rules HashMap in the specific file path.
+	 * 
 	 * @param filePath
 	 * @param rules
 	 */

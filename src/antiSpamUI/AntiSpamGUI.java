@@ -63,13 +63,13 @@ public class AntiSpamGUI {
 				frame.getChoisenPathRules().setText(path);
 				setRules("Manual");
 				setRules("Auto");
-				/*
-				 * } else if (e.getActionCommand().equals("Browse Ham")) {
-				 * FileLoader.readFile(path); choisenPathHam.setText(path);
-				 * 
-				 * } else if (e.getActionCommand().equals("Browse Spam")) {
-				 * FileLoader.readFile(path); choisenPathSpam.setText(path);
-				 */
+				
+				  } else if (e.getActionCommand().equals("Browse Ham")) {
+				  FileLoader.readFile(path); frame.getChoisenPathHam().setText(path);
+				  
+				  } else if (e.getActionCommand().equals("Browse Spam")) {
+				  FileLoader.readFile(path); frame.getChoisenPathSpam().setText(path);
+				 
 
 			}
 

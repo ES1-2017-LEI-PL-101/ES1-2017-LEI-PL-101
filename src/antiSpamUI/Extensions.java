@@ -16,7 +16,7 @@ public class Extensions {
 	 * This method is used to put rules in tables.
 	 * 
 	 * @param map
-	 * @return DefaultTableModel This method returns the model.
+	 * @return DefaultTableModel This method returns the model table.
 	 */
 	public static DefaultTableModel toTableModel(Map<?, ?> map) {
 		DefaultTableModel model = new DefaultTableModel(new Object[] { "Rules", "Weight" }, 0);

@@ -7,6 +7,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -18,14 +19,16 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
+import antiSpamFilter.AntiSpamFilterAutomaticConfiguration;
 import antiSpamFilter.AntiSpamFilterProblem;
 import fileReader.FileLoader;
-
 
 public class AntiSpamGUI {
 
 	private Frame frame;
 	private AntiSpamFilterProblem antiSpamFilterProblem;
+	private LinkedHashMap<String, Double> rulesManual = new LinkedHashMap<String, Double>();
+	private LinkedHashMap<String, Double> rulesAuto = new LinkedHashMap<String, Double>();
 
 	/**
 	 * Constructor. Creates a new Frame and a new AntiSpamFilterProblem.
@@ -56,20 +59,19 @@ public class AntiSpamGUI {
 				}
 			}
 
-			System.out.println("Path" + path);
-
 			if (e.getActionCommand().equals("Browse Rules")) {
-				FileLoader.readFile(path);
+				antiSpamFilterProblem.readRules(path);
 				frame.getChoisenPathRules().setText(path);
 				setRules("Manual");
 				setRules("Auto");
-				
-				  } else if (e.getActionCommand().equals("Browse Ham")) {
-				  FileLoader.readFile(path); frame.getChoisenPathHam().setText(path);
-				  
-				  } else if (e.getActionCommand().equals("Browse Spam")) {
-				  FileLoader.readFile(path); frame.getChoisenPathSpam().setText(path);
-				 
+
+			} else if (e.getActionCommand().equals("Browse Ham")) {
+				antiSpamFilterProblem.readHam(path);
+				frame.getChoisenPathHam().setText(path);
+
+			} else if (e.getActionCommand().equals("Browse Spam")) {
+				antiSpamFilterProblem.readSpam(path);
+				frame.getChoisenPathSpam().setText(path);
 
 			}
 
@@ -81,19 +83,69 @@ public class AntiSpamGUI {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			e.getActionCommand();
-			// antiSpamFilterProblem.setRules(rules);
-		}
+			
+			for (int count = 0; count < frame.getTableManual().getModel().getRowCount(); count++) {
+				rulesManual.put(frame.getTableManual().getModel().getValueAt(count, 0).toString(),
+						Double.parseDouble(frame.getTableManual().getModel().getValueAt(count, 1).toString()));
 
+			}
+		
+			antiSpamFilterProblem.setRules(rulesManual);
+			double[] fxCount = antiSpamFilterProblem.evaluate(rulesManual);
+			frame.setSpinnerFN(String.valueOf(fxCount[1]));
+			frame.setSpinnerFP(String.valueOf(fxCount[0]));
+			setRules("Manual");
+		
+			
+	}
+	};
+	
+	public ActionListener actionListenerGenerate = new ActionListener() {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			e.getActionCommand();
+			 Runnable task = new Runnable() {
+	                public void run() {
+	                	try {
+	                		AntiSpamFilterAutomaticConfiguration.setAntiSpamFilterProblem(antiSpamFilterProblem);
+	                		System.out.println("Rules " + antiSpamFilterProblem.getRules().size());
+	                		AntiSpamFilterAutomaticConfiguration.main(null);
+	                		rulesAuto = antiSpamFilterProblem.getRules();
+	                		frame.setFieldAutoFP(AntiSpamFilterAutomaticConfiguration.getAntiSpamFilterProblem().getCountFP()+"");
+							frame.setFieldAutoFN(AntiSpamFilterAutomaticConfiguration.getAntiSpamFilterProblem().getCountFN()+"");
+							setRules("Auto");
+							
+					
+	                	} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+                }
+            };
+            Thread t=new Thread(task);
+            t.start();
+	
+			try {
+				t.join();
+			} catch (InterruptedException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			
+		
+			
+	}
 	};
 
 	/**
-	 * This method is used to differentiate between Manual weight and Automatic weight and set the rules
-	 * in Manual or Auto table.
+	 * This method is used to differentiate between Manual weight and Automatic
+	 * weight and set the rules in Manual or Auto table.
 	 * 
 	 * @param option
 	 */
 	public void setRules(String option) {
-		LinkedHashMap<String, Double> newRules = FileLoader.getInstance().getRulesMap();
+		LinkedHashMap<String, Double> newRules = antiSpamFilterProblem.getRules();
 		DefaultTableModel model = Extensions.toTableModel(newRules);
 		if (option.equals("Manual")) {
 			this.frame.getTableManual().setModel(Extensions.toTableModel(newRules));
@@ -101,14 +153,6 @@ public class AntiSpamGUI {
 		if (option.equals("Auto")) {
 			this.frame.getTableAuto().setModel(model);
 		}
-
-		// Test
-		// for (Entry<String, Double> entry : antiSpamFilter.entrySet()) {
-		// String key = entry.getKey();
-		// Double value = entry.getValue();
-		// System.out.println(key.toString() + " " + value.toString());
-		// }
-
 	}
 
 	/**

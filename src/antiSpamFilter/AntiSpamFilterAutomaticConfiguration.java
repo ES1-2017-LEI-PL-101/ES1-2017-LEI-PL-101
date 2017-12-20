@@ -22,13 +22,14 @@ import java.util.List;
 
 public class AntiSpamFilterAutomaticConfiguration {
 	private static final int INDEPENDENT_RUNS = 5;
+	private static AntiSpamFilterProblem antiSpamFilterProblem;
 
 	public static void main(String[] args) throws IOException {
 		String experimentBaseDirectory = "experimentBaseDirectory";
 
 		List<ExperimentProblem<DoubleSolution>> problemList = new ArrayList<>();
 
-		problemList.add(new ExperimentProblem<>(new AntiSpamFilterProblem(), "AntiSpamFilterProblem"));
+    problemList.add(new ExperimentProblem<>(antiSpamFilterProblem, "AntiSpamFilterProblem"));
 
 		// Debug.getInstance().msg("ProblemList"+problemList.toString());
 
@@ -44,7 +45,8 @@ public class AntiSpamFilterAutomaticConfiguration {
 						.setReferenceFrontDirectory(experimentBaseDirectory + "/referenceFronts")
 						.setIndicatorList(Arrays.asList(new PISAHypervolume<DoubleSolution>()))
 						.setIndependentRuns(INDEPENDENT_RUNS).setNumberOfCores(8).build();
-
+ 
+    
 		// Debug.getInstance().msg("experiment"+experiment.toString());
 
 		new ExecuteAlgorithms<>(experiment).run();
@@ -53,6 +55,7 @@ public class AntiSpamFilterAutomaticConfiguration {
 		new GenerateLatexTablesWithStatistics(experiment).run();
 		new GenerateBoxplotsWithR<>(experiment).setRows(1).setColumns(1).run();
 
+    
 	}
 
 	static List<ExperimentAlgorithm<DoubleSolution, List<DoubleSolution>>> configureAlgorithmList(
@@ -65,11 +68,21 @@ public class AntiSpamFilterAutomaticConfiguration {
 			Algorithm<List<DoubleSolution>> algorithm = new NSGAIIBuilder<>(problemList.get(i).getProblem(),
 					new SBXCrossover(1.0, 5),
 					new PolynomialMutation(1.0 / problemList.get(i).getProblem().getNumberOfVariables(), 10.0))
-							.setMaxEvaluations(25000).setPopulationSize(100).build();
+					.setMaxEvaluations(3000).setPopulationSize(100).build();
 			algorithms.add(new ExperimentAlgorithm<>(algorithm, "NSGAII", problemList.get(i).getTag()));
 			// Debug.getInstance().msg("algorithms "+algorithms.toString());
 		}
 		return algorithms;
 	}
 
+	public static AntiSpamFilterProblem getAntiSpamFilterProblem() {
+		return antiSpamFilterProblem;
+	}
+
+	public static void setAntiSpamFilterProblem(AntiSpamFilterProblem antiSpamFilterProblem) {
+		AntiSpamFilterAutomaticConfiguration.antiSpamFilterProblem = antiSpamFilterProblem;
+	}
+
+	
+	
 }

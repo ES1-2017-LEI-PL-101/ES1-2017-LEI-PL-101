@@ -55,6 +55,10 @@ public class Frame {
 	private JTextField choisenPathRules;
 	private JTextField choisenPathHam;
 	private JTextField choisenPathSpam;
+	private JTextField spinnerFN;
+	private JTextField spinnerFP;
+	private JTextField fieldAutoFP;
+	private JTextField fieldAutoFN;
 
 	private JTable tableManual = new JTable();
 	private JTable tableAuto = new JTable();
@@ -115,20 +119,20 @@ public class Frame {
 		JPanel spinnerManualLayout = new JPanel(new GridLayout(0, 4));
 		JPanel textAutoLayout = new JPanel(new GridLayout(0, 4));
 
-		JTextField spinnerFP = new JTextField("-");
+		spinnerFP = new JTextField("-");
 		spinnerFP.setName("spinnerFP");
 		spinnerFP.setEditable(false);
-		JTextField spinnerFN = new JTextField("-");
+		spinnerFN = new JTextField("-");
 		spinnerFN.setName("spinnerFN");
 		spinnerFN.setEditable(false);
 
 		// lê dos files AntiSpamFilterProblem.NSGAII -> Pesos e FN/FP
 		// AntiSpamConfigurationForLeisureMailbox -> escolher menor FN
 
-		JTextField fieldAutoFP = new JTextField("-");
+		fieldAutoFP = new JTextField("-");
 		fieldAutoFP.setName("autoFP");
 		fieldAutoFP.setEditable(false);
-		JTextField fieldAutoFN = new JTextField("-");
+		fieldAutoFN = new JTextField("-");
 		fieldAutoFN.setName("autoFN");
 		fieldAutoFN.setEditable(false);
 
@@ -255,29 +259,9 @@ public class Frame {
 
 		JButton testButton = new JButton("Run Test");
 
-		testButton.addActionListener(new ActionListener() {
+		testButton.addActionListener(gui.actionListenerTest);
 
 			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				e.getActionCommand();
-
-				// if (gui.getAntiSpamFilterProblem().validLists()) {
-				LinkedHashMap<String, Double> rules = new LinkedHashMap<String, Double>();
-				for (int count = 0; count < tableManual.getModel().getRowCount(); count++) {
-					rules.put(tableManual.getModel().getValueAt(count, 0).toString(),
-							Double.parseDouble(tableManual.getModel().getValueAt(count, 1).toString()));
-
-				}
-				FileLoader.getInstance().setRules(rules);
-				gui.setRules("Manual");
-				// }
-				// System.out.println("Listas não adicionadas");
-
-			}
-
-		});
-
 		JButton saveButtonTest = new JButton("Save Manual");
 
 		// TODO
@@ -286,7 +270,7 @@ public class Frame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 
-				FileLoader.writeFile(getChoisenPathRules().getText(), FileLoader.getInstance().getRulesMap());
+				FileLoader.writeFile(getChoisenPathRules().getText(), gui.getAntiSpamFilterProblem().getRules());
 
 			}
 		});
@@ -296,15 +280,8 @@ public class Frame {
 		JButton generateButton = new JButton("Generate");
 
 		// TODO
-		generateButton.addActionListener(new ActionListener() {
+		generateButton.addActionListener(gui.actionListenerGenerate);
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// if (gui.getAntiSpamFilterProblem().validLists()) {
-
-				// }
-			}
-		});
 
 		JButton saveButtonAuto = new JButton("Save Auto");
 
@@ -398,4 +375,22 @@ public class Frame {
 		return gui;
 	}
 
+	public void setSpinnerFN(String spinnerFN) {
+		this.spinnerFN.setText(spinnerFN);
+	}
+
+	public void setSpinnerFP(String spinnerFP) {
+		this.spinnerFP.setText(spinnerFP);
+	}
+
+	public void setFieldAutoFP(String fieldAutoFP) {
+		this.fieldAutoFP.setText(fieldAutoFP);
+	}
+
+	public void setFieldAutoFN(String fieldAutoFN) {
+		this.fieldAutoFN.setText(fieldAutoFN);
+	}
+
+	
+	
 }

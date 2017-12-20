@@ -84,6 +84,8 @@ public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 		Debug.msg("Call evaluate(rules)");
 		double[] fx = evaluate(rules);
 
+		countFP = (int) fx[0];
+		countFN = (int) fx[1];
 		solution.setObjective(0, fx[0]); // objective 0 fx[0] will be subst by FP
 		solution.setObjective(1, fx[1]); // objective 1 fx[1] will be subst by FN
 		Debug.out("AntiSpamFilterProblem [evaluate(DoubleSolution)]");
@@ -107,6 +109,7 @@ public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 
 		}
 
+
 		fx[1] = 0.0; // FN
 		for (Entry<String, ArrayList<String>> spamRule : spam.entrySet()) {
 			double count = 0.0;
@@ -123,37 +126,7 @@ public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 
 		return fx;
 	}
-	// public double[] evaluate(LinkedHashMap<String, Double> rules) {
-	//
-	// double[] fx = new double[getNumberOfObjectives()];
-	// // TODO HAM
-	// // check if is FN or FP and countTotal -> send count to setObjective
-	// // calcule FN e FP to auth and manual configuration
-	// fx[0] = 0.0; // FP
-	// for (Entry<String, ArrayList<String>> hamRule : ham.entrySet()) {
-	// if (rules.containsKey(hamRule.getKey())) {
-	// fx[0] += rules.get(hamRule.getKey());
-	// }
-	// }
-	// Debug.msg("FX [0] = " + fx[0]);
-	//
-	// // TODO SPAM
-	// fx[1] = 0.0; // FN
-	// for (Entry<String, ArrayList<String>> spamRule : spam.entrySet()) {
-	// if (rules.containsKey(spamRule.getKey())) {
-	// fx[1] += rules.get(spamRule.getKey());
-	// }
-	// }
-	// Debug.msg("FX [1] = " + fx[1]);
-	//
-	// // verificar valor de Status
-	// double Status = (fx[0] > algorithmLimit ? countFP++ : (fx[1] < algorithmLimit
-	// ? countFN++ : null));
-	// Debug.msg("Status =[" + Status + "]");
-	// fx[0] = countFP;
-	// fx[1] = countFN;
-	// return fx;
-	// }
+
 
 	public LinkedHashMap<String, Double> getRules() {
 		return rules;
@@ -165,13 +138,6 @@ public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 
 	public LinkedHashMap<String, ArrayList<String>> getSpam() {
 		return spam;
-	}
-
-	// Manual calculation of FN and FP
-	public int[] getFN_FP() {
-		int[] result = new int[2];
-
-		return result;
 	}
 
 	public boolean validLists() {

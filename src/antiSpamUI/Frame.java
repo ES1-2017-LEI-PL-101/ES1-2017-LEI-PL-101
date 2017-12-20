@@ -57,6 +57,8 @@ public class Frame {
 	private JTextField choisenPathSpam;
 	private JTextField spinnerFN;
 	private JTextField spinnerFP;
+	private JTextField fieldAutoFP;
+	private JTextField fieldAutoFN;
 
 	private JTable tableManual = new JTable();
 	private JTable tableAuto = new JTable();
@@ -125,10 +127,10 @@ public class Frame {
 		// lê dos files AntiSpamFilterProblem.NSGAII -> Pesos e FN/FP
 		// AntiSpamConfigurationForLeisureMailbox -> escolher menor FN
 
-		JTextField fieldAutoFP = new JTextField("-");
+		fieldAutoFP = new JTextField("-");
 		fieldAutoFP.setName("autoFP");
 		fieldAutoFP.setEditable(false);
-		JTextField fieldAutoFN = new JTextField("-");
+		fieldAutoFN = new JTextField("-");
 		fieldAutoFN.setName("autoFN");
 		fieldAutoFN.setEditable(false);
 
@@ -370,5 +372,14 @@ public class Frame {
 		this.spinnerFP.setText(spinnerFP);
 	}
 
+	public void setFieldAutoFP(String fieldAutoFP) {
+		this.fieldAutoFP.setText(fieldAutoFP);
+	}
+
+	public void setFieldAutoFN(String fieldAutoFN) {
+		this.fieldAutoFN.setText(fieldAutoFN);
+	}
+
+	
 	
 }

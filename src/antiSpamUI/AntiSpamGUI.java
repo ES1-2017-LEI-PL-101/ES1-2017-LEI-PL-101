@@ -27,6 +27,8 @@ public class AntiSpamGUI {
 
 	private Frame frame;
 	private AntiSpamFilterProblem antiSpamFilterProblem;
+	private LinkedHashMap<String, Double> rulesManual = new LinkedHashMap<String, Double>();
+	private LinkedHashMap<String, Double> rulesAuto = new LinkedHashMap<String, Double>();
 
 	/**
 	 * Constructor. Creates a new Frame and a new AntiSpamFilterProblem.
@@ -81,17 +83,17 @@ public class AntiSpamGUI {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			e.getActionCommand();
-			LinkedHashMap<String, Double> rules = new LinkedHashMap<String, Double>();
+			
 			for (int count = 0; count < frame.getTableManual().getModel().getRowCount(); count++) {
-				rules.put(frame.getTableManual().getModel().getValueAt(count, 0).toString(),
+				rulesManual.put(frame.getTableManual().getModel().getValueAt(count, 0).toString(),
 						Double.parseDouble(frame.getTableManual().getModel().getValueAt(count, 1).toString()));
 
 			}
 		
-			antiSpamFilterProblem.setRules(rules);
-			double[] fxCount = antiSpamFilterProblem.evaluate(rules);
-			frame.setSpinnerFN(String.valueOf(fxCount[0]));
-			frame.setSpinnerFP(String.valueOf(fxCount[1]));
+			antiSpamFilterProblem.setRules(rulesManual);
+			double[] fxCount = antiSpamFilterProblem.evaluate(rulesManual);
+			frame.setSpinnerFN(String.valueOf(fxCount[1]));
+			frame.setSpinnerFP(String.valueOf(fxCount[0]));
 			setRules("Manual");
 		
 			
@@ -109,20 +111,12 @@ public class AntiSpamGUI {
 	                		AntiSpamFilterAutomaticConfiguration.setAntiSpamFilterProblem(antiSpamFilterProblem);
 	                		System.out.println("Rules " + antiSpamFilterProblem.getRules().size());
 	                		AntiSpamFilterAutomaticConfiguration.main(null);
-	                		frame.setSpinnerFP(AntiSpamFilterAutomaticConfiguration.getAntiSpamFilterProblem().getCountFP()+"");
-							frame.setSpinnerFN(AntiSpamFilterAutomaticConfiguration.getAntiSpamFilterProblem().getCountFN()+"");
+	                		rulesAuto = antiSpamFilterProblem.getRules();
+	                		frame.setFieldAutoFP(AntiSpamFilterAutomaticConfiguration.getAntiSpamFilterProblem().getCountFP()+"");
+							frame.setFieldAutoFN(AntiSpamFilterAutomaticConfiguration.getAntiSpamFilterProblem().getCountFN()+"");
 							setRules("Auto");
 							
-							//TEST
-							System.out.println("anti: " + AntiSpamFilterAutomaticConfiguration.getAntiSpamFilterProblem().getRules().size());
-							for (String name: antiSpamFilterProblem.getRules().keySet()){
-
-					            String key =name.toString();
-					            String value = antiSpamFilterProblem.getRules().get(name).toString();  
-					            System.out.println(key + " " + value);  
-
-
-					} 
+					
 	                	} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();

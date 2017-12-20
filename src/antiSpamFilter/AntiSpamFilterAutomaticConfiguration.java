@@ -15,9 +15,6 @@ import org.uma.jmetal.util.experiment.ExperimentBuilder;
 import org.uma.jmetal.util.experiment.component.*;
 import org.uma.jmetal.util.experiment.util.ExperimentAlgorithm;
 import org.uma.jmetal.util.experiment.util.ExperimentProblem;
-
-import Tools.Debug;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -28,7 +25,6 @@ public class AntiSpamFilterAutomaticConfiguration {
 	private static AntiSpamFilterProblem antiSpamFilterProblem;
 
 	public static void main(String[] args) throws IOException {
-		Debug.in("AntiSpamFilterAutomaticConfiguration [MAIN]");
 		String experimentBaseDirectory = "experimentBaseDirectory";
 
 		List<ExperimentProblem<DoubleSolution>> problemList = new ArrayList<>();
@@ -44,11 +40,11 @@ public class AntiSpamFilterAutomaticConfiguration {
 
 		Experiment<DoubleSolution, List<DoubleSolution>> experiment = new ExperimentBuilder<DoubleSolution, List<DoubleSolution>>(
 				"AntiSpamStudy").setAlgorithmList(algorithmList).setProblemList(problemList)
-				.setExperimentBaseDirectory(experimentBaseDirectory).setOutputParetoFrontFileName("FUN")
-				.setOutputParetoSetFileName("VAR")
-				.setReferenceFrontDirectory(experimentBaseDirectory + "/referenceFronts")
-				.setIndicatorList(Arrays.asList(new PISAHypervolume<DoubleSolution>()))
-				.setIndependentRuns(INDEPENDENT_RUNS).setNumberOfCores(8).build();
+						.setExperimentBaseDirectory(experimentBaseDirectory).setOutputParetoFrontFileName("FUN")
+						.setOutputParetoSetFileName("VAR")
+						.setReferenceFrontDirectory(experimentBaseDirectory + "/referenceFronts")
+						.setIndicatorList(Arrays.asList(new PISAHypervolume<DoubleSolution>()))
+						.setIndependentRuns(INDEPENDENT_RUNS).setNumberOfCores(8).build();
  
     
 		// Debug.getInstance().msg("experiment"+experiment.toString());
@@ -64,7 +60,6 @@ public class AntiSpamFilterAutomaticConfiguration {
 
 	static List<ExperimentAlgorithm<DoubleSolution, List<DoubleSolution>>> configureAlgorithmList(
 			List<ExperimentProblem<DoubleSolution>> problemList) {
-		Debug.in("AntiSpamFilterAutomaticConfiguration [configureAlgorithmList]");
 
 		List<ExperimentAlgorithm<DoubleSolution, List<DoubleSolution>>> algorithms = new ArrayList<>();
 
@@ -73,11 +68,10 @@ public class AntiSpamFilterAutomaticConfiguration {
 			Algorithm<List<DoubleSolution>> algorithm = new NSGAIIBuilder<>(problemList.get(i).getProblem(),
 					new SBXCrossover(1.0, 5),
 					new PolynomialMutation(1.0 / problemList.get(i).getProblem().getNumberOfVariables(), 10.0))
-					.setMaxEvaluations(1000).setPopulationSize(100).build();
+					.setMaxEvaluations(3000).setPopulationSize(100).build();
 			algorithms.add(new ExperimentAlgorithm<>(algorithm, "NSGAII", problemList.get(i).getTag()));
 			// Debug.getInstance().msg("algorithms "+algorithms.toString());
 		}
-		Debug.out("AntiSpamFilterAutomaticConfiguration [configureAlgorithmList]");
 		return algorithms;
 	}
 

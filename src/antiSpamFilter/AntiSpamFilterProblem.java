@@ -11,7 +11,6 @@ import java.util.Map.Entry;
 import org.uma.jmetal.problem.impl.AbstractDoubleProblem;
 import org.uma.jmetal.solution.DoubleSolution;
 
-import Tools.Debug;
 import fileReader.FileLoader;
 
 public class AntiSpamFilterProblem extends AbstractDoubleProblem {
@@ -72,23 +71,20 @@ public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 
 	/** Evaluate() method */
 	public void evaluate(DoubleSolution solution) {
-		Debug.in("AntiSpamFilterProblem [evaluate(DoubleSolution)]");
 
 		// tratamento de dados
 		int iterator = 0;
-		for (HashMap.Entry<String, Double> rule : rules.entrySet()) {
+		for (Entry<String, Double> rule : rules.entrySet()) {
 			rule.setValue(solution.getVariableValue(iterator));
 			iterator++;
 		}
 
-		Debug.msg("Call evaluate(rules)");
 		double[] fx = evaluate(rules);
 
 		countFP = (int) fx[0];
 		countFN = (int) fx[1];
 		solution.setObjective(0, fx[0]); // objective 0 fx[0] will be subst by FP
 		solution.setObjective(1, fx[1]); // objective 1 fx[1] will be subst by FN
-		Debug.out("AntiSpamFilterProblem [evaluate(DoubleSolution)]");
 	}
 
 	public double[] evaluate(LinkedHashMap<String, Double> rules) {

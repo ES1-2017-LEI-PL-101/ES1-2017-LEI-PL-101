@@ -109,7 +109,9 @@ public class Frame {
 	}
 
 	/**
-	 * @return
+	 * 
+	 * 
+	 * @return JPanel This method returns the panel.
 	 */
 	private JPanel createSpinnersPanel() {
 		JPanel topLayout = new JPanel(new GridLayout(0, 2));
@@ -152,7 +154,9 @@ public class Frame {
 	}
 
 	/**
-	 * @return
+	 * This method is used to create the Manual and Automatic tables with their weights.
+	 * 
+	 * @return JPanel This method returns the tables panel.
 	 */
 	private JPanel createTables() {
 
@@ -191,7 +195,9 @@ public class Frame {
 	}
 
 	/**
-	 * @return
+	 * This method is used to create the browsers buttons and path panel.
+	 * 
+	 * @return JPanel This method returns the path panel and browsers buttons layout.
 	 */
 	private JPanel createPathsPanel() {
 		JPanel gridLayout = new JPanel(new GridLayout(0, 3));
@@ -244,7 +250,9 @@ public class Frame {
 	}
 
 	/**
-	 * @return
+	 * This method is used to create a buttons panel and what they do.
+	 * 
+	 * @return JPanel This method returns the panel of buttons layout.
 	 */
 	private JPanel createButtons() {
 		JPanel buttonsLayout = new JPanel(new GridLayout(0, 4));
@@ -253,6 +261,7 @@ public class Frame {
 
 		testButton.addActionListener(gui.actionListenerTest);
 
+			
 		JButton saveButtonTest = new JButton("Save Manual");
 
 		// TODO
@@ -299,9 +308,11 @@ public class Frame {
 	}
 
 	/**
+	 * This method is used to insert a new and empty row in panel.
+	 * 
 	 * @param panel
 	 * @param columns
-	 * @return
+	 * @return JPanel This method returns the panel.
 	 */
 	private static JPanel insertEmptyRow(JPanel panel, int columns) {
 		for (int i = 0; i != columns; i++) {

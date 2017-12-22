@@ -108,7 +108,7 @@ public class AntiSpamGUI {
 						frame.setFieldAutoFN(
 								AntiSpamFilterAutomaticConfiguration.getAntiSpamFilterProblem().getCountFN() + "");
 						setRules("Auto", false);
-						// createGraphic();
+						createGraphic();
 						System.out.println("END");
 
 					} catch (IOException e) {
@@ -120,28 +120,27 @@ public class AntiSpamGUI {
 			t.start();
 		}
 
-		// TODO
+		
 		/**
-		 * 
+		 * This method is used to create Graphic to generate a image.
 		 * 
 		 */
 		private void createGraphic() {
 
 			String[] params = new String[2];
 
-			params[0] = "C:\\Program Files\\R\\R-3.4.1\\bin\\x64\\Rscript.exe";
+			params[0] = "C:\\Program Files\\R\\R-3.4.3\\bin\\x64\\Rscript.exe";
 
-			params[1] = "C:\\Users\\vbasto\\git\\ES1\\experimentBaseDirectory\\AntiSpamStudy\\R\\HV.Boxplot.R";
+			params[1] = "C:\\Users\\Admin\\Documents\\GitHub\\ES1-2017-LEI-PL-101\\experimentBaseDirectory\\AntiSpamStudy\\R\\HV.Boxplot.R";
 
 			String[] envp = new String[1];
 
-			envp[0] = "Path=C:\\Program Files\\R\\R-3.4.1\\bin\\x64";
+			envp[0] = "Path=C:\\Program Files\\R\\R-3.4.3\\bin\\x64";
 
 			try {
-				Process p = Runtime.getRuntime().exec(params, envp,
-						new File("C:\\Users\\vbasto\\git\\ES1\\experimentBaseDirectory\\AntiSpamStudy\\R"));
+				Process p = Runtime.getRuntime().exec(params, envp, new File("C:\\Users\\Admin\\Documents\\GitHub\\ES1-2017-LEI-PL-101\\experimentBaseDirectory\\AntiSpamStudy\\R"));
 			} catch (IOException e) {
-				e.printStackTrace();
+				
 			}
 		}
 	};

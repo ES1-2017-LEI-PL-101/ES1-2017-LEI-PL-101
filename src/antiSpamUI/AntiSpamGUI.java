@@ -64,19 +64,18 @@ public class AntiSpamGUI {
 
 			if (e.getActionCommand().equals("Browse Rules")) {
 				antiSpamFilterProblem.readRules(path);
-				frame.getChoisenPathRules().setText(path);
+				frame.getChosenPathRules().setText(path);
 				rulesManual = antiSpamFilterProblem.getRules();
 				rulesAuto = antiSpamFilterProblem.getRules();
 				setRules("Manual",true);
 				setRules("Auto",true);
-
 			} else if (e.getActionCommand().equals("Browse Ham")) {
 				antiSpamFilterProblem.readHam(path);
-				frame.getChoisenPathHam().setText(path);
+				frame.getChosenPathHam().setText(path);
 
 			} else if (e.getActionCommand().equals("Browse Spam")) {
 				antiSpamFilterProblem.readSpam(path);
-				frame.getChoisenPathSpam().setText(path);
+				frame.getChosenPathSpam().setText(path);
 
 			}
 			
@@ -176,11 +175,11 @@ public class AntiSpamGUI {
 			e.getActionCommand();
 
 			if (e.getActionCommand().equals("Save Manual")) {
-				FileLoader.writeFile(frame.getChoisenPathRules().getText(), rulesManual);
+				FileLoader.writeFile(frame.getChosenPathRules().getText(), rulesManual);
 				String message = "Rules Manual have been saved!";
 				frame.Popup(message);
 			} else if (e.getActionCommand().equals("Save Auto")){
-				FileLoader.writeFile(frame.getChoisenPathRules().getText(), rulesAuto);
+				FileLoader.writeFile(frame.getChosenPathRules().getText(), rulesAuto);
 				String message = "Rules Automatic have been saved!";
 				frame.Popup(message);
 			}
@@ -194,13 +193,17 @@ public class AntiSpamGUI {
 	 * @param option
 	 */
 	public void setRules(String option, boolean firstLoad) {
+
 		LinkedHashMap<String, Double> newRules = antiSpamFilterProblem.getRules();
 		DefaultTableModel model = Extensions.toTableModel(newRules,firstLoad);
 		
 		if (option.equals("Manual")) {
+
 			this.frame.getTableManual().setModel(model);
 		}
 		if (option.equals("Auto")) {
+			LinkedHashMap<String, Double> newRules = this.rulesAuto;
+			DefaultTableModel model = Extensions.toTableModel(newRules,firstLoad);
 			this.frame.getTableAuto().setModel(model);
 		}
 	}
@@ -225,6 +228,7 @@ public class AntiSpamGUI {
 			new AntiSpamGUI();
 		} catch (Exception e) {
 			System.out.println("Error: " + e.getMessage() + "; " + e.getLocalizedMessage() + ";" + e.getStackTrace());
+
 		}
 	}
 	
@@ -240,5 +244,5 @@ public class AntiSpamGUI {
 			iterator++;
 		}
 	}
-	
+
 }

@@ -94,12 +94,13 @@ public class FileLoader {
 	 */
 	public static int readNSGAII_LowerIndex(String filePath, int Column){
 		BufferedReader br = null;
-		
+
 		int FnCol = (Column >= 0 ? Column :1);
 		//Min[a,b];
 		//a menor valor
 		//b indice
 		Double min = -1.0;
+
 		int index = -1;
 		
 		try {
@@ -109,14 +110,12 @@ public class FileLoader {
 						
 			while ((sCurrentLine = br.readLine()) != null) {
 				String[] parts = sCurrentLine.split(" ");
-				
-				//Min[a,b];
+
 				//a menor valor
 				//b indice
 				if(nCurrentLine == 0){
 				min = Double.parseDouble(parts[FnCol]);
-				
-				index = 0;
+	index = 0;
 				}else{
 					if(parts.length > 1){	
 							//seleciona o valor minimo
@@ -139,6 +138,7 @@ public class FileLoader {
 				e.printStackTrace();
 			}
 		}
+
 		
 			return index;
 	}

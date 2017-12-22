@@ -25,7 +25,6 @@ public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 	private final double algorithmLimit = 5.0;
 
 	public AntiSpamFilterProblem() {
-
 		rules = new LinkedHashMap<String, Double>();
 		ham = new LinkedHashMap<String, ArrayList<String>>();
 		spam = new LinkedHashMap<String, ArrayList<String>>();
@@ -105,7 +104,6 @@ public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 
 		}
 
-
 		fx[1] = 0.0; // FN
 		for (Entry<String, ArrayList<String>> spamRule : spam.entrySet()) {
 			double count = 0.0;
@@ -146,7 +144,6 @@ public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 	 */
 	public void setRules(LinkedHashMap<String, Double> newRules) {
 		this.rules = newRules;
-
 	}
 
 	public int getCountFN() {

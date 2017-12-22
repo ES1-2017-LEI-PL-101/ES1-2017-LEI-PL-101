@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>AntiSpamFilterProblem.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">src (Dec 22, 2017 11:20:35 PM)</a> &gt; <a href="../../index.html" class="el_group">ES1-2017</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.source.html" class="el_package">antiSpamFilter</a> &gt; <span class="el_source">AntiSpamFilterProblem.java</span></div><h1>AntiSpamFilterProblem.java</h1><pre class="source lang-java linenums">package antiSpamFilter;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import org.uma.jmetal.problem.impl.AbstractDoubleProblem;
+import org.uma.jmetal.solution.DoubleSolution;
+
+import fileReader.FileLoader;
+
+public class AntiSpamFilterProblem extends AbstractDoubleProblem {
+
+	private static final long serialVersionUID = -8036102488474183100L;
+
+	private LinkedHashMap&lt;String, Double&gt; rules;
+	private LinkedHashMap&lt;String, ArrayList&lt;String&gt;&gt; ham;
+	private LinkedHashMap&lt;String, ArrayList&lt;String&gt;&gt; spam;
+<span class="fc" id="L23">	private int countFP = 0;</span>
+<span class="fc" id="L24">	private int countFN = 0;</span>
+<span class="fc" id="L25">	private final double algorithmLimit = 5.0;</span>
+
+<span class="fc" id="L27">	public AntiSpamFilterProblem() {</span>
+<span class="fc" id="L28">		rules = new LinkedHashMap&lt;String, Double&gt;();</span>
+<span class="fc" id="L29">		ham = new LinkedHashMap&lt;String, ArrayList&lt;String&gt;&gt;();</span>
+<span class="fc" id="L30">		spam = new LinkedHashMap&lt;String, ArrayList&lt;String&gt;&gt;();</span>
+<span class="fc" id="L31">	}</span>
+
+	// definimos o lower limit e upper limit
+	/**
+	 * Constructor. Creates a new instance of the AntiSpamFilter Problem.
+	 *
+	 * @param numberOfVariables
+	 *            Number of variables of the problem
+	 */
+	public void updateAntiSpamFilterProblem(Integer numberOfVariables) {
+
+<span class="fc" id="L42">		setNumberOfVariables(numberOfVariables);</span>
+<span class="fc" id="L43">		setNumberOfObjectives(2);// FN &amp; FP</span>
+<span class="fc" id="L44">		setName(&quot;AntiSpamFilterProblem&quot;);</span>
+
+<span class="fc" id="L46">		List&lt;Double&gt; lowerLimit = new ArrayList&lt;&gt;(getNumberOfVariables());</span>
+<span class="fc" id="L47">		List&lt;Double&gt; upperLimit = new ArrayList&lt;&gt;(getNumberOfVariables());</span>
+
+<span class="fc bfc" id="L49" title="All 2 branches covered.">		for (int i = 0; i &lt; getNumberOfVariables(); i++) {</span>
+<span class="fc" id="L50">			lowerLimit.add(-5.0);</span>
+<span class="fc" id="L51">			upperLimit.add(5.0);</span>
+		}
+
+<span class="fc" id="L54">		setLowerLimit(lowerLimit);</span>
+<span class="fc" id="L55">		setUpperLimit(upperLimit);</span>
+<span class="fc" id="L56">	}</span>
+
+	public void readRules(String path) {
+<span class="fc" id="L59">		rules = FileLoader.readRulesFile(path);</span>
+<span class="fc" id="L60">		updateAntiSpamFilterProblem(getRules().size());</span>
+<span class="fc" id="L61">	}</span>
+
+	public void readHam(String path) {
+<span class="fc" id="L64">		ham = FileLoader.readHamOrSpamFile(path);</span>
+<span class="fc" id="L65">	}</span>
+
+	public void readSpam(String path) {
+<span class="fc" id="L68">		spam = FileLoader.readHamOrSpamFile(path);</span>
+<span class="fc" id="L69">	}</span>
+
+	/** Evaluate() method */
+	public void evaluate(DoubleSolution solution) {
+
+		// tratamento de dados
+<span class="nc" id="L75">		int iterator = 0;</span>
+<span class="nc bnc" id="L76" title="All 2 branches missed.">		for (Entry&lt;String, Double&gt; rule : rules.entrySet()) {</span>
+<span class="nc" id="L77">			rule.setValue(solution.getVariableValue(iterator));</span>
+<span class="nc" id="L78">			iterator++;</span>
+		}
+
+<span class="nc" id="L81">		double[] fx = evaluate(rules);</span>
+
+<span class="nc" id="L83">		countFP = (int) fx[0];</span>
+<span class="nc" id="L84">		countFN = (int) fx[1];</span>
+<span class="nc" id="L85">		solution.setObjective(0, fx[0]); // objective 0 fx[0] will be subst by FP</span>
+<span class="nc" id="L86">		solution.setObjective(1, fx[1]); // objective 1 fx[1] will be subst by FN</span>
+<span class="nc" id="L87">	}</span>
+
+	public double[] evaluate(LinkedHashMap&lt;String, Double&gt; rules) {
+
+<span class="fc" id="L91">		double[] fx = new double[getNumberOfObjectives()];</span>
+
+<span class="fc" id="L93">		fx[0] = 0.0; // FP</span>
+<span class="pc bpc" id="L94" title="1 of 2 branches missed.">		for (Entry&lt;String, ArrayList&lt;String&gt;&gt; hamRule : ham.entrySet()) {</span>
+<span class="nc" id="L95">			double count = 0.0;</span>
+<span class="nc bnc" id="L96" title="All 2 branches missed.">			for (String hamRules : hamRule.getValue()) {</span>
+<span class="nc bnc" id="L97" title="All 2 branches missed.">				if (rules.containsKey(hamRules)) {</span>
+<span class="nc" id="L98">					count += rules.get(hamRules);</span>
+				}
+			}
+<span class="nc bnc" id="L101" title="All 2 branches missed.">			if (count &gt; algorithmLimit) {</span>
+<span class="nc" id="L102">				fx[0]++;</span>
+			}
+
+		}
+
+<span class="fc" id="L107">		fx[1] = 0.0; // FN</span>
+<span class="pc bpc" id="L108" title="1 of 2 branches missed.">		for (Entry&lt;String, ArrayList&lt;String&gt;&gt; spamRule : spam.entrySet()) {</span>
+<span class="nc" id="L109">			double count = 0.0;</span>
+<span class="nc bnc" id="L110" title="All 2 branches missed.">			for (String spamRules : spamRule.getValue()) {</span>
+<span class="nc bnc" id="L111" title="All 2 branches missed.">				if (rules.containsKey(spamRules)) {</span>
+<span class="nc" id="L112">					count += rules.get(spamRules);</span>
+				}
+			}
+<span class="nc bnc" id="L115" title="All 2 branches missed.">			if (count &lt; algorithmLimit) {</span>
+<span class="nc" id="L116">				fx[1]++;</span>
+			}
+
+		}
+		
+<span class="fc" id="L121">		return fx;</span>
+	}
+
+
+	public LinkedHashMap&lt;String, Double&gt; getRules() {
+<span class="fc" id="L126">		return rules;</span>
+	}
+
+	public LinkedHashMap&lt;String, ArrayList&lt;String&gt;&gt; getHam() {
+<span class="fc" id="L130">		return ham;</span>
+	}
+
+	public LinkedHashMap&lt;String, ArrayList&lt;String&gt;&gt; getSpam() {
+<span class="fc" id="L134">		return spam;</span>
+	}
+
+	public boolean validLists() {
+<span class="fc bfc" id="L138" title="All 6 branches covered.">		return !rules.isEmpty() &amp;&amp; !ham.isEmpty() &amp;&amp; !spam.isEmpty();</span>
+	}
+
+	/** This method is used to set new rules in rules map.
+	 * 
+	 * @param newRules
+	 */
+	public void setRules(LinkedHashMap&lt;String, Double&gt; newRules) {
+<span class="fc" id="L146">		this.rules = newRules;</span>
+<span class="fc" id="L147">	}</span>
+
+	public int getCountFN() {
+		// TODO Auto-generated method stub
+<span class="fc" id="L151">		return countFN;</span>
+	}
+
+	public int getCountFP() {
+<span class="fc" id="L155">		return countFP;</span>
+	}
+	
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span>src (Dec 22, 2017 11:20:35 PM)</div></body></html>

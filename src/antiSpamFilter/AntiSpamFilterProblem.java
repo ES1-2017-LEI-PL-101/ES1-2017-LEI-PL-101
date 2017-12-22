@@ -25,7 +25,6 @@ public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 	private final double algorithmLimit = 5.0;
 
 	public AntiSpamFilterProblem() {
-
 		rules = new LinkedHashMap<String, Double>();
 		ham = new LinkedHashMap<String, ArrayList<String>>();
 		spam = new LinkedHashMap<String, ArrayList<String>>();

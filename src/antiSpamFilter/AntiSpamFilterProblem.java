@@ -117,7 +117,7 @@ public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 			}
 
 		}
-
+		
 		return fx;
 	}
 

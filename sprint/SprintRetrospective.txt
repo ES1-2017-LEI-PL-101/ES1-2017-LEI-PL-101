@@ -1,0 +1,86 @@
+Sprint 20/10 - 03/11
+- What did we do well?
+Começamos a organizar tarefas de pesquisa
+
+- What shoul we have done better?
+Deveriamos ter começado a definir as tarefas para a especificidade do projeto
+
+- What should we start doing?
+Perceber os requisitos especificos do projeto
+
+- what should we stop doing?
+Desperdiçar tempo quando agendamos reuniões
+
+- What should we keep doing?
+Finalizar as tarefas que nos propomos a fazer no respetivo prazo
+
+----
+Sprint 03/11 - 17/11
+- What did we do well?
+Gestão do trello atualizada
+Identificação os pontos chave do projeto
+
+- What shoul we have done better?
+Desenvolver as tarefas num menor periodo de tempo
+
+- What should we start doing?
+Subdividir as task (estão muito grandes)
+
+- what should we stop doing?
+Sobrestimar as tarefas para o sprint
+
+- What should we keep doing?
+Manter avanços regulares no projeto
+
+----
+Sprint 17/11 - 01/12
+- What did we do well?
+Gestão do trello atualizada
+Identificação de todas as funcionalidades
+
+- What shoul we have done better?
+Desenvolver as tarefas num menor periodo de tempo
+
+- What should we start doing?
+Nothing
+
+- what should we stop doing?
+Nothing
+
+- What should we keep doing?
+Manter avanços regulares no projeto
+
+----
+Sprint 01/12 - 15/12
+- What did we do well?
+Desenvolvimento eficaz do projeto
+Reunião com o docente para esclarecimento de dúvidas
+
+- What should we have done better?
+Nothing
+
+- What should we start doing?
+Fazer commits mais regulares
+- what should we stop doing?
+
+- What should we keep doing?
+Cumprir os obetivos propostos no sprint
+
+----
+Sprint 15/12 - 22/12
+- What did we do well?
+Desenvolvimento eficaz do projeto
+Boa comunicação entre membros
+Eficáz divisão de tarefas
+
+- What shoul we have done better?
+Nothing
+
+- What should we start doing?
+Nothing
+
+- what should we stop doing?
+Nothing
+
+- What should we keep doing?
+Cumprir os obetivos propostos no sprint

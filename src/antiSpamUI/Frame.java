@@ -126,7 +126,7 @@ public class Frame {
 		spinnerFN.setName("spinnerFN");
 		spinnerFN.setEditable(false);
 
-		// lê dos files AntiSpamFilterProblem.NSGAII -> Pesos e FN/FP
+		// lï¿½ dos files AntiSpamFilterProblem.NSGAII -> Pesos e FN/FP
 		// AntiSpamConfigurationForLeisureMailbox -> escolher menor FN
 
 		fieldAutoFP = new JTextField("-");
@@ -276,7 +276,7 @@ public class Frame {
 		});
 
 		// instanciar AntiSpamConfiguration e correr o Main
-		// lançar os fixeiros R e tex quando gerar
+		// lanï¿½ar os fixeiros R e tex quando gerar
 		JButton generateButton = new JButton("Generate");
 
 		// TODO
@@ -390,6 +390,47 @@ public class Frame {
 	public void setFieldAutoFN(String fieldAutoFN) {
 		this.fieldAutoFN.setText(fieldAutoFN);
 	}
+	
+	/**
+	 * This method is used to get the SpinnerFN text field.
+	 * 
+	 * @return JTextField 
+	 */
+	
+	public JTextField getSpinnerFN() {
+		return spinnerFN;
+	}
+
+	
+	/**
+	 * This method is used to get the SpinnerFP text field.
+	 * 
+	 * @return JTextField 
+	 */
+	public JTextField getSpinnerFP() {
+		return spinnerFP;
+	}
+
+	
+	/**
+	 * This method is used to get the AutoFP text field.
+	 * 
+	 * @return JTextField 
+	 */
+	public JTextField getFieldAutoFP() {
+		return fieldAutoFP;
+	}
+
+	
+	/**
+	 * This method is used to get the AutoFN text field.
+	 * 
+	 * @return JTextField 
+	 */
+	public JTextField getFieldAutoFN() {
+		return fieldAutoFN;
+	}
+	
 
 	
 	

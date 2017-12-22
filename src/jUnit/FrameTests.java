@@ -57,22 +57,49 @@ class FrameTests {
 
 	@Test
 	void testSetSpinnerFN() {
-		fail("Not yet implemented");
+		f.setSpinnerFN(" ");
+		assertEquals(f.getSpinnerFN(), " ");
 	}
 
 	@Test
 	void testSetSpinnerFP() {
-		fail("Not yet implemented");
+		f.setSpinnerFP(" ");
+		assertEquals(f.getSpinnerFP(), " ");
 	}
 
 	@Test
 	void testSetFieldAutoFP() {
-		fail("Not yet implemented");
+		f.setSpinnerFN(" ");
+		assertEquals(f.getFieldAutoFP(), " ");
 	}
 
 	@Test
 	void testSetFieldAutoFN() {
-		fail("Not yet implemented");
+		f.setSpinnerFN(" ");
+		assertEquals(f.getFieldAutoFN(), " ");
 	}
+	
+	@Test
+	void testGetSpinnerFN() {
+		assertTrue(f.getSpinnerFN() instanceof JTextField);
+	}
+
+	@Test
+	void testGetSpinnerFP() {
+		assertTrue(f.getSpinnerFP() instanceof JTextField);
+	}
+
+	@Test
+	void testGetFieldAutoFP() {
+		assertTrue(f.getFieldAutoFP() instanceof JTextField);
+	}
+
+	@Test
+	void testGetFieldAutoFN() {
+		assertTrue(f.getFieldAutoFN() instanceof JTextField);
+	}
+
+	
+	
 
 }

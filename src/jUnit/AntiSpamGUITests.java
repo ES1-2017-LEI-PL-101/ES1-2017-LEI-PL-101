@@ -23,5 +23,10 @@ class AntiSpamGUITests{
 	void testGetAntiSpamFilterProblem() {
 		assertTrue(a.getAntiSpamFilterProblem() instanceof AntiSpamFilterProblem);
 	}
+	
+	@Test
+	void testGetFrame() {
+		
+	}
 
 }

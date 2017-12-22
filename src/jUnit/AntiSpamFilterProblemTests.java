@@ -12,8 +12,6 @@ import antiSpamFilter.AntiSpamFilterProblem;
 
 class AntiSpamFilterProblemTests{
 	
-	AntiSpamFilterProblem a = new AntiSpamFilterProblem();
-	
 	@Test
 	void testAntiSpamFilterProblem() {
 		assertTrue(new AntiSpamFilterProblem() instanceof AntiSpamFilterProblem);
@@ -26,21 +24,23 @@ class AntiSpamFilterProblemTests{
 
 	@Test
 	void testReadRules() {
-		
-		a.readRules("/ES1-2017/files/rules.cf");
-		assertNotEquals(a.getRules(), null);
+		AntiSpamFilterProblem a = new AntiSpamFilterProblem();
+		a.readRules("./files/rules.cf");
+		assertNotEquals(a.getRules(), new LinkedHashMap<>());
 	}
 
 	@Test
 	void testReadHam() {
-		a.readHam("/ES1-2017/files/ham.log");
-		assertNotEquals(a.getHam(), null);
+		AntiSpamFilterProblem a = new AntiSpamFilterProblem();
+		a.readHam("./files/ham.log");
+		assertNotEquals(a.getHam(), new LinkedHashMap<>());
 	}
 
 	@Test
 	void testReadSpam() {
-		a.readSpam("/ES1-2017/files/spam.log");
-		assertNotEquals(a.getSpam(), null);
+		AntiSpamFilterProblem a = new AntiSpamFilterProblem();
+		a.readSpam("./files/spam.log");
+		assertNotEquals(a.getSpam(), new LinkedHashMap<>());
 	}
 
 	@Test
@@ -50,7 +50,10 @@ class AntiSpamFilterProblemTests{
 
 	@Test
 	void testEvaluateLinkedHashMapOfStringDouble() {
-		fail("Not yet implemented");
+		AntiSpamFilterProblem a = new AntiSpamFilterProblem();
+		a.readRules("./files/rules.cf");
+		assertTrue(a.evaluate(a.getRules()) instanceof double[]);
+	    assertNotEquals(a.evaluate(a.getRules()).length, 0);
 	}
 
 	@Test
@@ -70,14 +73,16 @@ class AntiSpamFilterProblemTests{
 
 	@Test
 	void testValidLists() {
-		a.readRules("/ES1-2017/files/rules.cf");
-		a.readSpam("/ES1-2017/files/spam.log");
-		a.readHam("/ES1-2017/files/ham.log");
+		AntiSpamFilterProblem a = new AntiSpamFilterProblem();
+		a.readRules("./files/rules.cf");
+		a.readSpam("./files/spam.log");
+		a.readHam("./files/ham.log");
 		assertEquals(a.validLists(), true);
 	}
 
 	@Test
 	void testSetRules() {
+		AntiSpamFilterProblem a = new AntiSpamFilterProblem();
 		LinkedHashMap<String, Double> l = new LinkedHashMap<String, Double>();
 		a.setRules(l);
 		assertEquals(a.getRules(), l);
@@ -85,11 +90,13 @@ class AntiSpamFilterProblemTests{
 
 	@Test
 	void testGetCountFN() {
+		AntiSpamFilterProblem a = new AntiSpamFilterProblem();
 		assertNotEquals(Integer.valueOf(a.getCountFN()), null);
 	}
 
 	@Test
 	void testGetCountFP() {
+		AntiSpamFilterProblem a = new AntiSpamFilterProblem();
 		assertNotEquals(Integer.valueOf(a.getCountFP()), null);
 	}
 }

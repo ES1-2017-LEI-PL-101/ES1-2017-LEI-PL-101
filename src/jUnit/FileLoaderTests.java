@@ -13,22 +13,25 @@ class FileLoaderTests {
 	@Test
 	void testReadRulesFile() {
 		new FileLoader();
-		assertTrue(FileLoader.readRulesFile("/ES1-2017/files/rules.cf") instanceof LinkedHashMap<?,?>);
+		assertTrue(FileLoader.readRulesFile("./files/rules.cf") instanceof LinkedHashMap<?,?>);
 	}
 
 	@Test
 	void testReadHamOrSpamFile() {
 		new FileLoader();
-		assertTrue(FileLoader.readHamOrSpamFile("/ES1-2017/files/spam.log") instanceof LinkedHashMap<?,?>);
-		assertTrue(FileLoader.readHamOrSpamFile("/ES1-2017/files/ham.log") instanceof LinkedHashMap<?,?>);
+		assertTrue(FileLoader.readHamOrSpamFile("./files/spam.log") instanceof LinkedHashMap<?,?>);
+		assertTrue(FileLoader.readHamOrSpamFile("./files/ham.log") instanceof LinkedHashMap<?,?>);
 	}
 
 	@Test
 	void testWriteFile() {
 		new FileLoader();
+		LinkedHashMap<String, Double> rules = FileLoader.readRulesFile("./files/rules.cf");
 		LinkedHashMap<String, Double> l = new LinkedHashMap<String, Double>();
-		FileLoader.writeFile("/ES1-2017/files/rules.cf", l);
-		assertEquals(FileLoader.readRulesFile("/ES1-2017/files/rules.cf"), l);
+		FileLoader.writeFile("./files/rules.cf", l);
+		assertEquals(FileLoader.readRulesFile("./files/rules.cf"), l);
+		FileLoader.writeFile("./files/rules.cf", rules);
+		
 	}
 
 }

@@ -104,7 +104,6 @@ public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 
 		}
 
-
 		fx[1] = 0.0; // FN
 		for (Entry<String, ArrayList<String>> spamRule : spam.entrySet()) {
 			double count = 0.0;

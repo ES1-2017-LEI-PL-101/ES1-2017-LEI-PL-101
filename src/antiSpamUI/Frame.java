@@ -52,9 +52,9 @@ public class Frame {
 
 	private JFrame frame;
 
-	private JTextField choisenPathRules;
-	private JTextField choisenPathHam;
-	private JTextField choisenPathSpam;
+	private JTextField chosenPathRules;
+	private JTextField chosenPathHam;
+	private JTextField chosenPathSpam;
 	private JTextField spinnerFN;
 	private JTextField spinnerFP;
 	private JTextField fieldAutoFP;
@@ -62,7 +62,6 @@ public class Frame {
 
 	private JTable tableManual = new JTable();
 	private JTable tableAuto = new JTable();
-
 	private AntiSpamGUI gui;
 
 	/**
@@ -118,23 +117,23 @@ public class Frame {
 
 		JPanel spinnerManualLayout = new JPanel(new GridLayout(0, 4));
 		JPanel textAutoLayout = new JPanel(new GridLayout(0, 4));
-
-		spinnerFP = new JTextField("-");
-		spinnerFP.setName("spinnerFP");
-		spinnerFP.setEditable(false);
-		spinnerFN = new JTextField("-");
-		spinnerFN.setName("spinnerFN");
-		spinnerFN.setEditable(false);
+		
+		this.spinnerFP = new JTextField("-");
+		this.spinnerFP.setName("spinnerFP");
+		this.spinnerFP.setEditable(false);		
+		this.spinnerFN = new JTextField("-");
+		this.spinnerFN.setName("spinnerFN");
+		this.spinnerFN.setEditable(false);
 
 		// l� dos files AntiSpamFilterProblem.NSGAII -> Pesos e FN/FP
 		// AntiSpamConfigurationForLeisureMailbox -> escolher menor FN
 
-		fieldAutoFP = new JTextField("-");
-		fieldAutoFP.setName("autoFP");
-		fieldAutoFP.setEditable(false);
-		fieldAutoFN = new JTextField("-");
-		fieldAutoFN.setName("autoFN");
-		fieldAutoFN.setEditable(false);
+		this.fieldAutoFP = new JTextField("-");
+		this.fieldAutoFP.setName("autoFP");
+		this.fieldAutoFP.setEditable(false);
+		this.fieldAutoFN = new JTextField("-");
+		this.fieldAutoFN.setName("autoFN");
+		this.fieldAutoFN.setEditable(false);
 
 		spinnerManualLayout.add(new JLabel("FP - Manual"));
 		spinnerManualLayout.add(spinnerFP);
@@ -205,45 +204,45 @@ public class Frame {
 		gridLayout = insertEmptyRow(gridLayout, 3);
 
 		JTextField pathRules = new JTextField("Rules.cf");
-		choisenPathRules = new JTextField();
-		choisenPathRules.setEnabled(false);
+		chosenPathRules = new JTextField();
+		chosenPathRules.setEnabled(false);
 		JButton buttonChangeRulesPath = new JButton("Browse Rules");
 		buttonChangeRulesPath.addActionListener(gui.actionListenerBrowser);
 
-		JScrollPane scrollR = new JScrollPane(choisenPathRules);
+		JScrollPane scrollR = new JScrollPane(chosenPathRules);
 		scrollR.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 
 		JTextField pathHam = new JTextField("Ham.log");
-		choisenPathHam = new JTextField();
-		choisenPathHam.setEnabled(false);
+		chosenPathHam = new JTextField();
+		chosenPathHam.setEnabled(false);
 		JButton buttonChangeHamPath = new JButton("Browse Ham");
 
 		buttonChangeHamPath.addActionListener(gui.actionListenerBrowser);
 
-		JScrollPane scrollH = new JScrollPane(choisenPathHam);
+		JScrollPane scrollH = new JScrollPane(chosenPathHam);
 		scrollH.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 
 		JTextField pathSpam = new JTextField("Spam.log");
-		choisenPathSpam = new JTextField();
-		choisenPathSpam.setEnabled(false);
+		chosenPathSpam = new JTextField();
+		chosenPathSpam.setEnabled(false);
 		JButton buttonChangeSpamPath = new JButton("Browse Spam");
 		buttonChangeRulesPath.setName("buttonSpam");
 
 		buttonChangeSpamPath.addActionListener(gui.actionListenerBrowser);
 
-		JScrollPane scrollS = new JScrollPane(choisenPathSpam);
+		JScrollPane scrollS = new JScrollPane(chosenPathSpam);
 		scrollS.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 
 		gridLayout.add(pathRules);
-		gridLayout.add(choisenPathRules);
+		gridLayout.add(chosenPathRules);
 		gridLayout.add(buttonChangeRulesPath);
 
 		gridLayout.add(pathHam);
-		gridLayout.add(choisenPathHam);
+		gridLayout.add(chosenPathHam);
 		gridLayout.add(buttonChangeHamPath);
 
 		gridLayout.add(pathSpam);
-		gridLayout.add(choisenPathSpam);
+		gridLayout.add(chosenPathSpam);
 		gridLayout.add(buttonChangeSpamPath);
 
 		return gridLayout;
@@ -270,7 +269,7 @@ public class Frame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 
-				FileLoader.writeFile(getChoisenPathRules().getText(), gui.getAntiSpamFilterProblem().getRules());
+				FileLoader.writeFile(getChosenPathRules().getText(), gui.getAntiSpamFilterProblem().getRules());
 
 			}
 		});
@@ -326,8 +325,8 @@ public class Frame {
 	 * 
 	 * @return JTextField This method returns the rules file path.
 	 */
-	public JTextField getChoisenPathRules() {
-		return choisenPathRules;
+	public JTextField getChosenPathRules() {
+		return chosenPathRules;
 	}
 
 	/**
@@ -335,8 +334,20 @@ public class Frame {
 	 * 
 	 * @return JTextField This method returns the ham file path.
 	 */
-	public JTextField getChoisenPathHam() {
-		return choisenPathHam;
+	public JTextField getChosenPathHam() {
+		return chosenPathHam;
+	}
+
+	public void setChosenPathRules(JTextField chosenPathRules) {
+		this.chosenPathRules = chosenPathRules;
+	}
+
+	public void setChosenPathHam(JTextField chosenPathHam) {
+		this.chosenPathHam = chosenPathHam;
+	}
+
+	public void setChosenPathSpam(JTextField chosenPathSpam) {
+		this.chosenPathSpam = chosenPathSpam;
 	}
 
 	/**
@@ -344,8 +355,8 @@ public class Frame {
 	 * 
 	 * @return JTextField This method returns the spam file path.
 	 */
-	public JTextField getChoisenPathSpam() {
-		return choisenPathSpam;
+	public JTextField getChosenPathSpam() {
+		return chosenPathSpam;
 	}
 
 	/**
@@ -375,61 +386,23 @@ public class Frame {
 		return gui;
 	}
 
-	public void setSpinnerFN(String spinnerFN) {
-		this.spinnerFN.setText(spinnerFN);
+	public void setSpinnerFN(String sFN) {
+		this.spinnerFN.setText(sFN);
 	}
 
-	public void setSpinnerFP(String spinnerFP) {
-		this.spinnerFP.setText(spinnerFP);
+	public void setSpinnerFP(String sFP) {
+		spinnerFP.setText(sFP);
 	}
 
-	public void setFieldAutoFP(String fieldAutoFP) {
-		this.fieldAutoFP.setText(fieldAutoFP);
+	public void setFieldAutoFP(String fFP) {
+		fieldAutoFP.setText(fFP);
 	}
 
-	public void setFieldAutoFN(String fieldAutoFN) {
-		this.fieldAutoFN.setText(fieldAutoFN);
+	public void setFieldAutoFN(String fFN) {
+		fieldAutoFN.setText(fFN);
 	}
 	
-	/**
-	 * This method is used to get the SpinnerFN text field.
-	 * 
-	 * @return JTextField 
-	 */
 	
-	public JTextField getSpinnerFN() {
-		return spinnerFN;
-	}
-
-	
-	/**
-	 * This method is used to get the SpinnerFP text field.
-	 * 
-	 * @return JTextField 
-	 */
-	public JTextField getSpinnerFP() {
-		return spinnerFP;
-	}
-
-	
-	/**
-	 * This method is used to get the AutoFP text field.
-	 * 
-	 * @return JTextField 
-	 */
-	public JTextField getFieldAutoFP() {
-		return fieldAutoFP;
-	}
-
-	
-	/**
-	 * This method is used to get the AutoFN text field.
-	 * 
-	 * @return JTextField 
-	 */
-	public JTextField getFieldAutoFN() {
-		return fieldAutoFN;
-	}
 	
 
 	

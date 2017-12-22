@@ -1,5 +1,6 @@
 package jUnit;
 
+import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.*;
 
 import javax.swing.JFrame;
@@ -13,7 +14,8 @@ import antiSpamUI.Frame;
 
 class FrameTests {
 
-	Frame f = new Frame(new AntiSpamGUI());
+	AntiSpamGUI gui = new AntiSpamGUI();
+	Frame f = gui.getFrame();
 	
 	@Test
 	void testFrame() {
@@ -26,18 +28,27 @@ class FrameTests {
 	}
 
 	@Test
-	void testGetChoisenPathRules() {
-		assertTrue(f.getChoisenPathRules() instanceof JTextField);
+	void testGetChosenPathRules() {
+		JTextField path = f.getChosenPathRules();
+		f.setChosenPathRules( new JTextField("test"));
+		assertEquals(f.getChosenPathRules().getText(), "test");
+		f.setChosenPathRules(path);
 	}
 
 	@Test
-	void testGetChoisenPathHam() {
-		assertTrue(f.getChoisenPathHam() instanceof JTextField);
+	void testGetChosenPathHam() {
+		JTextField path = f.getChosenPathHam();
+		f.setChosenPathHam( new JTextField("test"));
+		assertEquals(f.getChosenPathHam().getText(), "test");
+		f.setChosenPathHam(path);
 	}
 
 	@Test
-	void testGetChoisenPathSpam() {
-		assertTrue(f.getChoisenPathSpam() instanceof JTextField);
+	void testGetChosenPathSpam() {
+		JTextField path = f.getChosenPathSpam();
+		f.setChosenPathSpam( new JTextField("test"));
+		assertEquals(f.getChosenPathSpam().getText(), "test");
+		f.setChosenPathSpam(path);
 	}
 
 	@Test
@@ -57,29 +68,34 @@ class FrameTests {
 
 	@Test
 	void testSetSpinnerFN() {
-		f.setSpinnerFN(" ");
-		assertEquals(f.getSpinnerFN(), " ");
+		f.setSpinnerFN("test");
+		//assertEquals(f.getSpinnerFN().getText(), "test");
+		fail();
 	}
 
 	@Test
 	void testSetSpinnerFP() {
-		f.setSpinnerFP(" ");
-		assertEquals(f.getSpinnerFP(), " ");
+		/*f.setSpinnerFN("test");
+		assertEquals(f.getSpinnerFN().getText(), "test");*/
+		//assertEquals(f.getSpinnerFN().getText(), null);
+		fail();
 	}
 
 	@Test
 	void testSetFieldAutoFP() {
-		f.setSpinnerFN(" ");
-		assertEquals(f.getFieldAutoFP(), " ");
+		//f.setSpinnerFN("test");
+		//assertEquals(f.getFieldAutoFP().getText(), "test");
+		fail();
 	}
 
 	@Test
 	void testSetFieldAutoFN() {
-		f.setSpinnerFN(" ");
-		assertEquals(f.getFieldAutoFN(), " ");
+		//f.setSpinnerFN("test");
+		//assertEquals(f.getFieldAutoFN().getText(), "test");
+		fail();
 	}
 	
-	@Test
+	/*@Test
 	void testGetSpinnerFN() {
 		assertTrue(f.getSpinnerFN() instanceof JTextField);
 	}
@@ -97,8 +113,7 @@ class FrameTests {
 	@Test
 	void testGetFieldAutoFN() {
 		assertTrue(f.getFieldAutoFN() instanceof JTextField);
-	}
-
+	}*/
 	
 	
 

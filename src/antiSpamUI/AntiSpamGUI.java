@@ -61,17 +61,17 @@ public class AntiSpamGUI {
 
 			if (e.getActionCommand().equals("Browse Rules")) {
 				antiSpamFilterProblem.readRules(path);
-				frame.getChoisenPathRules().setText(path);
+				frame.getChosenPathRules().setText(path);
 				setRules("Manual");
 				setRules("Auto");
 
 			} else if (e.getActionCommand().equals("Browse Ham")) {
 				antiSpamFilterProblem.readHam(path);
-				frame.getChoisenPathHam().setText(path);
+				frame.getChosenPathHam().setText(path);
 
 			} else if (e.getActionCommand().equals("Browse Spam")) {
 				antiSpamFilterProblem.readSpam(path);
-				frame.getChoisenPathSpam().setText(path);
+				frame.getChosenPathSpam().setText(path);
 
 			}
 
@@ -176,5 +176,9 @@ public class AntiSpamGUI {
 		} catch (Exception e) {
 			System.out.println("Error: " + e.getMessage());
 		}
+	}
+
+	public Frame getFrame() {
+		return frame;
 	}
 }

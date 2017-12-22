@@ -1,9 +1,13 @@
 package jUnit;
 
 import static org.junit.jupiter.api.Assertions.*;
+
+import javax.swing.JTable;
+
 import org.junit.jupiter.api.Test;
 import antiSpamFilter.AntiSpamFilterProblem;
 import antiSpamUI.AntiSpamGUI;
+import antiSpamUI.Frame;
 
 class AntiSpamGUITests{
 
@@ -16,7 +20,12 @@ class AntiSpamGUITests{
 
 	@Test
 	void testSetRules() {
-		fail("Not yet implemented");
+		JTable jtm = a.getFrame().getTableManual();
+		JTable jta = a.getFrame().getTableAuto();
+		a.setRules("Manual");
+		a.setRules("Auto");
+		assertEquals(jtm, a.getFrame().getTableManual());
+		assertEquals(jta, a.getFrame().getTableAuto());
 	}
 
 	@Test
@@ -26,7 +35,7 @@ class AntiSpamGUITests{
 	
 	@Test
 	void testGetFrame() {
-		
+		assertTrue(a.getFrame() instanceof Frame);
 	}
 
 }

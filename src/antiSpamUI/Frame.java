@@ -31,6 +31,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
@@ -134,7 +135,7 @@ public class Frame {
 		spinnerFN.setName("spinnerFN");
 		spinnerFN.setEditable(false);
 
-		// lê dos files AntiSpamFilterProblem.NSGAII -> Pesos e FN/FP
+		// lï¿½ dos files AntiSpamFilterProblem.NSGAII -> Pesos e FN/FP
 		// AntiSpamConfigurationForLeisureMailbox -> escolher menor FN
 
 		fieldAutoFP = new JTextField("-");
@@ -276,7 +277,7 @@ public class Frame {
 		saveButtonTest.addActionListener(gui.actionListenerSave);
 
 		// instanciar AntiSpamConfiguration e correr o Main
-		// lançar os fixeiros R e tex quando gerar
+		// lanï¿½ar os fixeiros R e tex quando gerar
 		generateButton = new JButton("Generate");
 
 		// TODO
@@ -405,5 +406,9 @@ public class Frame {
 			generateButton.setEnabled(true);
 			saveButtonAuto.setEnabled(true);
 		}
+	}
+
+	public void Popup(String message) {
+		JOptionPane.showMessageDialog(frame, message);
 	}
 }

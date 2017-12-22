@@ -92,8 +92,10 @@ public class FileLoader {
 	 * @param filePath AntiSpamFilterProblem.NSGAII.rf
 	 * @return integer index of lower FN on AntiSpamFilterProblemNSGAII.rs
 	 */
-	public static int readNSGAII_LowerIndex(String filePath){
+	public static int readNSGAII_LowerIndex(String filePath, int Column){
 		BufferedReader br = null;
+		
+		int FnCol = (Column >= 0 ? Column :1);
 		//Min[a,b];
 		//a menor valor
 		//b indice
@@ -104,29 +106,24 @@ public class FileLoader {
 			br = new BufferedReader(new FileReader(filePath));
 			String sCurrentLine;
 			int nCurrentLine = 0;
-			//na primeira linha toma o valor da pos 1 
-			//o valor da pos 0 é o primeiro valor de min.
-			int beginIndexLine = 0;
-			
+						
 			while ((sCurrentLine = br.readLine()) != null) {
 				String[] parts = sCurrentLine.split(" ");
-				beginIndexLine = 0;
+				
 				//Min[a,b];
 				//a menor valor
 				//b indice
 				if(nCurrentLine == 0){
-				min = Double.parseDouble(parts[0]);
-				beginIndexLine = 1;
-				index = 1;
-				}
+				min = Double.parseDouble(parts[FnCol]);
 				
-				if(parts.length > 1){	
-					for (int i = beginIndexLine; i < parts.length; i++) {
-						//seleciona o valor minimo
-						if(Double.parseDouble(parts[i]) < min){
-							min = Double.parseDouble(parts[i]);
-							index = nCurrentLine;
-						}
+				index = 0;
+				}else{
+					if(parts.length > 1){	
+							//seleciona o valor minimo
+							if(Double.parseDouble(parts[FnCol]) < min){
+								min = Double.parseDouble(parts[FnCol]);
+								index = nCurrentLine;
+							}
 					}
 				}
 				nCurrentLine++;	

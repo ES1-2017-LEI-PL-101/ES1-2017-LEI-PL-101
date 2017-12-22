@@ -15,10 +15,12 @@ public class Extensions {
 	public static DefaultTableModel toTableModel(Map<?, ?> map,boolean firstLoad) {
 		DefaultTableModel model = new DefaultTableModel(new Object[] { "Rules", "Weight" }, 0);
 		for (Map.Entry<?, ?> entry : map.entrySet()) {
-			if(firstLoad)
+			if(firstLoad) {
 			model.addRow(new Object[] { entry.getKey(), 0.0 });
-			else
+			
+			}else {
 			model.addRow(new Object[] { entry.getKey(), entry.getValue() });
+			}
 		}
 		return model;
 	}

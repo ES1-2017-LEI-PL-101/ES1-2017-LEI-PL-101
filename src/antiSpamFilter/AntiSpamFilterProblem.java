@@ -31,7 +31,6 @@ public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 		this.spam = new LinkedHashMap<String, ArrayList<String>>();
 	}
 
-	// definimos o lower limit e upper limit
 	/**
 	 * Constructor. Creates a new instance of the AntiSpamFilter Problem.
 	 *
@@ -40,7 +39,7 @@ public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 	public void updateAntiSpamFilterProblem(Integer numberOfVariables) {
 
 		setNumberOfVariables(numberOfVariables);
-		setNumberOfObjectives(2);// FN & FP
+		setNumberOfObjectives(2);
 		setName("AntiSpamFilterProblem");
 
 		List<Double> lowerLimit = new ArrayList<>(getNumberOfVariables());
@@ -55,7 +54,7 @@ public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 	}
 
 	/**
-	 * This method is used to read rules. 
+	 * This method is used to read rules.
 	 * 
 	 * @param path
 	 */
@@ -82,40 +81,37 @@ public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 		spam = FileLoader.readHamOrSpamFile(path);
 	}
 
-	
 	/**
-	 * 
+	 * This method is used to convert solution to LinkedHashMap.
 	 *
 	 * @param solution
 	 */
 	public void evaluate(DoubleSolution solution) {
 
-		// tratamento de dados
 		int iterator = 0;
 		for (Entry<String, Double> rule : rules.entrySet()) {
 			rule.setValue(solution.getVariableValue(iterator));
 			iterator++;
 		}
-
 		double[] fx = evaluate(rules);
 
 		countFP = (int) fx[0];
 		countFN = (int) fx[1];
-		solution.setObjective(0, fx[0]); // objective 0 fx[0] will be subst by FP
-		solution.setObjective(1, fx[1]); // objective 1 fx[1] will be subst by FN
+		solution.setObjective(0, fx[0]);
+		solution.setObjective(1, fx[1]);
 	}
 
 	/**
-	 * 
+	 * This method is used to count the false positives and false negatives.
 	 * 
 	 * @param rules
-	 * @return Double
+	 * @return Double This method returns the count of fp and fn.
 	 */
 	public double[] evaluate(LinkedHashMap<String, Double> rules) {
 
 		double[] fx = new double[getNumberOfObjectives()];
 
-		fx[0] = 0.0; // FP
+		fx[0] = 0.0;
 		for (Entry<String, ArrayList<String>> hamRule : ham.entrySet()) {
 			double count = 0.0;
 			for (String hamRules : hamRule.getValue()) {
@@ -128,7 +124,7 @@ public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 			}
 		}
 
-		fx[1] = 0.0; // FN
+		fx[1] = 0.0;
 		for (Entry<String, ArrayList<String>> spamRule : spam.entrySet()) {
 			double count = 0.0;
 			for (String spamRules : spamRule.getValue()) {
@@ -173,7 +169,8 @@ public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 	/**
 	 * This method is used to know if all lists aren't empty.
 	 * 
-	 * @return boolean This method returns true if all lists aren't empty and false otherwise.
+	 * @return boolean This method returns true if all lists aren't empty and false
+	 *         otherwise.
 	 */
 	public boolean validLists() {
 		return !rules.isEmpty() && !ham.isEmpty() && !spam.isEmpty();
@@ -191,7 +188,7 @@ public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 	/**
 	 * This method is used to get the count of false negative.
 	 * 
-	 * @return int This method returns the countFN.
+	 * @return integer This method returns the countFN.
 	 */
 	public int getCountFN() {
 		return countFN;
@@ -200,7 +197,7 @@ public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 	/**
 	 * This method is used to get the count of false positive.
 	 * 
-	 * @return int This method returns the countFP.
+	 * @return integer This method returns the countFP.
 	 */
 	public int getCountFP() {
 		return countFP;

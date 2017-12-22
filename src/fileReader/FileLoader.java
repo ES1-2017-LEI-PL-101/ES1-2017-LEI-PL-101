@@ -16,7 +16,7 @@ import java.util.Map.Entry;
 public class FileLoader {
 
 	/**
-	 * This method is used to read rules.
+	 * This method is used to read rules files.
 	 * 
 	 * @param filePath
 	 */
@@ -80,46 +80,43 @@ public class FileLoader {
 		}
 		return map;
 	}
+
 	/**
+	 * This method is used to search for the lowest false negative.
 	 * 
-	 * @param filePath AntiSpamFilterProblem.NSGAII.rf
-	 * @return integer index of lower FN on AntiSpamFilterProblemNSGAII.rs
+	 * @param filePath
+	 * @param column
+	 * @return integer This method returns the corresponding line of lowest FN.
 	 */
-	public static int readNSGAII_LowerIndex(String filePath, int Column){
+	public static int readNSGAII_LowerIndex(String filePath, int column) {
 		BufferedReader br = null;
+
+		int fnCol = (column >= 0 ? column : 1);
 		
-		int FnCol = (Column >= 0 ? Column :1);
-		//Min[a,b];
-		//a menor valor
-		//b indice
 		Double min = -1.0;
 		int index = -1;
-		
+
 		try {
 			br = new BufferedReader(new FileReader(filePath));
 			String sCurrentLine;
 			int nCurrentLine = 0;
-						
+
 			while ((sCurrentLine = br.readLine()) != null) {
 				String[] parts = sCurrentLine.split(" ");
-				
-				//Min[a,b];
-				//a menor valor
-				//b indice
-				if(nCurrentLine == 0){
-				min = Double.parseDouble(parts[FnCol]);
-				
-				index = 0;
-				}else{
-					if(parts.length > 1){	
-							//seleciona o valor minimo
-							if(Double.parseDouble(parts[FnCol]) < min){
-								min = Double.parseDouble(parts[FnCol]);
-								index = nCurrentLine;
-							}
+
+				if (nCurrentLine == 0) {
+					min = Double.parseDouble(parts[fnCol]);
+
+					index = 0;
+				} else {
+					if (parts.length > 1) {
+						if (Double.parseDouble(parts[fnCol]) < min) {
+							min = Double.parseDouble(parts[fnCol]);
+							index = nCurrentLine;
+						}
 					}
 				}
-				nCurrentLine++;	
+				nCurrentLine++;
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -132,37 +129,37 @@ public class FileLoader {
 				e.printStackTrace();
 			}
 		}
-		
-			return index;
+		return index;
 	}
 
-	
 	/**
-	 * Read values from AntiSpamFilterProblem.NSGAII.rs by index
-	 * @param filePath AntiSpamFilterProblem.NSGAII.rs
-	 * @param index Line
-	 * @return
+	 * This method is used to read values from AntiSpamFilterProblem.NSGAII.rs by
+	 * index.
+	 * 
+	 * @param filePath
+	 * @param index
+	 * @return Double This method returns the Leisure Mail values .
 	 */
 	public static Double[] readNSGAII_Values(String filePath, int index) {
 		BufferedReader br = null;
 		Double[] valuesMap = null;
-		
+
 		try {
 			br = new BufferedReader(new FileReader(filePath));
 			String sCurrentLine;
 			int nCurrentLine = 0;
-			
-			while (nCurrentLine!=index) {
-					br.readLine();
-					nCurrentLine++;
+
+			while (nCurrentLine != index) {
+				br.readLine();
+				nCurrentLine++;
 			}
-				sCurrentLine = br.readLine();
-				String[] parts = sCurrentLine.split(" ");
-				valuesMap = new Double [parts.length];
-				for(int i = 0 ; i!=parts.length;i++ ){
-					valuesMap[i] = Double.parseDouble(parts[i]);
-				}
-				
+			sCurrentLine = br.readLine();
+			String[] parts = sCurrentLine.split(" ");
+			valuesMap = new Double[parts.length];
+			for (int i = 0; i != parts.length; i++) {
+				valuesMap[i] = Double.parseDouble(parts[i]);
+			}
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
@@ -174,11 +171,9 @@ public class FileLoader {
 				e.printStackTrace();
 			}
 		}
-		
-		return valuesMap;	
+		return valuesMap;
 	}
-	
-	
+
 	/**
 	 * This method is used to write the new rules HashMap in the specific file path.
 	 * 

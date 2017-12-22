@@ -1,48 +1,24 @@
 package antiSpamUI;
 
-import java.awt.Adjustable;
 import java.awt.BorderLayout;
-import java.awt.Button;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Graphics;
 import java.awt.GridLayout;
-import java.awt.Insets;
 import java.awt.Label;
-import java.awt.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Map.Entry;
 
 import javax.swing.BorderFactory;
-import javax.swing.DefaultListModel;
 import javax.swing.JButton;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JPanel;
-import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
-import javax.swing.JSpinner;
 import javax.swing.JTable;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.ScrollPaneConstants;
 import javax.swing.border.Border;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
 
-import org.apache.commons.math3.optim.nonlinear.scalar.noderiv.BOBYQAOptimizer;
-
-import antiSpamFilter.AntiSpamFilterProblem;
 import fileReader.FileLoader;
 
 public class Frame {
@@ -82,18 +58,18 @@ public class Frame {
 
 				JPanel mainPanel = new JPanel(new BorderLayout());
 				mainPanel.add(createSpinnersPanel(), BorderLayout.PAGE_START);
+
 				JPanel centerPanel = new JPanel(new GridLayout(0, 1));
 				centerPanel.add(createTables());
 				centerPanel.add(createPathsPanel());
+
 				mainPanel.add(createButtons(), BorderLayout.SOUTH);
 				mainPanel.add(centerPanel, BorderLayout.CENTER);
 
 				frame.add(mainPanel);
-
 				frame.setVisible(true);
 			}
 		});
-
 	}
 
 	/**
@@ -106,13 +82,14 @@ public class Frame {
 	}
 
 	/**
-	 * 
+	 * This method is used to create the panel of FP - Manual, FN - Manual, FP -
+	 * Auto and FN - Auto.
 	 * 
 	 * @return JPanel This method returns the panel.
 	 */
 	private JPanel createSpinnersPanel() {
-		JPanel topLayout = new JPanel(new GridLayout(0, 2));
 
+		JPanel topLayout = new JPanel(new GridLayout(0, 2));
 		JPanel spinnerManualLayout = new JPanel(new GridLayout(0, 4));
 		JPanel textAutoLayout = new JPanel(new GridLayout(0, 4));
 
@@ -147,12 +124,10 @@ public class Frame {
 		topLayout.add(textAutoLayout);
 
 		return topLayout;
-
 	}
 
 	/**
-	 * This method is used to create the Manual and Automatic tables with their
-	 * weights.
+	 * This method is used to create the rules and weights tables.
 	 * 
 	 * @return JPanel This method returns the tables panel.
 	 */
@@ -182,6 +157,7 @@ public class Frame {
 
 		JScrollPane scrollPane = new JScrollPane(tableManual);
 		JScrollPane scrollPane2 = new JScrollPane(tableAuto);
+		
 		tableManual.setFillsViewportHeight(true);
 		tableAuto.setFillsViewportHeight(true);
 
@@ -189,23 +165,24 @@ public class Frame {
 		listPanel.add(scrollPane2);
 
 		return listPanel;
-
 	}
 
 	/**
-	 * This method is used to create the browsers buttons and path panel.
+	 * This method is used to create the browsers buttons and rules, ham and spam
+	 * path panel .
 	 * 
-	 * @return JPanel This method returns the path panel and browsers buttons
-	 *         layout.
+	 * @return JPanel This method returns the path panel and browsers buttons layout.
 	 */
 	private JPanel createPathsPanel() {
+		
 		JPanel gridLayout = new JPanel(new GridLayout(0, 3));
-
 		gridLayout = insertEmptyRow(gridLayout, 3);
 
 		JTextField pathRules = new JTextField("Rules.cf");
+
 		choisenPathRules = new JTextField();
 		choisenPathRules.setEnabled(false);
+		
 		JButton buttonChangeRulesPath = new JButton("Browse Rules");
 		buttonChangeRulesPath.addActionListener(gui.actionListenerBrowser);
 
@@ -213,18 +190,21 @@ public class Frame {
 		scrollR.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 
 		JTextField pathHam = new JTextField("Ham.log");
+		
 		choisenPathHam = new JTextField();
 		choisenPathHam.setEnabled(false);
+		
 		JButton buttonChangeHamPath = new JButton("Browse Ham");
-
 		buttonChangeHamPath.addActionListener(gui.actionListenerBrowser);
 
 		JScrollPane scrollH = new JScrollPane(choisenPathHam);
 		scrollH.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 
 		JTextField pathSpam = new JTextField("Spam.log");
+		
 		choisenPathSpam = new JTextField();
 		choisenPathSpam.setEnabled(false);
+		
 		JButton buttonChangeSpamPath = new JButton("Browse Spam");
 		buttonChangeRulesPath.setName("buttonSpam");
 
@@ -249,15 +229,16 @@ public class Frame {
 	}
 
 	/**
-	 * This method is used to create a buttons panel and what they do.
+	 * This method is used to create a buttons panel and what they do. Run test,
+	 * save manual, generate and save auto buttons.
 	 * 
 	 * @return JPanel This method returns the panel of buttons layout.
 	 */
 	private JPanel createButtons() {
+		
 		JPanel buttonsLayout = new JPanel(new GridLayout(0, 4));
 
 		JButton testButton = new JButton("Run Test");
-
 		testButton.addActionListener(gui.actionListenerTest);
 
 		JButton saveButtonTest = new JButton("Save Manual");
@@ -301,7 +282,6 @@ public class Frame {
 		buttonsLayout.add(saveButtonAuto);
 
 		return buttonsLayout;
-
 	}
 
 	/**

@@ -1,27 +1,18 @@
 package antiSpamUI;
 
-import java.awt.Dimension;
-import java.awt.EventQueue;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import java.io.File;
 import java.io.IOException;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Map.Entry;
 
-import javax.swing.DefaultListModel;
+import java.util.LinkedHashMap;
+
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
 
 import antiSpamFilter.AntiSpamFilterAutomaticConfiguration;
 import antiSpamFilter.AntiSpamFilterProblem;
-import fileReader.FileLoader;
 
 public class AntiSpamGUI {
 
@@ -72,9 +63,7 @@ public class AntiSpamGUI {
 			} else if (e.getActionCommand().equals("Browse Spam")) {
 				antiSpamFilterProblem.readSpam(path);
 				frame.getChoisenPathSpam().setText(path);
-
 			}
-
 		}
 	};
 
@@ -87,7 +76,6 @@ public class AntiSpamGUI {
 			for (int count = 0; count < frame.getTableManual().getModel().getRowCount(); count++) {
 				rulesManual.put(frame.getTableManual().getModel().getValueAt(count, 0).toString(),
 						Double.parseDouble(frame.getTableManual().getModel().getValueAt(count, 1).toString()));
-
 			}
 
 			antiSpamFilterProblem.setRules(rulesManual);
@@ -95,7 +83,6 @@ public class AntiSpamGUI {
 			frame.setSpinnerFN(String.valueOf(fxCount[1]));
 			frame.setSpinnerFP(String.valueOf(fxCount[0]));
 			setRules("Manual");
-
 		}
 	};
 
@@ -105,16 +92,15 @@ public class AntiSpamGUI {
 		public void actionPerformed(ActionEvent e) {
 			e.getActionCommand();
 			Runnable task = new Runnable() {
+				
 				public void run() {
 					try {
 						AntiSpamFilterAutomaticConfiguration.setAntiSpamFilterProblem(antiSpamFilterProblem);
 						System.out.println("Rules " + antiSpamFilterProblem.getRules().size());
 						AntiSpamFilterAutomaticConfiguration.main(null);
 						rulesAuto = antiSpamFilterProblem.getRules();
-						frame.setFieldAutoFP(
-								AntiSpamFilterAutomaticConfiguration.getAntiSpamFilterProblem().getCountFP() + "");
-						frame.setFieldAutoFN(
-								AntiSpamFilterAutomaticConfiguration.getAntiSpamFilterProblem().getCountFN() + "");
+						frame.setFieldAutoFP(AntiSpamFilterAutomaticConfiguration.getAntiSpamFilterProblem().getCountFP() + "");
+						frame.setFieldAutoFN(AntiSpamFilterAutomaticConfiguration.getAntiSpamFilterProblem().getCountFN() + "");
 						setRules("Auto");
 
 					} catch (IOException e) {
@@ -130,13 +116,12 @@ public class AntiSpamGUI {
 			} catch (InterruptedException e1) {
 				e1.printStackTrace();
 			}
-
 		}
 	};
 
 	/**
-	 * This method is used to differentiate between Manual weight and Automatic
-	 * weight and set the rules in Manual or Auto table.
+	 * This method is used to differentiate between manual weight and automatic
+	 * weight and set the rules in manual or auto table.
 	 * 
 	 * @param option
 	 */
@@ -173,4 +158,5 @@ public class AntiSpamGUI {
 			System.out.println("Error: " + e.getMessage());
 		}
 	}
+	
 }

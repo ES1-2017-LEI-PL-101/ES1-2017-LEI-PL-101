@@ -2,13 +2,7 @@ package antiSpamUI;
 
 import java.util.Map;
 
-import javax.swing.DefaultListModel;
-import javax.swing.JFrame;
-import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
-
-import antiSpamFilter.AntiSpamFilterProblem;
 
 public class Extensions {
 

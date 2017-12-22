@@ -10,9 +10,7 @@ import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.Map.Entry;
 
 public class FileLoader {
@@ -35,9 +33,7 @@ public class FileLoader {
 				} else {
 					rulesMap.put(sCurrentLine, 0.0);
 				}
-
 			}
-
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
@@ -82,7 +78,6 @@ public class FileLoader {
 				e.printStackTrace();
 			}
 		}
-
 		return map;
 	}
 
@@ -101,7 +96,6 @@ public class FileLoader {
 				writer.write(key.toString() + " " + value.toString());
 				writer.write(System.lineSeparator());
 			}
-
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		} catch (FileNotFoundException e) {

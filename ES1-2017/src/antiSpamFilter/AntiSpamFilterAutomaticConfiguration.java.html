@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>AntiSpamFilterAutomaticConfiguration.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">src (Dec 22, 2017 11:20:35 PM)</a> &gt; <a href="../../index.html" class="el_group">ES1-2017</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.source.html" class="el_package">antiSpamFilter</a> &gt; <span class="el_source">AntiSpamFilterAutomaticConfiguration.java</span></div><h1>AntiSpamFilterAutomaticConfiguration.java</h1><pre class="source lang-java linenums">package antiSpamFilter;
+
+import org.uma.jmetal.algorithm.Algorithm;
+import org.uma.jmetal.algorithm.multiobjective.nsgaii.NSGAIIBuilder;
+import org.uma.jmetal.operator.impl.crossover.SBXCrossover;
+import org.uma.jmetal.operator.impl.mutation.PolynomialMutation;
+import org.uma.jmetal.problem.Problem;
+import org.uma.jmetal.problem.multiobjective.zdt.*;
+import org.uma.jmetal.qualityindicator.impl.*;
+import org.uma.jmetal.qualityindicator.impl.hypervolume.PISAHypervolume;
+import org.uma.jmetal.solution.DoubleSolution;
+import org.uma.jmetal.util.JMetalException;
+import org.uma.jmetal.util.experiment.Experiment;
+import org.uma.jmetal.util.experiment.ExperimentBuilder;
+import org.uma.jmetal.util.experiment.component.*;
+import org.uma.jmetal.util.experiment.util.ExperimentAlgorithm;
+import org.uma.jmetal.util.experiment.util.ExperimentProblem;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+<span class="fc" id="L23">public class AntiSpamFilterAutomaticConfiguration {</span>
+	private static final int INDEPENDENT_RUNS = 5;
+	private static AntiSpamFilterProblem antiSpamFilterProblem;
+	private static String experimentBaseDirectory;
+	private static String sClassName;
+	
+	public static void main(String[] args) throws IOException {
+<span class="nc" id="L30">		experimentBaseDirectory = &quot;experimentBaseDirectory&quot;;</span>
+
+<span class="nc" id="L32">		List&lt;ExperimentProblem&lt;DoubleSolution&gt;&gt; problemList = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L33">		sClassName = &quot;AntiSpamFilterProblem&quot;;</span>
+		
+<span class="nc" id="L35">    problemList.add(new ExperimentProblem&lt;&gt;(antiSpamFilterProblem, sClassName));</span>
+
+		// Debug.getInstance().msg(&quot;ProblemList&quot;+problemList.toString());
+
+<span class="nc" id="L39">		List&lt;ExperimentAlgorithm&lt;DoubleSolution, List&lt;DoubleSolution&gt;&gt;&gt; algorithmList = configureAlgorithmList(</span>
+<span class="nc" id="L40">				problemList);</span>
+
+		// Debug.getInstance().msg(&quot;algorithmList&quot;+algorithmList.toString());
+
+<span class="nc" id="L44">		Experiment&lt;DoubleSolution, List&lt;DoubleSolution&gt;&gt; experiment = new ExperimentBuilder&lt;DoubleSolution, List&lt;DoubleSolution&gt;&gt;(</span>
+<span class="nc" id="L45">				&quot;AntiSpamStudy&quot;).setAlgorithmList(algorithmList).setProblemList(problemList)</span>
+<span class="nc" id="L46">						.setExperimentBaseDirectory(experimentBaseDirectory).setOutputParetoFrontFileName(&quot;FUN&quot;)</span>
+<span class="nc" id="L47">						.setOutputParetoSetFileName(&quot;VAR&quot;)</span>
+<span class="nc" id="L48">						.setReferenceFrontDirectory(experimentBaseDirectory + &quot;/referenceFronts&quot;)</span>
+<span class="nc" id="L49">						.setIndicatorList(Arrays.asList(new PISAHypervolume&lt;DoubleSolution&gt;()))</span>
+<span class="nc" id="L50">						.setIndependentRuns(INDEPENDENT_RUNS).setNumberOfCores(8).build();</span>
+ 
+    
+		// Debug.getInstance().msg(&quot;experiment&quot;+experiment.toString());
+
+<span class="nc" id="L55">		new ExecuteAlgorithms&lt;&gt;(experiment).run();</span>
+<span class="nc" id="L56">		new GenerateReferenceParetoSetAndFrontFromDoubleSolutions(experiment).run();</span>
+<span class="nc" id="L57">		new ComputeQualityIndicators&lt;&gt;(experiment).run();</span>
+<span class="nc" id="L58">		new GenerateLatexTablesWithStatistics(experiment).run();</span>
+<span class="nc" id="L59">		new GenerateBoxplotsWithR&lt;&gt;(experiment).setRows(1).setColumns(1).run();</span>
+
+    
+<span class="nc" id="L62">	}</span>
+
+	static List&lt;ExperimentAlgorithm&lt;DoubleSolution, List&lt;DoubleSolution&gt;&gt;&gt; configureAlgorithmList(
+			List&lt;ExperimentProblem&lt;DoubleSolution&gt;&gt; problemList) {
+
+<span class="nc" id="L67">		List&lt;ExperimentAlgorithm&lt;DoubleSolution, List&lt;DoubleSolution&gt;&gt;&gt; algorithms = new ArrayList&lt;&gt;();</span>
+
+		// Debug.getInstance().msg(&quot;algorithms &quot;+algorithms.toString());
+<span class="nc bnc" id="L70" title="All 2 branches missed.">		for (int i = 0; i &lt; problemList.size(); i++) {</span>
+<span class="nc" id="L71">			Algorithm&lt;List&lt;DoubleSolution&gt;&gt; algorithm = new NSGAIIBuilder&lt;&gt;(problemList.get(i).getProblem(),</span>
+<span class="nc" id="L72">					new SBXCrossover(1.0, 5),</span>
+<span class="nc" id="L73">					new PolynomialMutation(1.0 / problemList.get(i).getProblem().getNumberOfVariables(), 10.0))</span>
+<span class="nc" id="L74">					.setMaxEvaluations(3000).setPopulationSize(100).build();</span>
+<span class="nc" id="L75">			algorithms.add(new ExperimentAlgorithm&lt;&gt;(algorithm, &quot;NSGAII&quot;, problemList.get(i).getTag()));</span>
+			// Debug.getInstance().msg(&quot;algorithms &quot;+algorithms.toString());
+		}
+<span class="nc" id="L78">		return algorithms;</span>
+	}
+
+	public static AntiSpamFilterProblem getAntiSpamFilterProblem() {
+<span class="fc" id="L82">		return antiSpamFilterProblem;</span>
+	}
+
+	public static void setAntiSpamFilterProblem(AntiSpamFilterProblem antiSpamFilterProblem) {
+<span class="fc" id="L86">		AntiSpamFilterAutomaticConfiguration.antiSpamFilterProblem = antiSpamFilterProblem;</span>
+<span class="fc" id="L87">	}</span>
+
+	
+	public static String getExperimentBaseDirectory() {
+<span class="fc" id="L91">		return experimentBaseDirectory;</span>
+	}
+
+	
+	public static String getsClassName() {
+<span class="fc" id="L96">		return sClassName;</span>
+	}
+	
+	
+	
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span>src (Dec 22, 2017 11:20:35 PM)</div></body></html>

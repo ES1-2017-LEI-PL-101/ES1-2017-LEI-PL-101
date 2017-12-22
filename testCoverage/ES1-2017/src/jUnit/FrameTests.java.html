@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>FrameTests.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">src (Dec 22, 2017 11:20:35 PM)</a> &gt; <a href="../../index.html" class="el_group">ES1-2017</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.source.html" class="el_package">jUnit</a> &gt; <span class="el_source">FrameTests.java</span></div><h1>FrameTests.java</h1><pre class="source lang-java linenums">package jUnit;
+
+import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.awt.Component;
+import java.awt.List;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+
+import org.junit.jupiter.api.Test;
+
+import antiSpamUI.AntiSpamGUI;
+import antiSpamUI.Frame;
+
+<span class="fc" id="L21">class FrameTests {</span>
+
+<span class="fc" id="L23">	AntiSpamGUI gui = new AntiSpamGUI();</span>
+<span class="fc" id="L24">	Frame f = gui.getFrame();</span>
+	
+	@Test
+	void testFrame() {
+<span class="fc" id="L28">		assertTrue(f instanceof Frame);</span>
+<span class="fc" id="L29">	}</span>
+
+	@Test
+	void testGetFrame() {
+<span class="fc" id="L33">		assertTrue(f.getFrame() instanceof JFrame);</span>
+<span class="fc" id="L34">	}</span>
+
+	@Test
+	void testGetChosenPathRules() {
+<span class="fc" id="L38">		JTextField path = f.getChosenPathRules();</span>
+<span class="fc" id="L39">		f.setChosenPathRules( new JTextField(&quot;test&quot;));</span>
+<span class="fc" id="L40">		assertEquals(f.getChosenPathRules().getText(), &quot;test&quot;);</span>
+<span class="fc" id="L41">		f.setChosenPathRules(path);</span>
+<span class="fc" id="L42">	}</span>
+
+	@Test
+	void testGetChosenPathHam() {
+<span class="fc" id="L46">		JTextField path = f.getChosenPathHam();</span>
+<span class="fc" id="L47">		f.setChosenPathHam( new JTextField(&quot;test&quot;));</span>
+<span class="fc" id="L48">		assertEquals(f.getChosenPathHam().getText(), &quot;test&quot;);</span>
+<span class="fc" id="L49">		f.setChosenPathHam(path);</span>
+<span class="fc" id="L50">	}</span>
+
+	@Test
+	void testGetChosenPathSpam() {
+<span class="fc" id="L54">		JTextField path = f.getChosenPathSpam();</span>
+<span class="fc" id="L55">		f.setChosenPathSpam( new JTextField(&quot;test&quot;));</span>
+<span class="fc" id="L56">		assertEquals(f.getChosenPathSpam().getText(), &quot;test&quot;);</span>
+<span class="fc" id="L57">		f.setChosenPathSpam(path);</span>
+<span class="fc" id="L58">	}</span>
+
+	@Test
+	void testGetTableManual() {
+<span class="fc" id="L62">		assertTrue(f.getTableManual() instanceof JTable);</span>
+<span class="fc" id="L63">	}</span>
+
+	@Test
+	void testGetTableAuto() {
+<span class="fc" id="L67">		assertTrue(f.getTableAuto() instanceof JTable);</span>
+<span class="fc" id="L68">	}</span>
+
+	@Test
+	void testGetGui() {
+<span class="fc" id="L72">		assertTrue(f.getGui() instanceof AntiSpamGUI);</span>
+<span class="fc" id="L73">	}</span>
+
+	@Test
+	void testIsPathValid() {
+<span class="fc" id="L77">		gui.getAntiSpamFilterProblem().readHam(&quot;./files/ham.log&quot;);</span>
+<span class="fc" id="L78">		gui.getAntiSpamFilterProblem().readSpam(&quot;./files/spam.log&quot;);</span>
+<span class="fc" id="L79">		gui.getAntiSpamFilterProblem().readRules(&quot;./files/rules.cf&quot;);</span>
+<span class="fc" id="L80">		assertEquals(f.isPathValid(), true);</span>
+<span class="fc" id="L81">		gui.getAntiSpamFilterProblem().setRules(new LinkedHashMap&lt;String, Double&gt;());</span>
+<span class="fc" id="L82">		assertEquals(f.isPathValid(), false);</span>
+<span class="fc" id="L83">	}</span>
+	
+	@Test
+	void testChangeButtons() {
+<span class="fc" id="L87">		gui.getAntiSpamFilterProblem().readHam(&quot;./files/ham.log&quot;);</span>
+<span class="fc" id="L88">		gui.getAntiSpamFilterProblem().readSpam(&quot;./files/spam.log&quot;);</span>
+<span class="fc" id="L89">		gui.getAntiSpamFilterProblem().readRules(&quot;./files/rules.cf&quot;);</span>
+<span class="fc" id="L90">		assertEquals(f.isPathValid(), true);</span>
+<span class="fc" id="L91">		f.testButton = new JButton(&quot;&quot;);</span>
+<span class="fc" id="L92">		f.testButton.setEnabled(false);</span>
+<span class="fc" id="L93">		f.generateButton = new JButton(&quot;&quot;);</span>
+<span class="fc" id="L94">		f.generateButton .setEnabled(false);</span>
+<span class="fc" id="L95">		f.saveButtonAuto = new JButton(&quot;&quot;);</span>
+<span class="fc" id="L96">		f.saveButtonAuto.setEnabled(false);</span>
+<span class="fc" id="L97">		f.saveButtonTest = new JButton(&quot;&quot;);</span>
+<span class="fc" id="L98">		f.saveButtonTest.setEnabled(false);</span>
+<span class="fc" id="L99">		assertEquals(f.getTestButton().isEnabled(), false);</span>
+<span class="fc" id="L100">		assertEquals(f.getGenerateButton().isEnabled(), false);</span>
+<span class="fc" id="L101">		assertEquals(f.getSaveButtonAuto().isEnabled(), false);</span>
+<span class="fc" id="L102">		assertEquals(f.getSaveButtonTest().isEnabled(), false);</span>
+<span class="fc" id="L103">		f.changeButtons();</span>
+<span class="fc" id="L104">		assertEquals(f.getTestButton().isEnabled(), true);</span>
+<span class="fc" id="L105">		assertEquals(f.getGenerateButton().isEnabled(), true);</span>
+<span class="fc" id="L106">		assertEquals(f.getSaveButtonAuto().isEnabled(), true);</span>
+<span class="fc" id="L107">		assertEquals(f.getSaveButtonTest().isEnabled(), true);</span>
+		
+<span class="fc" id="L109">	}</span>
+
+	
+	@Test
+	void testSetSpinnerFN() {
+<span class="fc" id="L114">		f.spinnerFN = new JTextField(&quot;&quot;);</span>
+<span class="fc" id="L115">		f.setSpinnerFN(&quot;test&quot;);</span>
+<span class="fc" id="L116">		assertEquals(f.spinnerFN.getText(), &quot;test&quot;);</span>
+<span class="fc" id="L117">	}</span>
+
+	@Test
+	void testSetSpinnerFP() {
+<span class="fc" id="L121">		f.spinnerFP = new JTextField(&quot;&quot;);</span>
+<span class="fc" id="L122">		f.setSpinnerFP(&quot;test&quot;);</span>
+<span class="fc" id="L123">		assertEquals(f.getSpinnerFP().getText(), &quot;test&quot;);</span>
+<span class="fc" id="L124">	}</span>
+
+	@Test
+	void testSetFieldAutoFP() {
+<span class="fc" id="L128">		f.fieldAutoFP= new JTextField(&quot;&quot;);</span>
+<span class="fc" id="L129">		f.setFieldAutoFP(&quot;test&quot;);</span>
+<span class="fc" id="L130">		assertEquals(f.getFieldAutoFP().getText(), &quot;test&quot;);</span>
+<span class="fc" id="L131">	}</span>
+
+	@Test
+	void testSetFieldAutoFN() {
+<span class="fc" id="L135">		f.fieldAutoFN= new JTextField(&quot;&quot;);</span>
+<span class="fc" id="L136">		f.setFieldAutoFN(&quot;test&quot;);</span>
+<span class="fc" id="L137">		assertEquals(f.getFieldAutoFN().getText(), &quot;test&quot;);</span>
+<span class="fc" id="L138">	}</span>
+	
+	@Test
+	void testGetSpinnerFN() {
+<span class="fc" id="L142">		f.spinnerFN = new JTextField(&quot;&quot;);</span>
+<span class="fc" id="L143">		assertTrue(f.getSpinnerFN() instanceof JTextField);</span>
+<span class="fc" id="L144">	}</span>
+
+	@Test
+	void testGetSpinnerFP() {
+<span class="fc" id="L148">		f.spinnerFP = new JTextField(&quot;&quot;);</span>
+<span class="fc" id="L149">		assertTrue(f.getSpinnerFP() instanceof JTextField);</span>
+<span class="fc" id="L150">	}</span>
+
+	@Test
+	void testGetFieldAutoFP() {
+<span class="fc" id="L154">		f.fieldAutoFP= new JTextField(&quot;&quot;);</span>
+<span class="fc" id="L155">		assertTrue(f.getFieldAutoFP() instanceof JTextField);</span>
+<span class="fc" id="L156">	}</span>
+
+	@Test
+	void testGetFieldAutoFN() {
+<span class="fc" id="L160">		f.fieldAutoFN= new JTextField(&quot;&quot;);</span>
+<span class="fc" id="L161">		assertTrue(f.getFieldAutoFN() instanceof JTextField);</span>
+<span class="fc" id="L162">	}</span>
+	
+	
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span>src (Dec 22, 2017 11:20:35 PM)</div></body></html>

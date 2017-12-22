@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>AntiSpamFilterProblemTests.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">src (Dec 22, 2017 11:20:35 PM)</a> &gt; <a href="../../index.html" class="el_group">ES1-2017</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.source.html" class="el_package">jUnit</a> &gt; <span class="el_source">AntiSpamFilterProblemTests.java</span></div><h1>AntiSpamFilterProblemTests.java</h1><pre class="source lang-java linenums">package jUnit;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.LinkedHashMap;
+
+import org.junit.jupiter.api.Test;
+import org.uma.jmetal.problem.impl.AbstractDoubleProblem;
+import org.uma.jmetal.solution.DoubleSolution;
+
+import antiSpamFilter.AntiSpamFilterProblem;
+
+<span class="fc" id="L13">class AntiSpamFilterProblemTests{</span>
+	
+	@Test
+	void testAntiSpamFilterProblem() {
+<span class="fc" id="L17">		assertTrue(new AntiSpamFilterProblem() instanceof AntiSpamFilterProblem);</span>
+<span class="fc" id="L18">	}</span>
+
+	/*@Test
+	void testUpdateAntiSpamFilterProblem() {
+		fail(&quot;Not yet implemented&quot;);
+	}*/
+
+	@Test
+	void testReadRules() {
+<span class="fc" id="L27">		AntiSpamFilterProblem a = new AntiSpamFilterProblem();</span>
+<span class="fc" id="L28">		a.readRules(&quot;./files/rules.cf&quot;);</span>
+<span class="fc" id="L29">		assertNotEquals(a.getRules(), new LinkedHashMap&lt;&gt;());</span>
+<span class="fc" id="L30">	}</span>
+
+	@Test
+	void testReadHam() {
+<span class="fc" id="L34">		AntiSpamFilterProblem a = new AntiSpamFilterProblem();</span>
+<span class="fc" id="L35">		a.readHam(&quot;./files/ham.log&quot;);</span>
+<span class="fc" id="L36">		assertNotEquals(a.getHam(), new LinkedHashMap&lt;&gt;());</span>
+<span class="fc" id="L37">	}</span>
+
+	@Test
+	void testReadSpam() {
+<span class="fc" id="L41">		AntiSpamFilterProblem a = new AntiSpamFilterProblem();</span>
+<span class="fc" id="L42">		a.readSpam(&quot;./files/spam.log&quot;);</span>
+<span class="fc" id="L43">		assertNotEquals(a.getSpam(), new LinkedHashMap&lt;&gt;());</span>
+<span class="fc" id="L44">	}</span>
+
+	/*@Test
+	void testEvaluateDoubleSolution() {
+		fail(&quot;Not yet implemented&quot;);
+	}*/
+
+	@Test
+	void testEvaluateLinkedHashMapOfStringDouble() {
+<span class="fc" id="L53">		AntiSpamFilterProblem a = new AntiSpamFilterProblem();</span>
+<span class="fc" id="L54">		a.readRules(&quot;./files/rules.cf&quot;);</span>
+<span class="fc" id="L55">		assertTrue(a.evaluate(a.getRules()) instanceof double[]);</span>
+<span class="fc" id="L56">	    assertNotEquals(a.evaluate(a.getRules()).length, 0);</span>
+<span class="fc" id="L57">	}</span>
+
+	@Test
+	void testGetRules() {
+<span class="fc" id="L61">		assertTrue(new AntiSpamFilterProblem().getRules() instanceof  LinkedHashMap&lt;?,?&gt;);</span>
+<span class="fc" id="L62">	}</span>
+
+	@Test
+	void testGetHam() {
+<span class="fc" id="L66">		assertTrue(new AntiSpamFilterProblem().getHam() instanceof  LinkedHashMap&lt;?,?&gt;);</span>
+<span class="fc" id="L67">	}</span>
+
+	@Test
+	void testGetSpam() {
+<span class="fc" id="L71">		assertTrue(new AntiSpamFilterProblem().getSpam() instanceof  LinkedHashMap&lt;?,?&gt;);</span>
+<span class="fc" id="L72">	}</span>
+
+	@Test
+	void testValidLists() {
+<span class="fc" id="L76">		AntiSpamFilterProblem a = new AntiSpamFilterProblem();</span>
+<span class="fc" id="L77">		a.readRules(&quot;./files/rules.cf&quot;);</span>
+<span class="fc" id="L78">		a.readSpam(&quot;./files/spam.log&quot;);</span>
+<span class="fc" id="L79">		a.readHam(&quot;./files/ham.log&quot;);</span>
+<span class="fc" id="L80">		assertEquals(a.validLists(), true);</span>
+<span class="fc" id="L81">		AntiSpamFilterProblem b = new AntiSpamFilterProblem();</span>
+<span class="fc" id="L82">		b.readSpam(&quot;./files/spam.log&quot;);</span>
+<span class="fc" id="L83">		b.readHam(&quot;./files/ham.log&quot;);</span>
+<span class="fc" id="L84">		assertEquals(b.validLists(), false);</span>
+<span class="fc" id="L85">		AntiSpamFilterProblem c = new AntiSpamFilterProblem();</span>
+<span class="fc" id="L86">		c.readSpam(&quot;./files/spam.log&quot;);</span>
+<span class="fc" id="L87">		c.readRules(&quot;./files/rules.cf&quot;);</span>
+<span class="fc" id="L88">		assertEquals(c.validLists(), false);</span>
+<span class="fc" id="L89">		AntiSpamFilterProblem d = new AntiSpamFilterProblem();</span>
+<span class="fc" id="L90">		d.readHam(&quot;./files/ham.log&quot;);</span>
+<span class="fc" id="L91">		d.readRules(&quot;./files/rules.cf&quot;);</span>
+<span class="fc" id="L92">		assertEquals(d.validLists(), false);</span>
+<span class="fc" id="L93">	}</span>
+
+	@Test
+	void testSetRules() {
+<span class="fc" id="L97">		AntiSpamFilterProblem a = new AntiSpamFilterProblem();</span>
+<span class="fc" id="L98">		LinkedHashMap&lt;String, Double&gt; l = new LinkedHashMap&lt;String, Double&gt;();</span>
+<span class="fc" id="L99">		a.setRules(l);</span>
+<span class="fc" id="L100">		assertEquals(a.getRules(), l);</span>
+<span class="fc" id="L101">	}</span>
+
+	@Test
+	void testGetCountFN() {
+<span class="fc" id="L105">		AntiSpamFilterProblem a = new AntiSpamFilterProblem();</span>
+<span class="fc" id="L106">		assertNotEquals(Integer.valueOf(a.getCountFN()), null);</span>
+<span class="fc" id="L107">	}</span>
+
+	@Test
+	void testGetCountFP() {
+<span class="fc" id="L111">		AntiSpamFilterProblem a = new AntiSpamFilterProblem();</span>
+<span class="fc" id="L112">		assertNotEquals(Integer.valueOf(a.getCountFP()), null);</span>
+<span class="fc" id="L113">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span>src (Dec 22, 2017 11:20:35 PM)</div></body></html>

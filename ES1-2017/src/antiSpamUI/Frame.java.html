@@ -1,0 +1,453 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>Frame.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">src (Dec 22, 2017 11:20:35 PM)</a> &gt; <a href="../../index.html" class="el_group">ES1-2017</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.source.html" class="el_package">antiSpamUI</a> &gt; <span class="el_source">Frame.java</span></div><h1>Frame.java</h1><pre class="source lang-java linenums"><span class="fc" id="L1">/**</span>
+ * 
+ */
+package antiSpamUI;
+
+import java.awt.Adjustable;
+import java.awt.BorderLayout;
+import java.awt.Button;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Graphics;
+import java.awt.GridLayout;
+import java.awt.Insets;
+import java.awt.Label;
+import java.awt.List;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import javax.swing.BorderFactory;
+import javax.swing.DefaultListModel;
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
+import javax.swing.JTable;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.border.Border;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+
+import org.apache.commons.math3.optim.nonlinear.scalar.noderiv.BOBYQAOptimizer;
+
+import antiSpamFilter.AntiSpamFilterProblem;
+import fileReader.FileLoader;
+
+public class Frame {
+
+	private JFrame frame;
+
+	private JTextField chosenPathRules;
+	private JTextField chosenPathHam;
+	private JTextField chosenPathSpam;
+	public JTextField spinnerFN;
+	public JTextField spinnerFP;
+	public JTextField fieldAutoFP;
+	public JTextField fieldAutoFN;
+
+<span class="fc" id="L64">	private JTable tableManual = new JTable();</span>
+<span class="fc" id="L65">	private JTable tableAuto = new JTable();</span>
+	private AntiSpamGUI gui;
+
+	public JButton testButton;
+
+	public JButton saveButtonTest;
+
+	public JButton generateButton;
+
+	public JButton saveButtonAuto;
+	
+	/**
+	 * Constructor. Creates a new Frame.
+	 * 
+	 * @param gui
+	 */
+<span class="fc" id="L81">	public Frame(AntiSpamGUI gui) {</span>
+<span class="fc" id="L82">		this.gui = gui;</span>
+<span class="fc" id="L83">		this.frame = new JFrame();</span>
+
+<span class="fc" id="L85">		java.awt.EventQueue.invokeLater(new Runnable() {</span>
+			public void run() {
+
+<span class="fc" id="L88">				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);</span>
+<span class="fc" id="L89">				frame.getContentPane().setPreferredSize(new Dimension(1000, 600));</span>
+
+<span class="fc" id="L91">				frame.getContentPane().setLayout(new GridLayout(0, 1));</span>
+<span class="fc" id="L92">				frame.pack();</span>
+
+<span class="fc" id="L94">				JPanel mainPanel = new JPanel(new BorderLayout());</span>
+<span class="fc" id="L95">				mainPanel.add(createSpinnersPanel(), BorderLayout.PAGE_START);</span>
+<span class="fc" id="L96">				JPanel centerPanel = new JPanel(new GridLayout(0, 1));</span>
+<span class="fc" id="L97">				centerPanel.add(createTables());</span>
+<span class="fc" id="L98">				centerPanel.add(createPathsPanel());</span>
+<span class="fc" id="L99">				mainPanel.add(createButtons(), BorderLayout.SOUTH);</span>
+<span class="fc" id="L100">				mainPanel.add(centerPanel, BorderLayout.CENTER);</span>
+<span class="fc" id="L101">				frame.add(mainPanel);</span>
+
+<span class="fc" id="L103">				frame.setVisible(true);</span>
+<span class="fc" id="L104">			}</span>
+		});
+
+<span class="fc" id="L107">	}</span>
+
+	/**
+	 * This method is used to get the frame.
+	 * 
+	 * @return JFrame This method returns the frame.
+	 */
+	public JFrame getFrame() {
+<span class="fc" id="L115">		return this.frame;</span>
+	}
+
+	/**
+	 * 
+	 * 
+	 * @return JPanel This method returns the panel.
+	 */
+	private JPanel createSpinnersPanel() {
+<span class="fc" id="L124">		JPanel topLayout = new JPanel(new GridLayout(0, 2));</span>
+
+<span class="fc" id="L126">		JPanel spinnerManualLayout = new JPanel(new GridLayout(0, 4));</span>
+<span class="fc" id="L127">		JPanel textAutoLayout = new JPanel(new GridLayout(0, 4));</span>
+<span class="fc" id="L128">		spinnerFP = new JTextField(&quot;-&quot;);</span>
+<span class="fc" id="L129">		spinnerFP.setName(&quot;spinnerFP&quot;);</span>
+<span class="fc" id="L130">		spinnerFP.setEditable(false);</span>
+<span class="fc" id="L131">		spinnerFN = new JTextField(&quot;-&quot;);</span>
+<span class="fc" id="L132">		spinnerFN.setName(&quot;spinnerFN&quot;);</span>
+<span class="fc" id="L133">		spinnerFN.setEditable(false);</span>
+		// l� dos files AntiSpamFilterProblem.NSGAII -&gt; Pesos e FN/FP
+		// AntiSpamConfigurationForLeisureMailbox -&gt; escolher menor FN
+
+<span class="fc" id="L137">		this.fieldAutoFP = new JTextField(&quot;-&quot;);</span>
+<span class="fc" id="L138">		this.fieldAutoFP.setName(&quot;autoFP&quot;);</span>
+<span class="fc" id="L139">		this.fieldAutoFP.setEditable(false);</span>
+<span class="fc" id="L140">		this.fieldAutoFN = new JTextField(&quot;-&quot;);</span>
+<span class="fc" id="L141">		this.fieldAutoFN.setName(&quot;autoFN&quot;);</span>
+<span class="fc" id="L142">		this.fieldAutoFN.setEditable(false);</span>
+
+<span class="fc" id="L144">		spinnerManualLayout.add(new JLabel(&quot;FP - Manual&quot;));</span>
+<span class="fc" id="L145">		spinnerManualLayout.add(spinnerFP);</span>
+<span class="fc" id="L146">		spinnerManualLayout.add(new JLabel(&quot;FN - Manual&quot;));</span>
+<span class="fc" id="L147">		spinnerManualLayout.add(spinnerFN);</span>
+
+<span class="fc" id="L149">		textAutoLayout.add(new JLabel(&quot;FP - Auto&quot;));</span>
+<span class="fc" id="L150">		textAutoLayout.add(fieldAutoFP);</span>
+<span class="fc" id="L151">		textAutoLayout.add(new JLabel(&quot;FN - Auto&quot;));</span>
+<span class="fc" id="L152">		textAutoLayout.add(fieldAutoFN);</span>
+
+<span class="fc" id="L154">		topLayout.add(spinnerManualLayout);</span>
+<span class="fc" id="L155">		topLayout.add(textAutoLayout);</span>
+
+<span class="fc" id="L157">		return topLayout;</span>
+
+	}
+
+	/**
+	 * This method is used to create the Manual and Automatic tables with their weights.
+	 * 
+	 * @return JPanel This method returns the tables panel.
+	 */
+	private JPanel createTables() {
+
+<span class="fc" id="L168">		Border blackline = BorderFactory.createLineBorder(Color.black);</span>
+<span class="fc" id="L169">		JPanel listPanel = new JPanel(new GridLayout(0, 1));</span>
+<span class="fc" id="L170">		DefaultTableModel model = new DefaultTableModel(new Object[] { &quot;Rules&quot;, &quot;Weight&quot; }, 0);</span>
+
+<span class="fc" id="L172">		tableAuto = new JTable(model);</span>
+
+<span class="fc" id="L174">		tableManual = new JTable(model) {</span>
+			@Override
+			public boolean isCellEditable(int rowIndex, int columnIndex) {
+<span class="nc bnc" id="L177" title="All 2 branches missed.">				if (columnIndex == 0) {</span>
+<span class="nc" id="L178">					return false;</span>
+				} else {
+<span class="nc" id="L180">					return true;</span>
+				}
+			}
+		};
+
+<span class="fc" id="L185">		tableAuto.setBorder(blackline);</span>
+<span class="fc" id="L186">		tableManual.setBorder(blackline);</span>
+<span class="fc" id="L187">		tableAuto.setBackground(Color.LIGHT_GRAY);</span>
+<span class="fc" id="L188">		tableAuto.setEnabled(false);</span>
+
+<span class="fc" id="L190">		JScrollPane scrollPane = new JScrollPane(tableManual);</span>
+<span class="fc" id="L191">		JScrollPane scrollPane2 = new JScrollPane(tableAuto);</span>
+<span class="fc" id="L192">		tableManual.setFillsViewportHeight(true);</span>
+<span class="fc" id="L193">		tableAuto.setFillsViewportHeight(true);</span>
+
+<span class="fc" id="L195">		listPanel.add(scrollPane);</span>
+<span class="fc" id="L196">		listPanel.add(scrollPane2);</span>
+
+<span class="fc" id="L198">		return listPanel;</span>
+
+	}
+
+	/**
+	 * This method is used to create the browsers buttons and path panel.
+	 * 
+	 * @return JPanel This method returns the path panel and browsers buttons layout.
+	 */
+	private JPanel createPathsPanel() {
+<span class="fc" id="L208">		JPanel gridLayout = new JPanel(new GridLayout(0, 3));</span>
+
+<span class="fc" id="L210">		gridLayout = insertEmptyRow(gridLayout, 3);</span>
+
+<span class="fc" id="L212">		JTextField pathRules = new JTextField(&quot;Rules.cf&quot;);</span>
+<span class="fc" id="L213">		chosenPathRules = new JTextField();</span>
+<span class="fc" id="L214">		chosenPathRules.setEnabled(false);</span>
+<span class="fc" id="L215">		JButton buttonChangeRulesPath = new JButton(&quot;Browse Rules&quot;);</span>
+<span class="fc" id="L216">		buttonChangeRulesPath.addActionListener(gui.actionListenerBrowser);</span>
+
+<span class="fc" id="L218">		JScrollPane scrollR = new JScrollPane(chosenPathRules);</span>
+<span class="fc" id="L219">		scrollR.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);</span>
+
+<span class="fc" id="L221">		JTextField pathHam = new JTextField(&quot;Ham.log&quot;);</span>
+<span class="fc" id="L222">		chosenPathHam = new JTextField();</span>
+<span class="fc" id="L223">		chosenPathHam.setEnabled(false);</span>
+<span class="fc" id="L224">		JButton buttonChangeHamPath = new JButton(&quot;Browse Ham&quot;);</span>
+
+<span class="fc" id="L226">		buttonChangeHamPath.addActionListener(gui.actionListenerBrowser);</span>
+
+<span class="fc" id="L228">		JScrollPane scrollH = new JScrollPane(chosenPathHam);</span>
+<span class="fc" id="L229">		scrollH.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);</span>
+
+<span class="fc" id="L231">		JTextField pathSpam = new JTextField(&quot;Spam.log&quot;);</span>
+<span class="fc" id="L232">		chosenPathSpam = new JTextField();</span>
+<span class="fc" id="L233">		chosenPathSpam.setEnabled(false);</span>
+<span class="fc" id="L234">		JButton buttonChangeSpamPath = new JButton(&quot;Browse Spam&quot;);</span>
+<span class="fc" id="L235">		buttonChangeRulesPath.setName(&quot;buttonSpam&quot;);</span>
+
+<span class="fc" id="L237">		buttonChangeSpamPath.addActionListener(gui.actionListenerBrowser);</span>
+
+<span class="fc" id="L239">		JScrollPane scrollS = new JScrollPane(chosenPathSpam);</span>
+<span class="fc" id="L240">		scrollS.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);</span>
+
+<span class="fc" id="L242">		gridLayout.add(pathRules);</span>
+<span class="fc" id="L243">		gridLayout.add(chosenPathRules);</span>
+<span class="fc" id="L244">		gridLayout.add(buttonChangeRulesPath);</span>
+
+<span class="fc" id="L246">		gridLayout.add(pathHam);</span>
+<span class="fc" id="L247">		gridLayout.add(chosenPathHam);</span>
+<span class="fc" id="L248">		gridLayout.add(buttonChangeHamPath);</span>
+
+<span class="fc" id="L250">		gridLayout.add(pathSpam);</span>
+<span class="fc" id="L251">		gridLayout.add(chosenPathSpam);</span>
+<span class="fc" id="L252">		gridLayout.add(buttonChangeSpamPath);</span>
+
+<span class="fc" id="L254">		return gridLayout;</span>
+	}
+
+	/**
+	 * This method is used to create a buttons panel and what they do.
+	 * 
+	 * @return JPanel This method returns the panel of buttons layout.
+	 */
+	private JPanel createButtons() {
+<span class="fc" id="L263">		JPanel buttonsLayout = new JPanel(new GridLayout(0, 4));</span>
+
+<span class="fc" id="L265">		testButton = new JButton(&quot;Run Test&quot;);</span>
+
+<span class="fc" id="L267">		testButton.addActionListener(gui.actionListenerTest);</span>
+
+			
+<span class="fc" id="L270">		saveButtonTest = new JButton(&quot;Save Manual&quot;);</span>
+
+		// TODO
+
+<span class="fc" id="L274">		saveButtonTest.addActionListener(gui.actionListenerSave);</span>
+
+		// instanciar AntiSpamConfiguration e correr o Main
+		// lan�ar os fixeiros R e tex quando gerar
+<span class="fc" id="L278">		generateButton = new JButton(&quot;Generate&quot;);</span>
+		// TODO
+<span class="fc" id="L280">		generateButton.addActionListener(gui.actionListenerGenerate);</span>
+
+
+<span class="fc" id="L283">		saveButtonAuto = new JButton(&quot;Save Auto&quot;);</span>
+
+		// TODO
+<span class="fc" id="L286">		saveButtonAuto.addActionListener(gui.actionListenerSave);</span>
+		
+<span class="pc bpc" id="L288" title="1 of 2 branches missed.">		if (!isPathValid()) {</span>
+<span class="fc" id="L289">			testButton.setEnabled(false);</span>
+<span class="fc" id="L290">			saveButtonTest.setEnabled(false);</span>
+<span class="fc" id="L291">			generateButton.setEnabled(false);</span>
+<span class="fc" id="L292">			saveButtonAuto.setEnabled(false);</span>
+		}
+
+<span class="fc" id="L295">		saveButtonAuto.setPreferredSize(new Dimension(100, 10));</span>
+
+<span class="fc" id="L297">		buttonsLayout = insertEmptyRow(buttonsLayout, 4);</span>
+
+<span class="fc" id="L299">		buttonsLayout.add(testButton);</span>
+<span class="fc" id="L300">		buttonsLayout.add(saveButtonTest);</span>
+<span class="fc" id="L301">		buttonsLayout.add(generateButton);</span>
+<span class="fc" id="L302">		buttonsLayout.add(saveButtonAuto);</span>
+
+<span class="fc" id="L304">		return buttonsLayout;</span>
+
+	}
+
+	/**
+	 * This method is used to insert a new and empty row in panel.
+	 * 
+	 * @param panel
+	 * @param columns
+	 * @return JPanel This method returns the panel.
+	 */
+	private static JPanel insertEmptyRow(JPanel panel, int columns) {
+<span class="fc bfc" id="L316" title="All 2 branches covered.">		for (int i = 0; i != columns; i++) {</span>
+<span class="fc" id="L317">			panel.add(new Label(&quot; &quot;));</span>
+		}
+<span class="fc" id="L319">		return panel;</span>
+	}
+
+	/**
+	 * This method is used to get the rules file path.
+	 * 
+	 * @return JTextField This method returns the rules file path.
+	 */
+	public JTextField getChosenPathRules() {
+<span class="fc" id="L328">		return chosenPathRules;</span>
+	}
+
+	/**
+	 * This method is used to get the ham file path.
+	 * 
+	 * @return JTextField This method returns the ham file path.
+	 */
+	public JTextField getChosenPathHam() {
+<span class="fc" id="L337">		return chosenPathHam;</span>
+	}
+
+	public void setChosenPathRules(JTextField chosenPathRules) {
+<span class="fc" id="L341">		this.chosenPathRules = chosenPathRules;</span>
+<span class="fc" id="L342">	}</span>
+
+	public void setChosenPathHam(JTextField chosenPathHam) {
+<span class="fc" id="L345">		this.chosenPathHam = chosenPathHam;</span>
+<span class="fc" id="L346">	}</span>
+
+	public void setChosenPathSpam(JTextField chosenPathSpam) {
+<span class="fc" id="L349">		this.chosenPathSpam = chosenPathSpam;</span>
+<span class="fc" id="L350">	}</span>
+
+	/**
+	 * This method is used to get the spam file path.
+	 * 
+	 * @return JTextField This method returns the spam file path.
+	 */
+	public JTextField getChosenPathSpam() {
+<span class="fc" id="L358">		return chosenPathSpam;</span>
+	}
+
+	/**
+	 * This method is used to get the manual table.
+	 * 
+	 * @return JTable This method returns the manual table.
+	 */
+	public JTable getTableManual() {
+<span class="fc" id="L367">		return tableManual;</span>
+	}
+
+	/**
+	 * This method is used to get the automatic table.
+	 * 
+	 * @return JTable This method returns the automatic table.
+	 */
+	public JTable getTableAuto() {
+<span class="fc" id="L376">		return tableAuto;</span>
+	}
+
+	/**
+	 * This method is used to get the AntiSpam gui.
+	 * 
+	 * @return JTable This method returns the AntiSpam gui.
+	 */
+	public AntiSpamGUI getGui() {
+<span class="fc" id="L385">		return gui;</span>
+	}
+
+	public void setSpinnerFN(String sFN) {
+<span class="fc" id="L389">		this.spinnerFN.setText(sFN);</span>
+<span class="fc" id="L390">	}</span>
+
+	public void setSpinnerFP(String sFP) {
+<span class="fc" id="L393">		spinnerFP.setText(sFP);</span>
+<span class="fc" id="L394">	}</span>
+
+	public void setFieldAutoFP(String fFP) {
+<span class="fc" id="L397">		fieldAutoFP.setText(fFP);</span>
+<span class="fc" id="L398">	}</span>
+
+	public void setFieldAutoFN(String fFN) {
+<span class="fc" id="L401">		fieldAutoFN.setText(fFN);</span>
+<span class="fc" id="L402">	}</span>
+	
+	public JButton getTestButton() {
+<span class="fc" id="L405">		return testButton;</span>
+	}
+	
+	public JButton getSaveButtonTest() {
+<span class="fc" id="L409">		return saveButtonTest;</span>
+	}
+	public JButton getGenerateButton() {
+<span class="fc" id="L412">		return testButton;</span>
+	}
+	public JButton getSaveButtonAuto() {
+<span class="fc" id="L415">		return testButton;</span>
+	}	
+	
+	public boolean isPathValid() {
+<span class="pc bpc" id="L419" title="1 of 4 branches missed.">		return !(gui.getAntiSpamFilterProblem().getSpam().isEmpty() || gui.getAntiSpamFilterProblem().getHam().isEmpty()</span>
+<span class="fc bfc" id="L420" title="All 2 branches covered.">		|| gui.getAntiSpamFilterProblem().getRules().isEmpty());</span>
+	}
+	
+	public void changeButtons() {
+<span class="pc bpc" id="L424" title="1 of 2 branches missed.">		if (isPathValid()) {</span>
+<span class="fc" id="L425">			testButton.setEnabled(true);</span>
+<span class="fc" id="L426">			saveButtonTest.setEnabled(true);</span>
+<span class="fc" id="L427">			generateButton.setEnabled(true);</span>
+<span class="fc" id="L428">			saveButtonAuto.setEnabled(true);</span>
+		}
+<span class="fc" id="L430">	}</span>
+
+	public JTextField getSpinnerFN() {
+<span class="fc" id="L433">		return spinnerFN;</span>
+	}
+
+	public JTextField getSpinnerFP() {
+<span class="fc" id="L437">		return spinnerFP;</span>
+	}
+
+	public JTextField getFieldAutoFP() {
+<span class="fc" id="L441">		return fieldAutoFP;</span>
+	}
+
+	public JTextField getFieldAutoFN() {
+<span class="fc" id="L445">		return fieldAutoFN;</span>
+	}
+
+	public void Popup(String message) {
+<span class="nc" id="L449">		JOptionPane.showMessageDialog(frame, message);</span>
+<span class="nc" id="L450">	}</span>
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span>src (Dec 22, 2017 11:20:35 PM)</div></body></html>

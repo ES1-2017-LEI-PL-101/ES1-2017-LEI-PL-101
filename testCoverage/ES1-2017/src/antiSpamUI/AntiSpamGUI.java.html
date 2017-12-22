@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>AntiSpamGUI.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">src (Dec 22, 2017 11:20:35 PM)</a> &gt; <a href="../../index.html" class="el_group">ES1-2017</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.source.html" class="el_package">antiSpamUI</a> &gt; <span class="el_source">AntiSpamGUI.java</span></div><h1>AntiSpamGUI.java</h1><pre class="source lang-java linenums"><span class="pc" id="L1">package antiSpamUI;</span>
+
+import java.awt.Dimension;
+import java.awt.EventQueue;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.function.BiFunction;
+
+import javax.swing.DefaultListModel;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+
+import antiSpamFilter.AntiSpamFilterAutomaticConfiguration;
+import antiSpamFilter.AntiSpamFilterProblem;
+import fileReader.FileLoader;
+
+public class AntiSpamGUI {
+
+	private Frame frame;
+	private AntiSpamFilterProblem antiSpamFilterProblem;
+<span class="fc" id="L32">	private LinkedHashMap&lt;String, Double&gt; rulesManual = new LinkedHashMap&lt;String, Double&gt;();</span>
+<span class="fc" id="L33">	private LinkedHashMap&lt;String, Double&gt; rulesAuto = new LinkedHashMap&lt;String, Double&gt;();</span>
+
+	/**
+	 * Constructor. Creates a new Frame and a new AntiSpamFilterProblem.
+	 */
+<span class="fc" id="L38">	public AntiSpamGUI() {</span>
+<span class="fc" id="L39">		frame = new Frame(this);</span>
+<span class="fc" id="L40">		antiSpamFilterProblem = new AntiSpamFilterProblem();</span>
+
+<span class="fc" id="L42">	}</span>
+
+<span class="fc" id="L44">	public ActionListener actionListenerBrowser = new ActionListener() {</span>
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+
+<span class="nc" id="L49">			e.getActionCommand();</span>
+<span class="nc" id="L50">			File userDir = new File(System.getProperty(&quot;user.dir&quot;) + File.separator + &quot;files&quot;);</span>
+<span class="nc" id="L51">			JFileChooser fileChooser = new JFileChooser(userDir);</span>
+<span class="nc" id="L52">			int returnName = fileChooser.showOpenDialog(null);</span>
+<span class="nc" id="L53">			String path = null;</span>
+
+<span class="nc bnc" id="L55" title="All 2 branches missed.">			if (returnName == JFileChooser.APPROVE_OPTION) {</span>
+<span class="nc" id="L56">				File f = fileChooser.getSelectedFile();</span>
+<span class="nc bnc" id="L57" title="All 2 branches missed.">				if (f != null) { // Make sure the user</span>
+					// didn't choose a
+					// directory.
+
+<span class="nc" id="L61">					path = f.getAbsolutePath();// get the absolute path to selected file</span>
+				}
+			}
+
+<span class="nc bnc" id="L65" title="All 2 branches missed.">			if (e.getActionCommand().equals(&quot;Browse Rules&quot;)) {</span>
+<span class="nc" id="L66">				antiSpamFilterProblem.readRules(path);</span>
+<span class="nc" id="L67">				frame.getChosenPathRules().setText(path);</span>
+<span class="nc" id="L68">				rulesManual = antiSpamFilterProblem.getRules();</span>
+<span class="nc" id="L69">				rulesAuto = antiSpamFilterProblem.getRules();</span>
+<span class="nc" id="L70">				setRules(&quot;Manual&quot;,true);</span>
+<span class="nc" id="L71">				setRules(&quot;Auto&quot;,true);</span>
+<span class="nc bnc" id="L72" title="All 2 branches missed.">			} else if (e.getActionCommand().equals(&quot;Browse Ham&quot;)) {</span>
+<span class="nc" id="L73">				antiSpamFilterProblem.readHam(path);</span>
+<span class="nc" id="L74">				frame.getChosenPathHam().setText(path);</span>
+
+<span class="nc bnc" id="L76" title="All 2 branches missed.">			} else if (e.getActionCommand().equals(&quot;Browse Spam&quot;)) {</span>
+<span class="nc" id="L77">				antiSpamFilterProblem.readSpam(path);</span>
+<span class="nc" id="L78">				frame.getChosenPathSpam().setText(path);</span>
+
+			}
+			
+<span class="nc" id="L82">			frame.changeButtons();</span>
+
+<span class="nc" id="L84">		}</span>
+	};
+
+<span class="fc" id="L87">	public ActionListener actionListenerTest = new ActionListener() {</span>
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+<span class="nc" id="L91">			e.getActionCommand();</span>
+<span class="nc" id="L92">			rulesManual.clear();</span>
+
+<span class="nc bnc" id="L94" title="All 2 branches missed.">			for (int count = 0; count &lt; frame.getTableManual().getModel().getRowCount(); count++) {</span>
+<span class="nc" id="L95">				rulesManual.put(frame.getTableManual().getModel().getValueAt(count, 0).toString(),</span>
+<span class="nc" id="L96">						Double.parseDouble(frame.getTableManual().getModel().getValueAt(count, 1).toString()));</span>
+
+			}
+			
+<span class="nc" id="L100">			antiSpamFilterProblem.setRules(rulesManual);</span>
+<span class="nc" id="L101">			double[] fxCount = antiSpamFilterProblem.evaluate(rulesManual);</span>
+<span class="nc" id="L102">			frame.setSpinnerFN(fxCount[1] + &quot;&quot;);</span>
+<span class="nc" id="L103">			frame.setSpinnerFP(fxCount[0] + &quot;&quot;);</span>
+<span class="nc" id="L104">			setRules(&quot;Manual&quot;,false);</span>
+			
+			
+
+//			param = &quot;código descrito para compilar&quot;
+//			param = &quot;Mostar a imagem&quot;
+		
+<span class="nc" id="L111">		}</span>
+		
+		
+	};
+
+<span class="fc" id="L116">	public ActionListener actionListenerGenerate = new ActionListener() {</span>
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+<span class="nc" id="L120">			e.getActionCommand();</span>
+<span class="nc" id="L121">			Runnable task = new Runnable() {</span>
+				public void run() {
+					try {
+<span class="nc" id="L124">						AntiSpamFilterAutomaticConfiguration.setAntiSpamFilterProblem(antiSpamFilterProblem);</span>
+<span class="nc" id="L125">						System.out.println(&quot;Rules &quot; + antiSpamFilterProblem.getRules().size());</span>
+<span class="nc" id="L126">						AntiSpamFilterAutomaticConfiguration.main(null);</span>
+<span class="nc" id="L127">						rulesAuto = antiSpamFilterProblem.getRules();</span>
+<span class="nc" id="L128">						updateValuesFromFile();</span>
+<span class="nc" id="L129">						frame.setFieldAutoFP(</span>
+<span class="nc" id="L130">								AntiSpamFilterAutomaticConfiguration.getAntiSpamFilterProblem().getCountFP() + &quot;&quot;);</span>
+<span class="nc" id="L131">						frame.setFieldAutoFN(</span>
+<span class="nc" id="L132">								AntiSpamFilterAutomaticConfiguration.getAntiSpamFilterProblem().getCountFN() + &quot;&quot;);</span>
+<span class="nc" id="L133">						setRules(&quot;Auto&quot;,false);</span>
+						//createGraphic();
+<span class="nc" id="L135">						System.out.println(&quot;END&quot;);</span>
+						
+						
+<span class="nc" id="L138">					} catch (IOException e) {</span>
+						// TODO Auto-generated catch block
+<span class="nc" id="L140">						e.printStackTrace();</span>
+					}
+<span class="nc" id="L142">				}</span>
+			};
+<span class="nc" id="L144">			Thread t = new Thread(task);</span>
+<span class="nc" id="L145">			t.start();</span>
+
+<span class="nc" id="L147">		}</span>
+		//TODO Script é em exe
+				private void createGraphic() {
+					
+<span class="nc" id="L151">					String[] params = new String [2];</span>
+
+<span class="nc" id="L153">					params[0] = &quot;C:\\Program Files\\R\\R-3.4.1\\bin\\x64\\Rscript.exe&quot;;</span>
+
+<span class="nc" id="L155">					params[1] = &quot;C:\\Users\\vbasto\\git\\ES1\\experimentBaseDirectory\\AntiSpamStudy\\R\\HV.Boxplot.R&quot;;</span>
+
+<span class="nc" id="L157">					String[] envp = new String [1];</span>
+
+<span class="nc" id="L159">					envp[0] = &quot;Path=C:\\Program Files\\R\\R-3.4.1\\bin\\x64&quot;;</span>
+
+					try {
+<span class="nc" id="L162">						Process p = Runtime.getRuntime().exec(params, envp, new File(&quot;C:\\Users\\vbasto\\git\\ES1\\experimentBaseDirectory\\AntiSpamStudy\\R&quot;));</span>
+<span class="nc" id="L163">					} catch (IOException e) {</span>
+						// TODO Auto-generated catch block
+<span class="nc" id="L165">						e.printStackTrace();</span>
+					}
+					
+<span class="nc" id="L168">				}</span>
+	};
+
+<span class="fc" id="L171">	public ActionListener actionListenerSave = new ActionListener() {</span>
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+<span class="nc" id="L175">			e.getActionCommand();</span>
+
+<span class="nc bnc" id="L177" title="All 2 branches missed.">			if (e.getActionCommand().equals(&quot;Save Manual&quot;)) {</span>
+<span class="nc" id="L178">				FileLoader.writeFile(frame.getChosenPathRules().getText(), rulesManual);</span>
+<span class="nc" id="L179">				String message = &quot;Rules Manual have been saved!&quot;;</span>
+<span class="nc" id="L180">				frame.Popup(message);</span>
+<span class="nc bnc" id="L181" title="All 2 branches missed.">			} else if (e.getActionCommand().equals(&quot;Save Auto&quot;)){</span>
+<span class="nc" id="L182">				FileLoader.writeFile(frame.getChosenPathRules().getText(), rulesAuto);</span>
+<span class="nc" id="L183">				String message = &quot;Rules Automatic have been saved!&quot;;</span>
+<span class="nc" id="L184">				frame.Popup(message);</span>
+			}
+<span class="nc" id="L186">		}</span>
+	};
+
+	/**
+	 * This method is used to differentiate between Manual weight and Automatic
+	 * weight and set the rules in Manual or Auto table.
+	 * 
+	 * @param option
+	 */
+	public void setRules(String option, boolean firstLoad) {
+<span class="fc bfc" id="L196" title="All 2 branches covered.">		if (option.equals(&quot;Manual&quot;)) {</span>
+<span class="fc" id="L197">			LinkedHashMap&lt;String, Double&gt; newRules = this.rulesManual;</span>
+<span class="fc" id="L198">			DefaultTableModel model = Extensions.toTableModel(newRules,firstLoad);</span>
+<span class="fc" id="L199">			this.frame.getTableManual().setModel(model);</span>
+		}
+<span class="fc bfc" id="L201" title="All 2 branches covered.">		if (option.equals(&quot;Auto&quot;)) {</span>
+<span class="fc" id="L202">			LinkedHashMap&lt;String, Double&gt; newRules = this.rulesAuto;</span>
+<span class="fc" id="L203">			DefaultTableModel model = Extensions.toTableModel(newRules,firstLoad);</span>
+<span class="fc" id="L204">			this.frame.getTableAuto().setModel(model);</span>
+		}
+<span class="fc" id="L206">	}</span>
+
+	/**
+	 * This method is used to get the anti spam filter problem.
+	 * 
+	 * @return AntiSpamFilterProblem This method returns the anti spam filter
+	 *         problem.
+	 */
+	public AntiSpamFilterProblem getAntiSpamFilterProblem() {
+<span class="fc" id="L215">		return antiSpamFilterProblem;</span>
+	}
+
+	/**
+	 * This is the main method that creates a new AntiSpamGUI.
+	 * 
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		try {
+<span class="nc" id="L225">			new AntiSpamGUI();</span>
+<span class="nc" id="L226">		} catch (Exception e) {</span>
+<span class="nc" id="L227">			System.out.println(&quot;Error: &quot; + e.getMessage() + &quot;; &quot; + e.getLocalizedMessage() + &quot;;&quot; + e.getStackTrace());</span>
+		}
+<span class="nc" id="L229">	}</span>
+	
+	public void updateValuesFromFile(){
+		//set file values
+<span class="nc" id="L233">		int nIndexOfLowerValue = FileLoader.readNSGAII_LowerIndex(AntiSpamFilterAutomaticConfiguration.getExperimentBaseDirectory()+&quot;/referenceFronts/AntiSpamFilterProblem.NSGAII.rf&quot;,1);</span>
+<span class="nc" id="L234">		Double[] Values = FileLoader.readNSGAII_Values(AntiSpamFilterAutomaticConfiguration.getExperimentBaseDirectory()+&quot;/referenceFronts/&quot;+AntiSpamFilterAutomaticConfiguration.getsClassName()+&quot;.NSGAII.rs&quot;, nIndexOfLowerValue);</span>
+		
+		// tratamento de dados
+<span class="nc" id="L237">		int iterator = 0;</span>
+<span class="nc bnc" id="L238" title="All 2 branches missed.">		for (Entry&lt;String, Double&gt; rule : rulesManual.entrySet()) {</span>
+<span class="nc" id="L239">			rule.setValue(Values[iterator]);</span>
+<span class="nc" id="L240">			iterator++;</span>
+		}
+<span class="nc" id="L242">	}</span>
+
+	public Frame getFrame() {
+<span class="fc" id="L245">		return frame;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span>src (Dec 22, 2017 11:20:35 PM)</div></body></html>

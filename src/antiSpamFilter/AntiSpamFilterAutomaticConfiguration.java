@@ -23,13 +23,16 @@ import java.util.List;
 public class AntiSpamFilterAutomaticConfiguration {
 	private static final int INDEPENDENT_RUNS = 5;
 	private static AntiSpamFilterProblem antiSpamFilterProblem;
-
+	private static String experimentBaseDirectory;
+	private static String sClassName;
+	
 	public static void main(String[] args) throws IOException {
-		String experimentBaseDirectory = "experimentBaseDirectory";
+		experimentBaseDirectory = "experimentBaseDirectory";
 
 		List<ExperimentProblem<DoubleSolution>> problemList = new ArrayList<>();
-
-		problemList.add(new ExperimentProblem<>(antiSpamFilterProblem, "AntiSpamFilterProblem"));
+		sClassName = "AntiSpamFilterProblem";
+		
+    problemList.add(new ExperimentProblem<>(antiSpamFilterProblem, sClassName));
 
 		List<ExperimentAlgorithm<DoubleSolution, List<DoubleSolution>>> algorithmList = configureAlgorithmList(
 				problemList);
@@ -71,5 +74,16 @@ public class AntiSpamFilterAutomaticConfiguration {
 	public static void setAntiSpamFilterProblem(AntiSpamFilterProblem antiSpamFilterProblem) {
 		AntiSpamFilterAutomaticConfiguration.antiSpamFilterProblem = antiSpamFilterProblem;
 	}
+	
+	
+	public static String getExperimentBaseDirectory() {
+		return experimentBaseDirectory;
+	}
+
+	
+	public static String getsClassName() {
+		return sClassName;
+	}
+	
 	
 }

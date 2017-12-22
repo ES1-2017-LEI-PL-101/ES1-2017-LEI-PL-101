@@ -12,6 +12,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -37,6 +38,14 @@ public class Frame {
 	private JTable tableAuto = new JTable();
 
 	private AntiSpamGUI gui;
+
+	private JButton testButton;
+
+	private JButton saveButtonTest;
+
+	private JButton generateButton;
+
+	private JButton saveButtonAuto;
 
 	/**
 	 * Constructor. Creates a new Frame.
@@ -100,7 +109,7 @@ public class Frame {
 		spinnerFN.setName("spinnerFN");
 		spinnerFN.setEditable(false);
 
-		// lê dos files AntiSpamFilterProblem.NSGAII -> Pesos e FN/FP
+		// lï¿½ dos files AntiSpamFilterProblem.NSGAII -> Pesos e FN/FP
 		// AntiSpamConfigurationForLeisureMailbox -> escolher menor FN
 
 		fieldAutoFP = new JTextField("-");
@@ -238,39 +247,32 @@ public class Frame {
 		
 		JPanel buttonsLayout = new JPanel(new GridLayout(0, 4));
 
-		JButton testButton = new JButton("Run Test");
+		testButton = new JButton("Run Test");
 		testButton.addActionListener(gui.actionListenerTest);
 
-		JButton saveButtonTest = new JButton("Save Manual");
+		saveButtonTest = new JButton("Save Manual");
 
 		// TODO
-		saveButtonTest.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-
-				FileLoader.writeFile(getChosenPathRules().getText(), gui.getAntiSpamFilterProblem().getRules());
-
-			}
-		});
+		saveButtonTest.addActionListener(gui.actionListenerSave);
 
 		// instanciar AntiSpamConfiguration e correr o Main
-		// lançar os fixeiros R e tex quando gerar
-		JButton generateButton = new JButton("Generate");
+		// lanï¿½ar os fixeiros R e tex quando gerar
+		generateButton = new JButton("Generate");
 
 		// TODO
 		generateButton.addActionListener(gui.actionListenerGenerate);
 
-		JButton saveButtonAuto = new JButton("Save Auto");
+		saveButtonAuto = new JButton("Save Auto");
 
 		// TODO
-		saveButtonAuto.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-
-			}
-		});
+		saveButtonAuto.addActionListener(gui.actionListenerSave);
+		
+		if (!isPathValid()) {
+			testButton.setEnabled(false);
+			saveButtonTest.setEnabled(false);
+			generateButton.setEnabled(false);
+			saveButtonAuto.setEnabled(false);
+		}
 
 		saveButtonAuto.setPreferredSize(new Dimension(100, 10));
 
@@ -451,5 +453,21 @@ public class Frame {
 		this.chosenPathSpam = chosenPathSpam;
 	}
 
+	private Boolean isPathValid() {
+		return !(gui.getAntiSpamFilterProblem().getSpam().isEmpty() || gui.getAntiSpamFilterProblem().getHam().isEmpty()
+		|| gui.getAntiSpamFilterProblem().getRules().isEmpty());
+	}
+	
+	public void changeButtons() {
+		if (isPathValid()) {
+			testButton.setEnabled(true);
+			saveButtonTest.setEnabled(true);
+			generateButton.setEnabled(true);
+			saveButtonAuto.setEnabled(true);
+		}
+	}
 
+	public void Popup(String message) {
+		JOptionPane.showMessageDialog(frame, message);
+	}
 }

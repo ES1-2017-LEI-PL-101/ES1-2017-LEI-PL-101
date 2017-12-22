@@ -193,9 +193,12 @@ public class AntiSpamGUI {
 	 * @param option
 	 */
 	public void setRules(String option, boolean firstLoad) {
+
+		LinkedHashMap<String, Double> newRules = antiSpamFilterProblem.getRules();
+		DefaultTableModel model = Extensions.toTableModel(newRules,firstLoad);
+		
 		if (option.equals("Manual")) {
-			LinkedHashMap<String, Double> newRules = this.rulesManual;
-			DefaultTableModel model = Extensions.toTableModel(newRules,firstLoad);
+
 			this.frame.getTableManual().setModel(model);
 		}
 		if (option.equals("Auto")) {
@@ -225,6 +228,7 @@ public class AntiSpamGUI {
 			new AntiSpamGUI();
 		} catch (Exception e) {
 			System.out.println("Error: " + e.getMessage() + "; " + e.getLocalizedMessage() + ";" + e.getStackTrace());
+
 		}
 	}
 	
@@ -240,8 +244,6 @@ public class AntiSpamGUI {
 			iterator++;
 		}
 	}
+	
 
-	public Frame getFrame() {
-		return frame;
-	}
 }

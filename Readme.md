@@ -6,5 +6,5 @@ Identificação do número, nome e papel de cada membro do grupo (73063, Joana P
 
 Identificação da variante do projeto desenvolvida (AntiSpamConfigurationForLeisureMailbox)
 
-Link para um vídeo no youtube com a demonstração da aplicação final desenvolvida (ex: http://...)
+Link para um vídeo no youtube com a demonstração da aplicação final desenvolvida (Link video: https://youtu.be/PYV4pt2Bo24)
 

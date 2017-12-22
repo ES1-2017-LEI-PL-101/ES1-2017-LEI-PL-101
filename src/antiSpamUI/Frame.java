@@ -131,6 +131,7 @@ public class Frame {
 		spinnerFN = new JTextField("-");
 		spinnerFN.setName("spinnerFN");
 		spinnerFN.setEditable(false);
+
 		// l� dos files AntiSpamFilterProblem.NSGAII -> Pesos e FN/FP
 		// AntiSpamConfigurationForLeisureMailbox -> escolher menor FN
 
@@ -276,6 +277,7 @@ public class Frame {
 		// instanciar AntiSpamConfiguration e correr o Main
 		// lan�ar os fixeiros R e tex quando gerar
 		generateButton = new JButton("Generate");
+
 		// TODO
 		generateButton.addActionListener(gui.actionListenerGenerate);
 
@@ -448,5 +450,18 @@ public class Frame {
 	public void Popup(String message) {
 		JOptionPane.showMessageDialog(frame, message);
 	}
+
 	
+	public void changeButtons() {
+		if (isPathValid()) {
+			testButton.setEnabled(true);
+			saveButtonTest.setEnabled(true);
+			generateButton.setEnabled(true);
+			saveButtonAuto.setEnabled(true);
+		}
+	}
+
+	public void Popup(String message) {
+		JOptionPane.showMessageDialog(frame, message);
+	}
 }

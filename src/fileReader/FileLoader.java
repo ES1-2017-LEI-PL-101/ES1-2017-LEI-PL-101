@@ -99,18 +99,23 @@ public class FileLoader {
 		//a menor valor
 		//b indice
 		Double min = -1.0;
-		int index = -1;	
+
+		int index = -1;
+		
 		try {
 			br = new BufferedReader(new FileReader(filePath));
 			String sCurrentLine;
-			int nCurrentLine = 0;		
+			int nCurrentLine = 0;
+						
 			while ((sCurrentLine = br.readLine()) != null) {
 				String[] parts = sCurrentLine.split(" ");
-				//Min[a,b];
+				
+		//Min[a,b];
 				//a menor valor
 				//b indice
 				if(nCurrentLine == 0){
 				min = Double.parseDouble(parts[FnCol]);
+
 				index = 0;
 				}else{
 					if(parts.length > 1){	
@@ -134,6 +139,7 @@ public class FileLoader {
 				e.printStackTrace();
 			}
 		}
+
 			return index;
 	}
 

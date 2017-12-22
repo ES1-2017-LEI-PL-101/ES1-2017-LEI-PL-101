@@ -25,9 +25,9 @@ public class Frame {
 
 	private JFrame frame;
 
-	private JTextField choisenPathRules;
-	private JTextField choisenPathHam;
-	private JTextField choisenPathSpam;
+	private JTextField chosenPathRules;
+	private JTextField chosenPathHam;
+	private JTextField chosenPathSpam;
 	private JTextField spinnerFN;
 	private JTextField spinnerFP;
 	private JTextField fieldAutoFP;
@@ -180,49 +180,49 @@ public class Frame {
 
 		JTextField pathRules = new JTextField("Rules.cf");
 
-		choisenPathRules = new JTextField();
-		choisenPathRules.setEnabled(false);
+		chosenPathRules = new JTextField();
+		chosenPathRules.setEnabled(false);
 		
 		JButton buttonChangeRulesPath = new JButton("Browse Rules");
 		buttonChangeRulesPath.addActionListener(gui.actionListenerBrowser);
 
-		JScrollPane scrollR = new JScrollPane(choisenPathRules);
+		JScrollPane scrollR = new JScrollPane(chosenPathRules);
 		scrollR.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 
 		JTextField pathHam = new JTextField("Ham.log");
 		
-		choisenPathHam = new JTextField();
-		choisenPathHam.setEnabled(false);
+		chosenPathHam = new JTextField();
+		chosenPathHam.setEnabled(false);
 		
 		JButton buttonChangeHamPath = new JButton("Browse Ham");
 		buttonChangeHamPath.addActionListener(gui.actionListenerBrowser);
 
-		JScrollPane scrollH = new JScrollPane(choisenPathHam);
+		JScrollPane scrollH = new JScrollPane(chosenPathHam);
 		scrollH.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 
 		JTextField pathSpam = new JTextField("Spam.log");
 		
-		choisenPathSpam = new JTextField();
-		choisenPathSpam.setEnabled(false);
+		chosenPathSpam = new JTextField();
+		chosenPathSpam.setEnabled(false);
 		
 		JButton buttonChangeSpamPath = new JButton("Browse Spam");
 		buttonChangeRulesPath.setName("buttonSpam");
 
 		buttonChangeSpamPath.addActionListener(gui.actionListenerBrowser);
 
-		JScrollPane scrollS = new JScrollPane(choisenPathSpam);
+		JScrollPane scrollS = new JScrollPane(chosenPathSpam);
 		scrollS.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 
 		gridLayout.add(pathRules);
-		gridLayout.add(choisenPathRules);
+		gridLayout.add(chosenPathRules);
 		gridLayout.add(buttonChangeRulesPath);
 
 		gridLayout.add(pathHam);
-		gridLayout.add(choisenPathHam);
+		gridLayout.add(chosenPathHam);
 		gridLayout.add(buttonChangeHamPath);
 
 		gridLayout.add(pathSpam);
-		gridLayout.add(choisenPathSpam);
+		gridLayout.add(chosenPathSpam);
 		gridLayout.add(buttonChangeSpamPath);
 
 		return gridLayout;
@@ -249,7 +249,7 @@ public class Frame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 
-				FileLoader.writeFile(getChoisenPathRules().getText(), gui.getAntiSpamFilterProblem().getRules());
+				FileLoader.writeFile(getChosenPathRules().getText(), gui.getAntiSpamFilterProblem().getRules());
 
 			}
 		});
@@ -303,8 +303,8 @@ public class Frame {
 	 * 
 	 * @return JTextField This method returns the rules file path.
 	 */
-	public JTextField getChoisenPathRules() {
-		return choisenPathRules;
+	public JTextField getChosenPathRules() {
+		return chosenPathRules;
 	}
 
 	/**
@@ -312,8 +312,8 @@ public class Frame {
 	 * 
 	 * @return JTextField This method returns the ham file path.
 	 */
-	public JTextField getChoisenPathHam() {
-		return choisenPathHam;
+	public JTextField getChosenPathHam() {
+		return chosenPathHam;
 	}
 
 	/**
@@ -321,8 +321,8 @@ public class Frame {
 	 * 
 	 * @return JTextField This method returns the spam file path.
 	 */
-	public JTextField getChoisenPathSpam() {
-		return choisenPathSpam;
+	public JTextField getChosenPathSpam() {
+		return chosenPathSpam;
 	}
 
 	/**
@@ -387,5 +387,69 @@ public class Frame {
 	public void setFieldAutoFN(String fieldAutoFN) {
 		this.fieldAutoFN.setText(fieldAutoFN);
 	}
+	
+	/**
+	 * This method is used to get the false negative.
+	 * 
+	 * @return JTextField This method returns the sipnnerFN.
+	 */
+	public JTextField getSpinnerFN() {
+		return spinnerFN;
+	}
+
+	/**
+	 * This method is used to get the false positive.
+	 * 
+	 * @return JTextField This method returns the sipnnerFP.
+	 */
+	public JTextField getSpinnerFP() {
+		return spinnerFP;
+	}
+
+	/**
+	 * This method is used to get the auto false positive.
+	 * 
+	 * @return JTextField This method returns the fieldAutoFP.
+	 */
+	public JTextField getFieldAutoFP() {
+		return fieldAutoFP;
+	}
+
+	/**
+	 * This method is used to get the auto false negative.
+	 * 
+	 * @return JTextField This method returns the fieldAutoFN.
+	 */
+	public JTextField getFieldAutoFN() {
+		return fieldAutoFN;
+	}
+	
+	/**
+	 * This method is used to set rules path in chosenPathRules.
+	 * 
+	 * @param chosenPathRules
+	 */
+	public void setChosenPathRules(JTextField chosenPathRules) {
+		this.chosenPathRules = chosenPathRules;
+	}
+
+	/**
+	 * This method is used to set ham path in chosenPathHam.
+	 * 
+	 * @param chosenPathHam
+	 */
+	public void setChosenPathHam(JTextField chosenPathHam) {
+		this.chosenPathHam = chosenPathHam;
+	}
+
+	/**
+	 * This method is used to set spam path in chosenPathSpam.
+	 * 
+	 * @param chosenPathSpam
+	 */
+	public void setChosenPathSpam(JTextField chosenPathSpam) {
+		this.chosenPathSpam = chosenPathSpam;
+	}
+
 
 }

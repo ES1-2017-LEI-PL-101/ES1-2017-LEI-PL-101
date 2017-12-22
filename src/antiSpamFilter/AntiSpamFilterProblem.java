@@ -21,10 +21,14 @@ public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 	private int countFN = 0;
 	private final double algorithmLimit = 5.0;
 
+	/**
+	 * Constructor. Creates a HashMap of rules, ham and spam.
+	 * 
+	 */
 	public AntiSpamFilterProblem() {
-		rules = new LinkedHashMap<String, Double>();
-		ham = new LinkedHashMap<String, ArrayList<String>>();
-		spam = new LinkedHashMap<String, ArrayList<String>>();
+		this.rules = new LinkedHashMap<String, Double>();
+		this.ham = new LinkedHashMap<String, ArrayList<String>>();
+		this.spam = new LinkedHashMap<String, ArrayList<String>>();
 	}
 
 	// definimos o lower limit e upper limit
@@ -50,15 +54,30 @@ public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 		setUpperLimit(upperLimit);
 	}
 
+	/**
+	 * This method is used to read rules. 
+	 * 
+	 * @param path
+	 */
 	public void readRules(String path) {
 		rules = FileLoader.readRulesFile(path);
 		updateAntiSpamFilterProblem(getRules().size());
 	}
 
+	/**
+	 * This method is used to read ham.
+	 * 
+	 * @param path
+	 */
 	public void readHam(String path) {
 		ham = FileLoader.readHamOrSpamFile(path);
 	}
 
+	/**
+	 * This method is used to read spam.
+	 * 
+	 * @param path
+	 */
 	public void readSpam(String path) {
 		spam = FileLoader.readHamOrSpamFile(path);
 	}
@@ -124,18 +143,38 @@ public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 		return fx;
 	}
 
+	/**
+	 * 
+	 * 
+	 * @return
+	 */
 	public LinkedHashMap<String, Double> getRules() {
 		return rules;
 	}
 
+	/**
+	 * 
+	 * 
+	 * @return
+	 */
 	public LinkedHashMap<String, ArrayList<String>> getHam() {
 		return ham;
 	}
 
+	/**
+	 * 
+	 * 
+	 * @return
+	 */
 	public LinkedHashMap<String, ArrayList<String>> getSpam() {
 		return spam;
 	}
 
+	/**
+	 * 
+	 * 
+	 * @return
+	 */
 	public boolean validLists() {
 		return !rules.isEmpty() && !ham.isEmpty() && !spam.isEmpty();
 	}
@@ -149,10 +188,20 @@ public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 		this.rules = newRules;
 	}
 
+	/**
+	 * 
+	 * 
+	 * @return
+	 */
 	public int getCountFN() {
 		return countFN;
 	}
 
+	/**
+	 * 
+	 * 
+	 * @return
+	 */
 	public int getCountFP() {
 		return countFP;
 	}

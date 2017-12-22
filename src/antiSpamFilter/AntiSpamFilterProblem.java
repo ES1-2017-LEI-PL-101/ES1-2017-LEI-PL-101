@@ -1,11 +1,8 @@
 package antiSpamFilter;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Map.Entry;
 
 import org.uma.jmetal.problem.impl.AbstractDoubleProblem;
@@ -25,7 +22,6 @@ public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 	private final double algorithmLimit = 5.0;
 
 	public AntiSpamFilterProblem() {
-
 		rules = new LinkedHashMap<String, Double>();
 		ham = new LinkedHashMap<String, ArrayList<String>>();
 		spam = new LinkedHashMap<String, ArrayList<String>>();
@@ -36,7 +32,6 @@ public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 	 * Constructor. Creates a new instance of the AntiSpamFilter Problem.
 	 *
 	 * @param numberOfVariables
-	 *            Number of variables of the problem
 	 */
 	public void updateAntiSpamFilterProblem(Integer numberOfVariables) {
 
@@ -51,7 +46,6 @@ public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 			lowerLimit.add(-5.0);
 			upperLimit.add(5.0);
 		}
-
 		setLowerLimit(lowerLimit);
 		setUpperLimit(upperLimit);
 	}
@@ -69,7 +63,12 @@ public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 		spam = FileLoader.readHamOrSpamFile(path);
 	}
 
-	/** Evaluate() method */
+	
+	/**
+	 * 
+	 *
+	 * @param solution
+	 */
 	public void evaluate(DoubleSolution solution) {
 
 		// tratamento de dados
@@ -87,6 +86,12 @@ public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 		solution.setObjective(1, fx[1]); // objective 1 fx[1] will be subst by FN
 	}
 
+	/**
+	 * 
+	 * 
+	 * @param rules
+	 * @return Double
+	 */
 	public double[] evaluate(LinkedHashMap<String, Double> rules) {
 
 		double[] fx = new double[getNumberOfObjectives()];
@@ -102,9 +107,7 @@ public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 			if (count > algorithmLimit) {
 				fx[0]++;
 			}
-
 		}
-
 
 		fx[1] = 0.0; // FN
 		for (Entry<String, ArrayList<String>> spamRule : spam.entrySet()) {
@@ -117,12 +120,9 @@ public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 			if (count < algorithmLimit) {
 				fx[1]++;
 			}
-
 		}
-
 		return fx;
 	}
-
 
 	public LinkedHashMap<String, Double> getRules() {
 		return rules;
@@ -140,23 +140,21 @@ public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 		return !rules.isEmpty() && !ham.isEmpty() && !spam.isEmpty();
 	}
 
-	/** This method is used to set new rules in rules map.
+	/**
+	 * This method is used to set new rules in rules map.
 	 * 
 	 * @param newRules
 	 */
 	public void setRules(LinkedHashMap<String, Double> newRules) {
 		this.rules = newRules;
-
 	}
 
 	public int getCountFN() {
-		// TODO Auto-generated method stub
 		return countFN;
 	}
 
 	public int getCountFP() {
 		return countFP;
 	}
-	
-	
+
 }

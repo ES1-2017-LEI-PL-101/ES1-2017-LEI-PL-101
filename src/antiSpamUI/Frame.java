@@ -346,7 +346,7 @@ public class Frame {
 	/**
 	 * This method is used to get the AntiSpam gui.
 	 * 
-	 * @return JTable This method returns the AntiSpam gui.
+	 * @return AntiSpamGUI This method returns the AntiSpam gui.
 	 */
 	public AntiSpamGUI getGui() {
 		return gui;

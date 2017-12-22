@@ -92,15 +92,17 @@ public class AntiSpamGUI {
 		public void actionPerformed(ActionEvent e) {
 			e.getActionCommand();
 			Runnable task = new Runnable() {
-				
+
 				public void run() {
 					try {
 						AntiSpamFilterAutomaticConfiguration.setAntiSpamFilterProblem(antiSpamFilterProblem);
 						System.out.println("Rules " + antiSpamFilterProblem.getRules().size());
 						AntiSpamFilterAutomaticConfiguration.main(null);
 						rulesAuto = antiSpamFilterProblem.getRules();
-						frame.setFieldAutoFP(AntiSpamFilterAutomaticConfiguration.getAntiSpamFilterProblem().getCountFP() + "");
-						frame.setFieldAutoFN(AntiSpamFilterAutomaticConfiguration.getAntiSpamFilterProblem().getCountFN() + "");
+						frame.setFieldAutoFP(
+								AntiSpamFilterAutomaticConfiguration.getAntiSpamFilterProblem().getCountFP() + "");
+						frame.setFieldAutoFN(
+								AntiSpamFilterAutomaticConfiguration.getAntiSpamFilterProblem().getCountFN() + "");
 						setRules("Auto");
 
 					} catch (IOException e) {
@@ -158,5 +160,5 @@ public class AntiSpamGUI {
 			System.out.println("Error: " + e.getMessage());
 		}
 	}
-	
+
 }

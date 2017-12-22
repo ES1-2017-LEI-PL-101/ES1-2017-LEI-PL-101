@@ -144,36 +144,36 @@ public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 	}
 
 	/**
+	 * This method is used to get the rules HashMap.
 	 * 
-	 * 
-	 * @return
+	 * @return LinkedHashMap This method returns the rules.
 	 */
 	public LinkedHashMap<String, Double> getRules() {
 		return rules;
 	}
 
 	/**
+	 * This method is used to get the ham HashMap.
 	 * 
-	 * 
-	 * @return
+	 * @return LinkedHashMap This method returns the ham.
 	 */
 	public LinkedHashMap<String, ArrayList<String>> getHam() {
 		return ham;
 	}
 
 	/**
+	 * This method is used to get the spam HashMap.
 	 * 
-	 * 
-	 * @return
+	 * @return LinkedHashMap This method returns the spam.
 	 */
 	public LinkedHashMap<String, ArrayList<String>> getSpam() {
 		return spam;
 	}
 
 	/**
+	 * This method is used to know if all lists aren't empty.
 	 * 
-	 * 
-	 * @return
+	 * @return boolean This method returns true if all lists aren't empty and false otherwise.
 	 */
 	public boolean validLists() {
 		return !rules.isEmpty() && !ham.isEmpty() && !spam.isEmpty();
@@ -189,18 +189,18 @@ public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 	}
 
 	/**
+	 * This method is used to get the count of false negative.
 	 * 
-	 * 
-	 * @return
+	 * @return int This method returns the countFN.
 	 */
 	public int getCountFN() {
 		return countFN;
 	}
 
 	/**
+	 * This method is used to get the count of false positive.
 	 * 
-	 * 
-	 * @return
+	 * @return int This method returns the countFP.
 	 */
 	public int getCountFP() {
 		return countFP;

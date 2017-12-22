@@ -17,8 +17,6 @@ import java.util.Map.Entry;
 
 public class FileLoader {
 
-
-	// Write on hashmap the content of the file
 	/**
 	 * This method is used to read rules.
 	 * 
@@ -39,7 +37,7 @@ public class FileLoader {
 				}
 
 			}
-			
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
@@ -71,7 +69,7 @@ public class FileLoader {
 				for (int i = 1; i < parts.length; i++) {
 					a.add(parts[i]);
 				}
-					map.put(parts[0], a);
+				map.put(parts[0], a);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -84,10 +82,9 @@ public class FileLoader {
 				e.printStackTrace();
 			}
 		}
-		
+
 		return map;
 	}
-
 
 	/**
 	 * This method is used to write the new rules HashMap in the specific file path.
@@ -106,17 +103,12 @@ public class FileLoader {
 			}
 
 		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-
-
 
 }

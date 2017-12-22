@@ -1,6 +1,3 @@
-/**
- * 
- */
 package antiSpamUI;
 
 import java.awt.Adjustable;
@@ -154,7 +151,8 @@ public class Frame {
 	}
 
 	/**
-	 * This method is used to create the Manual and Automatic tables with their weights.
+	 * This method is used to create the Manual and Automatic tables with their
+	 * weights.
 	 * 
 	 * @return JPanel This method returns the tables panel.
 	 */
@@ -197,7 +195,8 @@ public class Frame {
 	/**
 	 * This method is used to create the browsers buttons and path panel.
 	 * 
-	 * @return JPanel This method returns the path panel and browsers buttons layout.
+	 * @return JPanel This method returns the path panel and browsers buttons
+	 *         layout.
 	 */
 	private JPanel createPathsPanel() {
 		JPanel gridLayout = new JPanel(new GridLayout(0, 3));
@@ -261,7 +260,6 @@ public class Frame {
 
 		testButton.addActionListener(gui.actionListenerTest);
 
-			
 		JButton saveButtonTest = new JButton("Save Manual");
 
 		// TODO
@@ -281,7 +279,6 @@ public class Frame {
 
 		// TODO
 		generateButton.addActionListener(gui.actionListenerGenerate);
-
 
 		JButton saveButtonAuto = new JButton("Save Auto");
 
@@ -375,22 +372,40 @@ public class Frame {
 		return gui;
 	}
 
+	/**
+	 * This method is used to set the false negative spinner in spinnerFN field.
+	 * 
+	 * @param spinnerFN
+	 */
 	public void setSpinnerFN(String spinnerFN) {
 		this.spinnerFN.setText(spinnerFN);
 	}
 
+	/**
+	 * This method is used to set the false positive spinner in spinnerFP field.
+	 * 
+	 * @param spinnerFP
+	 */
 	public void setSpinnerFP(String spinnerFP) {
 		this.spinnerFP.setText(spinnerFP);
 	}
 
+	/**
+	 * This method is used to set the false positive in AutoFP field.
+	 * 
+	 * @param fieldAutoFP
+	 */
 	public void setFieldAutoFP(String fieldAutoFP) {
 		this.fieldAutoFP.setText(fieldAutoFP);
 	}
 
+	/**
+	 * This method is used to set the false negative spinner in spinnerFN field.
+	 * 
+	 * @param fieldAutoFN
+	 */
 	public void setFieldAutoFN(String fieldAutoFN) {
 		this.fieldAutoFN.setText(fieldAutoFN);
 	}
 
-	
-	
 }

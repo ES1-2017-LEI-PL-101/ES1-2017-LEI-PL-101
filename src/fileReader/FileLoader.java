@@ -87,8 +87,108 @@ public class FileLoader {
 		
 		return map;
 	}
+	/**
+	 * 
+	 * @param filePath AntiSpamFilterProblem.NSGAII.rf
+	 * @return integer index of lower FN on AntiSpamFilterProblemNSGAII.rs
+	 */
+	public static int readNSGAII_LowerIndex(String filePath){
+		BufferedReader br = null;
+		//Min[a,b];
+		//a menor valor
+		//b indice
+		Double min = -1.0;
+		int index = -1;
+		
+		try {
+			br = new BufferedReader(new FileReader(filePath));
+			String sCurrentLine;
+			int nCurrentLine = 0;
+			//na primeira linha toma o valor da pos 1 
+			//o valor da pos 0 é o primeiro valor de min.
+			int beginIndexLine = 0;
+			
+			while ((sCurrentLine = br.readLine()) != null) {
+				String[] parts = sCurrentLine.split(" ");
+				beginIndexLine = 0;
+				//Min[a,b];
+				//a menor valor
+				//b indice
+				if(nCurrentLine == 0){
+				min = Double.parseDouble(parts[0]);
+				beginIndexLine = 1;
+				index = 1;
+				}
+				
+				if(parts.length > 1){	
+					for (int i = beginIndexLine; i < parts.length; i++) {
+						//seleciona o valor minimo
+						if(Double.parseDouble(parts[i]) < min){
+							min = Double.parseDouble(parts[i]);
+							index = nCurrentLine;
+						}
+					}
+				}
+				nCurrentLine++;	
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (br != null) {
+					br.close();
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		
+			return index;
+	}
 
-
+	
+	/**
+	 * Read values from AntiSpamFilterProblem.NSGAII.rs by index
+	 * @param filePath AntiSpamFilterProblem.NSGAII.rs
+	 * @param index Line
+	 * @return
+	 */
+	public static Double[] readNSGAII_Values(String filePath, int index) {
+		BufferedReader br = null;
+		Double[] valuesMap = null;
+		
+		try {
+			br = new BufferedReader(new FileReader(filePath));
+			String sCurrentLine;
+			int nCurrentLine = 0;
+			
+			while (nCurrentLine!=index) {
+					br.readLine();
+					nCurrentLine++;
+			}
+				sCurrentLine = br.readLine();
+				String[] parts = sCurrentLine.split(" ");
+				valuesMap = new Double [parts.length];
+				for(int i = 0 ; i!=parts.length;i++ ){
+					valuesMap[i] = Double.parseDouble(parts[i]);
+				}
+				
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (br != null) {
+					br.close();
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return valuesMap;	
+	}
+	
+	
 	/**
 	 * This method is used to write the new rules HashMap in the specific file path.
 	 * 

@@ -23,13 +23,16 @@ import java.util.List;
 public class AntiSpamFilterAutomaticConfiguration {
 	private static final int INDEPENDENT_RUNS = 5;
 	private static AntiSpamFilterProblem antiSpamFilterProblem;
-
+	private static String experimentBaseDirectory;
+	private static String sClassName;
+	
 	public static void main(String[] args) throws IOException {
-		String experimentBaseDirectory = "experimentBaseDirectory";
+		experimentBaseDirectory = "experimentBaseDirectory";
 
 		List<ExperimentProblem<DoubleSolution>> problemList = new ArrayList<>();
-
-    problemList.add(new ExperimentProblem<>(antiSpamFilterProblem, "AntiSpamFilterProblem"));
+		sClassName = "AntiSpamFilterProblem";
+		
+    problemList.add(new ExperimentProblem<>(antiSpamFilterProblem, sClassName));
 
 		// Debug.getInstance().msg("ProblemList"+problemList.toString());
 
@@ -68,7 +71,7 @@ public class AntiSpamFilterAutomaticConfiguration {
 			Algorithm<List<DoubleSolution>> algorithm = new NSGAIIBuilder<>(problemList.get(i).getProblem(),
 					new SBXCrossover(1.0, 5),
 					new PolynomialMutation(1.0 / problemList.get(i).getProblem().getNumberOfVariables(), 10.0))
-					.setMaxEvaluations(1000).setPopulationSize(100).build();
+					.setMaxEvaluations(3000).setPopulationSize(100).build();
 			algorithms.add(new ExperimentAlgorithm<>(algorithm, "NSGAII", problemList.get(i).getTag()));
 			// Debug.getInstance().msg("algorithms "+algorithms.toString());
 		}
@@ -83,6 +86,17 @@ public class AntiSpamFilterAutomaticConfiguration {
 		AntiSpamFilterAutomaticConfiguration.antiSpamFilterProblem = antiSpamFilterProblem;
 	}
 
+	
+	public static String getExperimentBaseDirectory() {
+		return experimentBaseDirectory;
+	}
+
+	
+	public static String getsClassName() {
+		return sClassName;
+	}
+	
+	
 	
 	
 }

@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.function.BiFunction;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JFileChooser;
@@ -95,15 +96,40 @@ public class AntiSpamGUI {
 						Double.parseDouble(frame.getTableManual().getModel().getValueAt(count, 1).toString()));
 
 			}
-
+			
 			antiSpamFilterProblem.setRules(rulesManual);
 			double[] fxCount = antiSpamFilterProblem.evaluate(rulesManual);
 			frame.setSpinnerFN(fxCount[1] + "");
 			frame.setSpinnerFP(fxCount[0] + "");
 			setRules("Manual");
-
 			
+			createGraphic();
+
+//			param = "código descrito para compilar"
+//			param = "Mostar a imagem"
 		
+		}
+		
+		//TODO Script é em exe
+		private void createGraphic() {
+			
+			String[] params = new String [2];
+
+			params[0] = "C:\\Program Files\\R\\R-3.4.1\\bin\\x64\\Rscript.exe";
+
+			params[1] = "C:\\Users\\vbasto\\git\\ES1\\experimentBaseDirectory\\AntiSpamStudy\\R\\HV.Boxplot.R";
+
+			String[] envp = new String [1];
+
+			envp[0] = "Path=C:\\Program Files\\R\\R-3.4.1\\bin\\x64";
+
+			try {
+				Process p = Runtime.getRuntime().exec(params, envp, new File("C:\\Users\\vbasto\\git\\ES1\\experimentBaseDirectory\\AntiSpamStudy\\R"));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
 		}
 		
 		
@@ -121,6 +147,7 @@ public class AntiSpamGUI {
 						System.out.println("Rules " + antiSpamFilterProblem.getRules().size());
 						AntiSpamFilterAutomaticConfiguration.main(null);
 						rulesAuto = antiSpamFilterProblem.getRules();
+						updateValuesFromFile();
 						frame.setFieldAutoFP(
 								AntiSpamFilterAutomaticConfiguration.getAntiSpamFilterProblem().getCountFP() + "");
 						frame.setFieldAutoFN(
@@ -194,4 +221,18 @@ public class AntiSpamGUI {
 			System.out.println("Error: " + e.getMessage() + "; " + e.getLocalizedMessage() + ";" + e.getStackTrace());
 		}
 	}
+	
+	public void updateValuesFromFile(){
+		//set file values
+		int nIndexOfLowerValue = FileLoader.readNSGAII_LowerIndex(AntiSpamFilterAutomaticConfiguration.getExperimentBaseDirectory()+"/referenceFronts/AntiSpamFilterProblem.NSGAII.rf");
+		Double[] Values = FileLoader.readNSGAII_Values(AntiSpamFilterAutomaticConfiguration.getExperimentBaseDirectory()+"/referenceFronts/"+AntiSpamFilterAutomaticConfiguration.getsClassName()+".NSGAII.rs", nIndexOfLowerValue);
+		
+		// tratamento de dados
+		int iterator = 0;
+		for (Entry<String, Double> rule : rulesManual.entrySet()) {
+			rule.setValue(Values[iterator]);
+			iterator++;
+		}
+	}
+	
 }

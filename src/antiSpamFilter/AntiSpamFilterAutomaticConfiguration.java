@@ -68,7 +68,7 @@ public class AntiSpamFilterAutomaticConfiguration {
 			Algorithm<List<DoubleSolution>> algorithm = new NSGAIIBuilder<>(problemList.get(i).getProblem(),
 					new SBXCrossover(1.0, 5),
 					new PolynomialMutation(1.0 / problemList.get(i).getProblem().getNumberOfVariables(), 10.0))
-					.setMaxEvaluations(3000).setPopulationSize(100).build();
+					.setMaxEvaluations(1000).setPopulationSize(100).build();
 			algorithms.add(new ExperimentAlgorithm<>(algorithm, "NSGAII", problemList.get(i).getTag()));
 			// Debug.getInstance().msg("algorithms "+algorithms.toString());
 		}

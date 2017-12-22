@@ -65,6 +65,14 @@ public class Frame {
 
 	private AntiSpamGUI gui;
 
+	private JButton testButton;
+
+	private JButton saveButtonTest;
+
+	private JButton generateButton;
+
+	private JButton saveButtonAuto;
+
 	/**
 	 * Constructor. Creates a new Frame.
 	 * 
@@ -257,42 +265,35 @@ public class Frame {
 	private JPanel createButtons() {
 		JPanel buttonsLayout = new JPanel(new GridLayout(0, 4));
 
-		JButton testButton = new JButton("Run Test");
+		testButton = new JButton("Run Test");
 
 		testButton.addActionListener(gui.actionListenerTest);
 
 			
-		JButton saveButtonTest = new JButton("Save Manual");
+		saveButtonTest = new JButton("Save Manual");
 
 		// TODO
-		saveButtonTest.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-
-				FileLoader.writeFile(getChoisenPathRules().getText(), gui.getAntiSpamFilterProblem().getRules());
-
-			}
-		});
+		saveButtonTest.addActionListener(gui.actionListenerSave);
 
 		// instanciar AntiSpamConfiguration e correr o Main
 		// lançar os fixeiros R e tex quando gerar
-		JButton generateButton = new JButton("Generate");
+		generateButton = new JButton("Generate");
 
 		// TODO
 		generateButton.addActionListener(gui.actionListenerGenerate);
 
 
-		JButton saveButtonAuto = new JButton("Save Auto");
+		saveButtonAuto = new JButton("Save Auto");
 
 		// TODO
-		saveButtonAuto.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-
-			}
-		});
+		saveButtonAuto.addActionListener(gui.actionListenerSave);
+		
+		if (!isPathValid()) {
+			testButton.setEnabled(false);
+			saveButtonTest.setEnabled(false);
+			generateButton.setEnabled(false);
+			saveButtonAuto.setEnabled(false);
+		}
 
 		saveButtonAuto.setPreferredSize(new Dimension(100, 10));
 
@@ -392,5 +393,17 @@ public class Frame {
 	}
 
 	
+	private Boolean isPathValid() {
+		return !(gui.getAntiSpamFilterProblem().getSpam().isEmpty() || gui.getAntiSpamFilterProblem().getHam().isEmpty()
+		|| gui.getAntiSpamFilterProblem().getRules().isEmpty());
+	}
 	
+	public void changeButtons() {
+		if (isPathValid()) {
+			testButton.setEnabled(true);
+			saveButtonTest.setEnabled(true);
+			generateButton.setEnabled(true);
+			saveButtonAuto.setEnabled(true);
+		}
+	}
 }

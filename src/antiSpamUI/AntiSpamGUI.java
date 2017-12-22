@@ -36,6 +36,7 @@ public class AntiSpamGUI {
 	public AntiSpamGUI() {
 		frame = new Frame(this);
 		antiSpamFilterProblem = new AntiSpamFilterProblem();
+
 	}
 
 	public ActionListener actionListenerBrowser = new ActionListener() {
@@ -44,7 +45,7 @@ public class AntiSpamGUI {
 		public void actionPerformed(ActionEvent e) {
 
 			e.getActionCommand();
-			File userDir = new File(System.getProperty("user.dir"));
+			File userDir = new File(System.getProperty("user.dir") + File.separator + "files");
 			JFileChooser fileChooser = new JFileChooser(userDir);
 			int returnName = fileChooser.showOpenDialog(null);
 			String path = null;
@@ -62,6 +63,8 @@ public class AntiSpamGUI {
 			if (e.getActionCommand().equals("Browse Rules")) {
 				antiSpamFilterProblem.readRules(path);
 				frame.getChoisenPathRules().setText(path);
+				rulesManual = antiSpamFilterProblem.getRules();
+				rulesAuto = antiSpamFilterProblem.getRules();
 				setRules("Manual");
 				setRules("Auto");
 
@@ -74,6 +77,8 @@ public class AntiSpamGUI {
 				frame.getChoisenPathSpam().setText(path);
 
 			}
+			
+			frame.changeButtons();
 
 		}
 	};
@@ -83,59 +88,71 @@ public class AntiSpamGUI {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			e.getActionCommand();
-			
+			rulesManual.clear();
+
 			for (int count = 0; count < frame.getTableManual().getModel().getRowCount(); count++) {
 				rulesManual.put(frame.getTableManual().getModel().getValueAt(count, 0).toString(),
 						Double.parseDouble(frame.getTableManual().getModel().getValueAt(count, 1).toString()));
 
 			}
-		
+
 			antiSpamFilterProblem.setRules(rulesManual);
 			double[] fxCount = antiSpamFilterProblem.evaluate(rulesManual);
-			frame.setSpinnerFN(String.valueOf(fxCount[1]));
-			frame.setSpinnerFP(String.valueOf(fxCount[0]));
+			frame.setSpinnerFN(fxCount[1] + "");
+			frame.setSpinnerFP(fxCount[0] + "");
 			setRules("Manual");
-		
+
 			
-	}
+		
+		}
+		
+		
 	};
-	
+
 	public ActionListener actionListenerGenerate = new ActionListener() {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			e.getActionCommand();
-			 Runnable task = new Runnable() {
-	                public void run() {
-	                	try {
-	                		AntiSpamFilterAutomaticConfiguration.setAntiSpamFilterProblem(antiSpamFilterProblem);
-	                		System.out.println("Rules " + antiSpamFilterProblem.getRules().size());
-	                		AntiSpamFilterAutomaticConfiguration.main(null);
-	                		rulesAuto = antiSpamFilterProblem.getRules();
-	                		frame.setFieldAutoFP(AntiSpamFilterAutomaticConfiguration.getAntiSpamFilterProblem().getCountFP()+"");
-							frame.setFieldAutoFN(AntiSpamFilterAutomaticConfiguration.getAntiSpamFilterProblem().getCountFN()+"");
-							setRules("Auto");
-							
-					
-	                	} catch (IOException e) {
+			Runnable task = new Runnable() {
+				public void run() {
+					try {
+						AntiSpamFilterAutomaticConfiguration.setAntiSpamFilterProblem(antiSpamFilterProblem);
+						System.out.println("Rules " + antiSpamFilterProblem.getRules().size());
+						AntiSpamFilterAutomaticConfiguration.main(null);
+						rulesAuto = antiSpamFilterProblem.getRules();
+						frame.setFieldAutoFP(
+								AntiSpamFilterAutomaticConfiguration.getAntiSpamFilterProblem().getCountFP() + "");
+						frame.setFieldAutoFN(
+								AntiSpamFilterAutomaticConfiguration.getAntiSpamFilterProblem().getCountFN() + "");
+						setRules("Auto");
+						System.out.println("END");
+						
+						
+					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-                }
-            };
-            Thread t=new Thread(task);
-            t.start();
-	
-			try {
-				t.join();
-			} catch (InterruptedException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+				}
+			};
+			Thread t = new Thread(task);
+			t.start();
+
+		}
+	};
+
+	public ActionListener actionListenerSave = new ActionListener() {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			e.getActionCommand();
+
+			if (e.getActionCommand().equals("Save Manual")) {
+				FileLoader.writeFile(frame.getChoisenPathRules().getText(), rulesManual);
+			} else if (e.getActionCommand().equals("Save Auto")){
+				FileLoader.writeFile(frame.getChoisenPathRules().getText(), rulesAuto);
 			}
-			
-		
-			
-	}
+		}
 	};
 
 	/**
@@ -174,7 +191,7 @@ public class AntiSpamGUI {
 		try {
 			new AntiSpamGUI();
 		} catch (Exception e) {
-			System.out.println("Error: " + e.getMessage());
+			System.out.println("Error: " + e.getMessage() + "; " + e.getLocalizedMessage() + ";" + e.getStackTrace());
 		}
 	}
 }

@@ -17,10 +17,10 @@ class AntiSpamFilterProblemTests{
 		assertTrue(new AntiSpamFilterProblem() instanceof AntiSpamFilterProblem);
 	}
 
-	@Test
+	/*@Test
 	void testUpdateAntiSpamFilterProblem() {
 		fail("Not yet implemented");
-	}
+	}*/
 
 	@Test
 	void testReadRules() {
@@ -43,10 +43,10 @@ class AntiSpamFilterProblemTests{
 		assertNotEquals(a.getSpam(), new LinkedHashMap<>());
 	}
 
-	@Test
+	/*@Test
 	void testEvaluateDoubleSolution() {
 		fail("Not yet implemented");
-	}
+	}*/
 
 	@Test
 	void testEvaluateLinkedHashMapOfStringDouble() {
@@ -78,6 +78,18 @@ class AntiSpamFilterProblemTests{
 		a.readSpam("./files/spam.log");
 		a.readHam("./files/ham.log");
 		assertEquals(a.validLists(), true);
+		AntiSpamFilterProblem b = new AntiSpamFilterProblem();
+		b.readSpam("./files/spam.log");
+		b.readHam("./files/ham.log");
+		assertEquals(b.validLists(), false);
+		AntiSpamFilterProblem c = new AntiSpamFilterProblem();
+		c.readSpam("./files/spam.log");
+		c.readRules("./files/rules.cf");
+		assertEquals(c.validLists(), false);
+		AntiSpamFilterProblem d = new AntiSpamFilterProblem();
+		d.readHam("./files/ham.log");
+		d.readRules("./files/rules.cf");
+		assertEquals(d.validLists(), false);
 	}
 
 	@Test

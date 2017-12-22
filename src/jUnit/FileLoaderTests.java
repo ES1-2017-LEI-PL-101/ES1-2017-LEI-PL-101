@@ -33,5 +33,19 @@ class FileLoaderTests {
 		FileLoader.writeFile("./files/rules.cf", rules);
 		
 	}
+	
+	@Test
+	void testReadNSGAII_LowerIndex() {
+		new FileLoader();
+		int min = FileLoader.readNSGAII_LowerIndex("./experimentBaseDirectory/referenceFronts/AntiSpamFilterProblem.NSGAII.rf", 1);
+		assertTrue(Integer.valueOf(min) instanceof Integer);
+	}
+	
+	@Test
+	void testReadNSGAII_Values() {
+		new FileLoader();
+		Double[] min = FileLoader.readNSGAII_Values("./experimentBaseDirectory/referenceFronts/AntiSpamFilterProblem.NSGAII.rs", 1);
+		assertNotEquals(min.length, 0);
+	}
 
 }

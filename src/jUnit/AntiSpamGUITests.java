@@ -22,8 +22,8 @@ class AntiSpamGUITests{
 	void testSetRules() {
 		JTable jtm = a.getFrame().getTableManual();
 		JTable jta = a.getFrame().getTableAuto();
-		a.setRules("Manual");
-		a.setRules("Auto");
+		a.setRules("Manual", true);
+		a.setRules("Auto", false);
 		assertEquals(jtm, a.getFrame().getTableManual());
 		assertEquals(jta, a.getFrame().getTableAuto());
 	}

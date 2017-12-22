@@ -144,7 +144,6 @@ public class AntiSpamFilterProblem extends AbstractDoubleProblem {
 	 */
 	public void setRules(LinkedHashMap<String, Double> newRules) {
 		this.rules = newRules;
-
 	}
 
 	public int getCountFN() {

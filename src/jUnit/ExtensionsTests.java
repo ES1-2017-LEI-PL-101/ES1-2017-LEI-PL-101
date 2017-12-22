@@ -17,7 +17,7 @@ class ExtensionsTests {
 	void testToTableModel() {
 		new Extensions();
 		Map<?,?> map = new HashMap<String,String>();
-		assertTrue(Extensions.toTableModel(map) instanceof DefaultTableModel);
+		assertTrue(Extensions.toTableModel(map, false) instanceof DefaultTableModel);
 	}
-
+	
 }

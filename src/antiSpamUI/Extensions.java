@@ -18,7 +18,7 @@ public class Extensions {
 	 * @param map
 	 * @return DefaultTableModel This method returns the model table.
 	 */
-	public static DefaultTableModel toTableModel(Map<?, ?> map,boolean firstLoad) {
+	public static DefaultTableModel toTableModel(Map<?, ?> map, boolean firstLoad) {
 		DefaultTableModel model = new DefaultTableModel(new Object[] { "Rules", "Weight" }, 0);
 		for (Map.Entry<?, ?> entry : map.entrySet()) {
 			if(firstLoad)

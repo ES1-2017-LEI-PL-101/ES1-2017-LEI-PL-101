@@ -56,23 +56,23 @@ public class Frame {
 	private JTextField chosenPathRules;
 	private JTextField chosenPathHam;
 	private JTextField chosenPathSpam;
-	private JTextField spinnerFN;
-	private JTextField spinnerFP;
-	private JTextField fieldAutoFP;
-	private JTextField fieldAutoFN;
+	public JTextField spinnerFN;
+	public JTextField spinnerFP;
+	public JTextField fieldAutoFP;
+	public JTextField fieldAutoFN;
 
 	private JTable tableManual = new JTable();
 	private JTable tableAuto = new JTable();
 	private AntiSpamGUI gui;
 
-	private JButton testButton;
+	public JButton testButton;
 
-	private JButton saveButtonTest;
+	public JButton saveButtonTest;
 
-	private JButton generateButton;
+	public JButton generateButton;
 
-	private JButton saveButtonAuto;
-
+	public JButton saveButtonAuto;
+	
 	/**
 	 * Constructor. Creates a new Frame.
 	 * 
@@ -98,7 +98,6 @@ public class Frame {
 				centerPanel.add(createPathsPanel());
 				mainPanel.add(createButtons(), BorderLayout.SOUTH);
 				mainPanel.add(centerPanel, BorderLayout.CENTER);
-
 				frame.add(mainPanel);
 
 				frame.setVisible(true);
@@ -126,24 +125,12 @@ public class Frame {
 
 		JPanel spinnerManualLayout = new JPanel(new GridLayout(0, 4));
 		JPanel textAutoLayout = new JPanel(new GridLayout(0, 4));
-<<<<<<< HEAD
-		
-		this.spinnerFP = new JTextField("-");
-		this.spinnerFP.setName("spinnerFP");
-		this.spinnerFP.setEditable(false);		
-		this.spinnerFN = new JTextField("-");
-		this.spinnerFN.setName("spinnerFN");
-		this.spinnerFN.setEditable(false);
-=======
-
 		spinnerFP = new JTextField("-");
 		spinnerFP.setName("spinnerFP");
 		spinnerFP.setEditable(false);
 		spinnerFN = new JTextField("-");
 		spinnerFN.setName("spinnerFN");
 		spinnerFN.setEditable(false);
->>>>>>> dev
-
 		// l� dos files AntiSpamFilterProblem.NSGAII -> Pesos e FN/FP
 		// AntiSpamConfigurationForLeisureMailbox -> escolher menor FN
 
@@ -283,28 +270,12 @@ public class Frame {
 		saveButtonTest = new JButton("Save Manual");
 
 		// TODO
-<<<<<<< HEAD
-		saveButtonTest.addActionListener(new ActionListener() {
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-
-				FileLoader.writeFile(getChosenPathRules().getText(), gui.getAntiSpamFilterProblem().getRules());
-
-			}
-		});
-
-		// instanciar AntiSpamConfiguration e correr o Main
-		// lan�ar os fixeiros R e tex quando gerar
-		JButton generateButton = new JButton("Generate");
-=======
 		saveButtonTest.addActionListener(gui.actionListenerSave);
 
 		// instanciar AntiSpamConfiguration e correr o Main
 		// lan�ar os fixeiros R e tex quando gerar
 		generateButton = new JButton("Generate");
->>>>>>> dev
-
 		// TODO
 		generateButton.addActionListener(gui.actionListenerGenerate);
 
@@ -430,11 +401,21 @@ public class Frame {
 		fieldAutoFN.setText(fFN);
 	}
 	
+	public JButton getTestButton() {
+		return testButton;
+	}
 	
+	public JButton getSaveButtonTest() {
+		return saveButtonTest;
+	}
+	public JButton getGenerateButton() {
+		return testButton;
+	}
+	public JButton getSaveButtonAuto() {
+		return testButton;
+	}	
 	
-
-	
-	private Boolean isPathValid() {
+	public boolean isPathValid() {
 		return !(gui.getAntiSpamFilterProblem().getSpam().isEmpty() || gui.getAntiSpamFilterProblem().getHam().isEmpty()
 		|| gui.getAntiSpamFilterProblem().getRules().isEmpty());
 	}
@@ -448,7 +429,24 @@ public class Frame {
 		}
 	}
 
+	public JTextField getSpinnerFN() {
+		return spinnerFN;
+	}
+
+	public JTextField getSpinnerFP() {
+		return spinnerFP;
+	}
+
+	public JTextField getFieldAutoFP() {
+		return fieldAutoFP;
+	}
+
+	public JTextField getFieldAutoFN() {
+		return fieldAutoFN;
+	}
+
 	public void Popup(String message) {
 		JOptionPane.showMessageDialog(frame, message);
 	}
+	
 }

@@ -1,28 +1,20 @@
 package antiSpamUI;
 
-import java.awt.Dimension;
-import java.awt.EventQueue;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import java.io.File;
 import java.io.IOException;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.function.BiFunction;
 
-import javax.swing.DefaultListModel;
+import java.util.LinkedHashMap;
+import java.util.Map.Entry;
+
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
 
 import antiSpamFilter.AntiSpamFilterAutomaticConfiguration;
 import antiSpamFilter.AntiSpamFilterProblem;
+
 import fileReader.FileLoader;
 
 public class AntiSpamGUI {
@@ -36,9 +28,8 @@ public class AntiSpamGUI {
 	 * Constructor. Creates a new Frame and a new AntiSpamFilterProblem.
 	 */
 	public AntiSpamGUI() {
-		frame = new Frame(this);
-		antiSpamFilterProblem = new AntiSpamFilterProblem();
-
+		this.frame = new Frame(this);
+		this.antiSpamFilterProblem = new AntiSpamFilterProblem();
 	}
 
 	public ActionListener actionListenerBrowser = new ActionListener() {
@@ -54,33 +45,30 @@ public class AntiSpamGUI {
 
 			if (returnName == JFileChooser.APPROVE_OPTION) {
 				File f = fileChooser.getSelectedFile();
-				if (f != null) { // Make sure the user
-					// didn't choose a
-					// directory.
+				if (f != null) {
 
-					path = f.getAbsolutePath();// get the absolute path to selected file
+					path = f.getAbsolutePath();
 				}
 			}
-
 			if (e.getActionCommand().equals("Browse Rules")) {
 				antiSpamFilterProblem.readRules(path);
 				frame.getChosenPathRules().setText(path);
 				rulesManual = antiSpamFilterProblem.getRules();
 				rulesAuto = antiSpamFilterProblem.getRules();
+
 				setRules("Manual",true);
 				setRules("Auto",true);
+				
 			} else if (e.getActionCommand().equals("Browse Ham")) {
-				antiSpamFilterProblem.readHam(path);
-				frame.getChosenPathHam().setText(path);
+			                antiSpamFilterProblem.readHam(path);
+			                frame.getChosenPathHam().setText(path);
 
 			} else if (e.getActionCommand().equals("Browse Spam")) {
 				antiSpamFilterProblem.readSpam(path);
 				frame.getChosenPathSpam().setText(path);
 
 			}
-			
 			frame.changeButtons();
-
 		}
 	};
 
@@ -94,23 +82,13 @@ public class AntiSpamGUI {
 			for (int count = 0; count < frame.getTableManual().getModel().getRowCount(); count++) {
 				rulesManual.put(frame.getTableManual().getModel().getValueAt(count, 0).toString(),
 						Double.parseDouble(frame.getTableManual().getModel().getValueAt(count, 1).toString()));
-
 			}
-			
 			antiSpamFilterProblem.setRules(rulesManual);
 			double[] fxCount = antiSpamFilterProblem.evaluate(rulesManual);
 			frame.setSpinnerFN(fxCount[1] + "");
 			frame.setSpinnerFP(fxCount[0] + "");
-			setRules("Manual",false);
-			
-			
-
-//			param = "código descrito para compilar"
-//			param = "Mostar a imagem"
-		
+			setRules("Manual", false);
 		}
-		
-		
 	};
 
 	public ActionListener actionListenerGenerate = new ActionListener() {
@@ -119,53 +97,54 @@ public class AntiSpamGUI {
 		public void actionPerformed(ActionEvent e) {
 			e.getActionCommand();
 			Runnable task = new Runnable() {
+
 				public void run() {
 					try {
 						AntiSpamFilterAutomaticConfiguration.setAntiSpamFilterProblem(antiSpamFilterProblem);
 						System.out.println("Rules " + antiSpamFilterProblem.getRules().size());
 						AntiSpamFilterAutomaticConfiguration.main(null);
 						rulesAuto = antiSpamFilterProblem.getRules();
-						updateValuesFromFile();
+						updateRulesWithLeisureMailValues();
 						frame.setFieldAutoFP(
 								AntiSpamFilterAutomaticConfiguration.getAntiSpamFilterProblem().getCountFP() + "");
 						frame.setFieldAutoFN(
 								AntiSpamFilterAutomaticConfiguration.getAntiSpamFilterProblem().getCountFN() + "");
-						setRules("Auto",false);
-						//createGraphic();
+						setRules("Auto", false);
+						createGraphic();
 						System.out.println("END");
-						
-						
+
 					} catch (IOException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}
 			};
 			Thread t = new Thread(task);
 			t.start();
-
 		}
-		//TODO Script é em exe
-				private void createGraphic() {
-					
-					String[] params = new String [2];
 
-					params[0] = "C:\\Program Files\\R\\R-3.4.1\\bin\\x64\\Rscript.exe";
+		
+		/**
+		 * This method is used to create Graphic to generate a image.
+		 * 
+		 */
+		private void createGraphic() {
 
-					params[1] = "C:\\Users\\vbasto\\git\\ES1\\experimentBaseDirectory\\AntiSpamStudy\\R\\HV.Boxplot.R";
+			String[] params = new String[2];
 
-					String[] envp = new String [1];
+			params[0] = "C:\\Program Files\\R\\R-3.4.3\\bin\\x64\\Rscript.exe";
 
-					envp[0] = "Path=C:\\Program Files\\R\\R-3.4.1\\bin\\x64";
+			params[1] = "C:\\Users\\Admin\\Documents\\GitHub\\ES1-2017-LEI-PL-101\\experimentBaseDirectory\\AntiSpamStudy\\R\\HV.Boxplot.R";
 
-					try {
-						Process p = Runtime.getRuntime().exec(params, envp, new File("C:\\Users\\vbasto\\git\\ES1\\experimentBaseDirectory\\AntiSpamStudy\\R"));
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					
-				}
+			String[] envp = new String[1];
+
+			envp[0] = "Path=C:\\Program Files\\R\\R-3.4.3\\bin\\x64";
+
+			try {
+				Process p = Runtime.getRuntime().exec(params, envp, new File("C:\\Users\\Admin\\Documents\\GitHub\\ES1-2017-LEI-PL-101\\experimentBaseDirectory\\AntiSpamStudy\\R"));
+			} catch (IOException e) {
+				
+			}
+		}
 	};
 
 	public ActionListener actionListenerSave = new ActionListener() {
@@ -178,7 +157,8 @@ public class AntiSpamGUI {
 				FileLoader.writeFile(frame.getChosenPathRules().getText(), rulesManual);
 				String message = "Rules Manual have been saved!";
 				frame.Popup(message);
-			} else if (e.getActionCommand().equals("Save Auto")){
+
+			} else if (e.getActionCommand().equals("Save Auto")) {
 				FileLoader.writeFile(frame.getChosenPathRules().getText(), rulesAuto);
 				String message = "Rules Automatic have been saved!";
 				frame.Popup(message);
@@ -187,23 +167,23 @@ public class AntiSpamGUI {
 	};
 
 	/**
-	 * This method is used to differentiate between Manual weight and Automatic
-	 * weight and set the rules in Manual or Auto table.
+	 * This method is used to differentiate between manual weight and automatic
+	 * weight and set the rules in manual or auto table.
 	 * 
 	 * @param option
 	 */
 	public void setRules(String option, boolean firstLoad) {
 
-		LinkedHashMap<String, Double> newRules = antiSpamFilterProblem.getRules();
-		DefaultTableModel model = Extensions.toTableModel(newRules,firstLoad);
-		
-		if (option.equals("Manual")) {
 
+		if (option.equals("Manual")) {
+			LinkedHashMap<String, Double> newRules = this.rulesManual;
+			DefaultTableModel model = Extensions.toTableModel(newRules, firstLoad);
 			this.frame.getTableManual().setModel(model);
 		}
 		if (option.equals("Auto")) {
 			LinkedHashMap<String, Double> newRules = this.rulesAuto;
-			DefaultTableModel model = Extensions.toTableModel(newRules,firstLoad);
+
+			DefaultTableModel model = Extensions.toTableModel(newRules, firstLoad);
 			this.frame.getTableAuto().setModel(model);
 		}
 	}
@@ -231,18 +211,36 @@ public class AntiSpamGUI {
 
 		}
 	}
-	
-	public void updateValuesFromFile(){
-		//set file values
-		int nIndexOfLowerValue = FileLoader.readNSGAII_LowerIndex(AntiSpamFilterAutomaticConfiguration.getExperimentBaseDirectory()+"/referenceFronts/AntiSpamFilterProblem.NSGAII.rf",1);
-		Double[] Values = FileLoader.readNSGAII_Values(AntiSpamFilterAutomaticConfiguration.getExperimentBaseDirectory()+"/referenceFronts/"+AntiSpamFilterAutomaticConfiguration.getsClassName()+".NSGAII.rs", nIndexOfLowerValue);
-		
-		// tratamento de dados
+
+	/**
+	 * This method is used to put in rules list the Leisure Mail values.
+	 * 
+	 */
+	public void updateRulesWithLeisureMailValues() {
+		int nIndexOfLowerValue = FileLoader
+				.readNSGAII_LowerIndex(AntiSpamFilterAutomaticConfiguration.getExperimentBaseDirectory()
+						+ "/referenceFronts/AntiSpamFilterProblem.NSGAII.rf", 1);
+
+		Double[] values = FileLoader
+				.readNSGAII_Values(
+						AntiSpamFilterAutomaticConfiguration.getExperimentBaseDirectory() + "/referenceFronts/"
+								+ AntiSpamFilterAutomaticConfiguration.getsClassName() + ".NSGAII.rs",
+						nIndexOfLowerValue);
+
 		int iterator = 0;
 		for (Entry<String, Double> rule : rulesManual.entrySet()) {
-			rule.setValue(Values[iterator]);
+			rule.setValue(values[iterator]);
 			iterator++;
 		}
+	}
+
+	/**
+	 * This method is used to return the JFrame.
+	 * 
+	 * @return Frame
+	 */
+	public Frame getFrame() {
+		return frame;
 	}
 
 }

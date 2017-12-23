@@ -1,53 +1,23 @@
-/**
- * 
- */
 package antiSpamUI;
 
-import java.awt.Adjustable;
 import java.awt.BorderLayout;
-import java.awt.Button;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Graphics;
 import java.awt.GridLayout;
-import java.awt.Insets;
 import java.awt.Label;
-import java.awt.List;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Map.Entry;
 
 import javax.swing.BorderFactory;
-import javax.swing.DefaultListModel;
 import javax.swing.JButton;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
-import javax.swing.JSpinner;
 import javax.swing.JTable;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.ScrollPaneConstants;
 import javax.swing.border.Border;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
-
-import org.apache.commons.math3.optim.nonlinear.scalar.noderiv.BOBYQAOptimizer;
-
-import antiSpamFilter.AntiSpamFilterProblem;
-import fileReader.FileLoader;
 
 public class Frame {
 
@@ -60,6 +30,7 @@ public class Frame {
 	public JTextField spinnerFP;
 	public JTextField fieldAutoFP;
 	public JTextField fieldAutoFN;
+
 
 	private JTable tableManual = new JTable();
 	private JTable tableAuto = new JTable();
@@ -95,17 +66,17 @@ public class Frame {
 
 				JPanel mainPanel = new JPanel(new BorderLayout());
 				mainPanel.add(createSpinnersPanel(), BorderLayout.PAGE_START);
+
 				JPanel centerPanel = new JPanel(new GridLayout(0, 1));
 				centerPanel.add(createTables());
 				centerPanel.add(createPathsPanel());
+
 				mainPanel.add(createButtons(), BorderLayout.SOUTH);
 				mainPanel.add(centerPanel, BorderLayout.CENTER);
 				frame.add(mainPanel);
-
 				frame.setVisible(true);
 			}
 		});
-
 	}
 
 	/**
@@ -118,13 +89,14 @@ public class Frame {
 	}
 
 	/**
-	 * 
+	 * This method is used to create the panel of FP - Manual, FN - Manual, FP -
+	 * Auto and FN - Auto.
 	 * 
 	 * @return JPanel This method returns the panel.
 	 */
 	private JPanel createSpinnersPanel() {
-		JPanel topLayout = new JPanel(new GridLayout(0, 2));
 
+		JPanel topLayout = new JPanel(new GridLayout(0, 2));
 		JPanel spinnerManualLayout = new JPanel(new GridLayout(0, 4));
 		JPanel textAutoLayout = new JPanel(new GridLayout(0, 4));
 		spinnerFP = new JTextField("-");
@@ -134,15 +106,13 @@ public class Frame {
 		spinnerFN.setName("spinnerFN");
 		spinnerFN.setEditable(false);
 
-		// l� dos files AntiSpamFilterProblem.NSGAII -> Pesos e FN/FP
-		// AntiSpamConfigurationForLeisureMailbox -> escolher menor FN
-
 		this.fieldAutoFP = new JTextField("-");
 		this.fieldAutoFP.setName("autoFP");
 		this.fieldAutoFP.setEditable(false);
 		this.fieldAutoFN = new JTextField("-");
 		this.fieldAutoFN.setName("autoFN");
 		this.fieldAutoFN.setEditable(false);
+
 
 		spinnerManualLayout.add(new JLabel("FP - Manual"));
 		spinnerManualLayout.add(spinnerFP);
@@ -158,17 +128,16 @@ public class Frame {
 		topLayout.add(textAutoLayout);
 
 		return topLayout;
-
 	}
 
 	/**
-	 * This method is used to create the Manual and Automatic tables with their weights.
+	 * This method is used to create the rules and weights tables.
 	 * 
 	 * @return JPanel This method returns the tables panel.
 	 */
 	private JPanel createTables() {
 
-		Border blackline = BorderFactory.createLineBorder(Color.black);
+		Border blackLine = BorderFactory.createLineBorder(Color.black);
 		JPanel listPanel = new JPanel(new GridLayout(0, 1));
 		DefaultTableModel model = new DefaultTableModel(new Object[] { "Rules", "Weight" }, 0);
 
@@ -185,13 +154,14 @@ public class Frame {
 			}
 		};
 
-		tableAuto.setBorder(blackline);
-		tableManual.setBorder(blackline);
+		tableAuto.setBorder(blackLine);
+		tableManual.setBorder(blackLine);
 		tableAuto.setBackground(Color.LIGHT_GRAY);
 		tableAuto.setEnabled(false);
 
 		JScrollPane scrollPane = new JScrollPane(tableManual);
 		JScrollPane scrollPane2 = new JScrollPane(tableAuto);
+
 		tableManual.setFillsViewportHeight(true);
 		tableAuto.setFillsViewportHeight(true);
 
@@ -199,22 +169,24 @@ public class Frame {
 		listPanel.add(scrollPane2);
 
 		return listPanel;
-
 	}
 
 	/**
-	 * This method is used to create the browsers buttons and path panel.
+	 * This method is used to create the browsers buttons and rules, ham and spam
+	 * path panel .
 	 * 
-	 * @return JPanel This method returns the path panel and browsers buttons layout.
+	 * @return JPanel This method returns the path panel and browsers buttons
+	 *         layout.
 	 */
 	private JPanel createPathsPanel() {
-		JPanel gridLayout = new JPanel(new GridLayout(0, 3));
 
+		JPanel gridLayout = new JPanel(new GridLayout(0, 3));
 		gridLayout = insertEmptyRow(gridLayout, 3);
 
 		JTextField pathRules = new JTextField("Rules.cf");
 		chosenPathRules = new JTextField();
 		chosenPathRules.setEnabled(false);
+
 		JButton buttonChangeRulesPath = new JButton("Browse Rules");
 		buttonChangeRulesPath.addActionListener(gui.actionListenerBrowser);
 
@@ -224,8 +196,8 @@ public class Frame {
 		JTextField pathHam = new JTextField("Ham.log");
 		chosenPathHam = new JTextField();
 		chosenPathHam.setEnabled(false);
-		JButton buttonChangeHamPath = new JButton("Browse Ham");
 
+		JButton buttonChangeHamPath = new JButton("Browse Ham");
 		buttonChangeHamPath.addActionListener(gui.actionListenerBrowser);
 
 		JScrollPane scrollH = new JScrollPane(chosenPathHam);
@@ -234,6 +206,7 @@ public class Frame {
 		JTextField pathSpam = new JTextField("Spam.log");
 		chosenPathSpam = new JTextField();
 		chosenPathSpam.setEnabled(false);
+
 		JButton buttonChangeSpamPath = new JButton("Browse Spam");
 		buttonChangeRulesPath.setName("buttonSpam");
 
@@ -258,37 +231,28 @@ public class Frame {
 	}
 
 	/**
-	 * This method is used to create a buttons panel and what they do.
+	 * This method is used to create a buttons panel and what they do. Run test,
+	 * save manual, generate and save auto buttons.
 	 * 
 	 * @return JPanel This method returns the panel of buttons layout.
 	 */
 	private JPanel createButtons() {
+
 		JPanel buttonsLayout = new JPanel(new GridLayout(0, 4));
 
 		testButton = new JButton("Run Test");
-
 		testButton.addActionListener(gui.actionListenerTest);
 
-			
 		saveButtonTest = new JButton("Save Manual");
-
-		// TODO
 
 		saveButtonTest.addActionListener(gui.actionListenerSave);
 
-		// instanciar AntiSpamConfiguration e correr o Main
-		// lan�ar os fixeiros R e tex quando gerar
 		generateButton = new JButton("Generate");
-
-		// TODO
 		generateButton.addActionListener(gui.actionListenerGenerate);
 
-
 		saveButtonAuto = new JButton("Save Auto");
-
-		// TODO
 		saveButtonAuto.addActionListener(gui.actionListenerSave);
-		
+
 		if (!isPathValid()) {
 			testButton.setEnabled(false);
 			saveButtonTest.setEnabled(false);
@@ -306,7 +270,6 @@ public class Frame {
 		buttonsLayout.add(saveButtonAuto);
 
 		return buttonsLayout;
-
 	}
 
 	/**
@@ -339,18 +302,7 @@ public class Frame {
 	 */
 	public JTextField getChosenPathHam() {
 		return chosenPathHam;
-	}
 
-	public void setChosenPathRules(JTextField chosenPathRules) {
-		this.chosenPathRules = chosenPathRules;
-	}
-
-	public void setChosenPathHam(JTextField chosenPathHam) {
-		this.chosenPathHam = chosenPathHam;
-	}
-
-	public void setChosenPathSpam(JTextField chosenPathSpam) {
-		this.chosenPathSpam = chosenPathSpam;
 	}
 
 	/**
@@ -383,77 +335,126 @@ public class Frame {
 	/**
 	 * This method is used to get the AntiSpam gui.
 	 * 
-	 * @return JTable This method returns the AntiSpam gui.
+	 * @return AntiSpamGUI This method returns the AntiSpam gui.
 	 */
 	public AntiSpamGUI getGui() {
 		return gui;
 	}
 
-	public void setSpinnerFN(String sFN) {
-		this.spinnerFN.setText(sFN);
+
+	/**
+	 * This method is used to set the false negative spinner in spinnerFN field.
+	 * 
+	 * @param spinnerFN
+	 */
+	public void setSpinnerFN(String spinnerFN) {
+		this.spinnerFN.setText(spinnerFN);
 	}
 
-	public void setSpinnerFP(String sFP) {
-		spinnerFP.setText(sFP);
+	/**
+	 * This method is used to set the false positive spinner in spinnerFP field.
+	 * 
+	 * @param spinnerFP
+	 */
+	public void setSpinnerFP(String spinnerFP) {
+		this.spinnerFP.setText(spinnerFP);
 	}
 
-	public void setFieldAutoFP(String fFP) {
-		fieldAutoFP.setText(fFP);
+	/**
+	 * This method is used to set the false positive in AutoFP field.
+	 * 
+	 * @param fieldAutoFP
+	 */
+	public void setFieldAutoFP(String fieldAutoFP) {
+		this.fieldAutoFP.setText(fieldAutoFP);
 	}
 
-	public void setFieldAutoFN(String fFN) {
-		fieldAutoFN.setText(fFN);
+	/**
+	 * This method is used to set the false negative spinner in spinnerFN field.
+	 * 
+	 * @param fieldAutoFN
+	 */
+	public void setFieldAutoFN(String fieldAutoFN) {
+		this.fieldAutoFN.setText(fieldAutoFN);
 	}
 
-	public JButton getTestButton() {
-		return testButton;
-	}
-	
-	public JButton getSaveButtonTest() {
-		return saveButtonTest;
-	}
-	public JButton getGenerateButton() {
-		return testButton;
-	}
-	public JButton getSaveButtonAuto() {
-		return testButton;
-	}	
-	
-	public boolean isPathValid() {
-		return !(gui.getAntiSpamFilterProblem().getSpam().isEmpty() || gui.getAntiSpamFilterProblem().getHam().isEmpty()
-		|| gui.getAntiSpamFilterProblem().getRules().isEmpty());
-	}
-	
-	public void changeButtons() {
-		if (isPathValid()) {
-			testButton.setEnabled(true);
-			saveButtonTest.setEnabled(true);
-			generateButton.setEnabled(true);
-			saveButtonAuto.setEnabled(true);
-		}
-	}
-
+	/**
+	 * This method is used to get the false negative.
+	 * 
+	 * @return JTextField This method returns the sipnnerFN.
+	 */
 	public JTextField getSpinnerFN() {
 		return spinnerFN;
 	}
 
+	/**
+	 * This method is used to get the false positive.
+	 * 
+	 * @return JTextField This method returns the sipnnerFP.
+	 */
 	public JTextField getSpinnerFP() {
 		return spinnerFP;
 	}
 
+	/**
+	 * This method is used to get the auto false positive.
+	 * 
+	 * @return JTextField This method returns the fieldAutoFP.
+	 */
 	public JTextField getFieldAutoFP() {
 		return fieldAutoFP;
 	}
 
+	/**
+	 * This method is used to get the auto false negative.
+	 * 
+	 * @return JTextField This method returns the fieldAutoFN.
+	 */
 	public JTextField getFieldAutoFN() {
 		return fieldAutoFN;
 	}
 
-	public void Popup(String message) {
-		JOptionPane.showMessageDialog(frame, message);
+	/**
+	 * This method is used to set rules path in chosenPathRules.
+	 * 
+	 * @param chosenPathRules
+	 */
+	public void setChosenPathRules(JTextField chosenPathRules) {
+		this.chosenPathRules = chosenPathRules;
 	}
 
-	
+	/**
+	 * This method is used to set ham path in chosenPathHam.
+	 * 
+	 * @param chosenPathHam
+	 */
+	public void setChosenPathHam(JTextField chosenPathHam) {
+		this.chosenPathHam = chosenPathHam;
+	}
+
+	/**
+	 * This method is used to set spam path in chosenPathSpam.
+	 * 
+	 * @param chosenPathSpam
+	 */
+	public void setChosenPathSpam(JTextField chosenPathSpam) {
+		this.chosenPathSpam = chosenPathSpam;
+	}
+
+	/**
+	 * This method is used to verified if a path is valid.
+	 * 
+	 * @return boolean This method returns true if the path is valid, false otherwise.
+	 */
+	public boolean isPathValid() {
+		return !(gui.getAntiSpamFilterProblem().getSpam().isEmpty() || gui.getAntiSpamFilterProblem().getHam().isEmpty()
+				|| gui.getAntiSpamFilterProblem().getRules().isEmpty());
+	}
+
+	/**
+	 * This method is used to put available buttons.
+	 * 
+	 */
 	public void changeButtons() {
 		if (isPathValid()) {
 			testButton.setEnabled(true);
@@ -463,7 +464,24 @@ public class Frame {
 		}
 	}
 
+
+	/**
+	 * This method is used to show a Popup.
+	 * 
+	 * @param message
+	 */
 	public void Popup(String message) {
 		JOptionPane.showMessageDialog(frame, message);
 	}
+
+	public Component getTestButton() {
+		return testButton;
+	}
+
+	public Component getSaveButtonAuto() {
+		return saveButtonAuto;
+	}
+	
+
+
 }

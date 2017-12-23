@@ -34,12 +34,8 @@ public class AntiSpamFilterAutomaticConfiguration {
 		
     problemList.add(new ExperimentProblem<>(antiSpamFilterProblem, sClassName));
 
-		// Debug.getInstance().msg("ProblemList"+problemList.toString());
-
 		List<ExperimentAlgorithm<DoubleSolution, List<DoubleSolution>>> algorithmList = configureAlgorithmList(
 				problemList);
-
-		// Debug.getInstance().msg("algorithmList"+algorithmList.toString());
 
 		Experiment<DoubleSolution, List<DoubleSolution>> experiment = new ExperimentBuilder<DoubleSolution, List<DoubleSolution>>(
 				"AntiSpamStudy").setAlgorithmList(algorithmList).setProblemList(problemList)
@@ -49,16 +45,11 @@ public class AntiSpamFilterAutomaticConfiguration {
 						.setIndicatorList(Arrays.asList(new PISAHypervolume<DoubleSolution>()))
 						.setIndependentRuns(INDEPENDENT_RUNS).setNumberOfCores(8).build();
  
-    
-		// Debug.getInstance().msg("experiment"+experiment.toString());
-
 		new ExecuteAlgorithms<>(experiment).run();
 		new GenerateReferenceParetoSetAndFrontFromDoubleSolutions(experiment).run();
 		new ComputeQualityIndicators<>(experiment).run();
 		new GenerateLatexTablesWithStatistics(experiment).run();
-		new GenerateBoxplotsWithR<>(experiment).setRows(1).setColumns(1).run();
-
-    
+		new GenerateBoxplotsWithR<>(experiment).setRows(1).setColumns(1).run();   
 	}
 
 	static List<ExperimentAlgorithm<DoubleSolution, List<DoubleSolution>>> configureAlgorithmList(
@@ -66,14 +57,12 @@ public class AntiSpamFilterAutomaticConfiguration {
 
 		List<ExperimentAlgorithm<DoubleSolution, List<DoubleSolution>>> algorithms = new ArrayList<>();
 
-		// Debug.getInstance().msg("algorithms "+algorithms.toString());
 		for (int i = 0; i < problemList.size(); i++) {
 			Algorithm<List<DoubleSolution>> algorithm = new NSGAIIBuilder<>(problemList.get(i).getProblem(),
 					new SBXCrossover(1.0, 5),
 					new PolynomialMutation(1.0 / problemList.get(i).getProblem().getNumberOfVariables(), 10.0))
-					.setMaxEvaluations(3000).setPopulationSize(100).build();
+					.setMaxEvaluations(1000).setPopulationSize(100).build();
 			algorithms.add(new ExperimentAlgorithm<>(algorithm, "NSGAII", problemList.get(i).getTag()));
-			// Debug.getInstance().msg("algorithms "+algorithms.toString());
 		}
 		return algorithms;
 	}
@@ -85,7 +74,7 @@ public class AntiSpamFilterAutomaticConfiguration {
 	public static void setAntiSpamFilterProblem(AntiSpamFilterProblem antiSpamFilterProblem) {
 		AntiSpamFilterAutomaticConfiguration.antiSpamFilterProblem = antiSpamFilterProblem;
 	}
-
+	
 	
 	public static String getExperimentBaseDirectory() {
 		return experimentBaseDirectory;
@@ -95,8 +84,6 @@ public class AntiSpamFilterAutomaticConfiguration {
 	public static String getsClassName() {
 		return sClassName;
 	}
-	
-	
 	
 	
 }

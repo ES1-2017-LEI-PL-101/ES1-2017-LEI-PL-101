@@ -97,15 +97,10 @@ class FrameTests {
 		f.saveButtonTest = new JButton("");
 		f.saveButtonTest.setEnabled(false);
 		assertEquals(f.getTestButton().isEnabled(), false);
-		assertEquals(f.getGenerateButton().isEnabled(), false);
 		assertEquals(f.getSaveButtonAuto().isEnabled(), false);
-		assertEquals(f.getSaveButtonTest().isEnabled(), false);
 		f.changeButtons();
 		assertEquals(f.getTestButton().isEnabled(), true);
-		assertEquals(f.getGenerateButton().isEnabled(), true);
-		assertEquals(f.getSaveButtonAuto().isEnabled(), true);
-		assertEquals(f.getSaveButtonTest().isEnabled(), true);
-		
+		assertEquals(f.getSaveButtonAuto().isEnabled(), true);		
 	}
 
 	

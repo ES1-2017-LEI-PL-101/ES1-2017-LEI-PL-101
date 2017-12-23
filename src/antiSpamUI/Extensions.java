@@ -2,13 +2,7 @@ package antiSpamUI;
 
 import java.util.Map;
 
-import javax.swing.DefaultListModel;
-import javax.swing.JFrame;
-import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
-
-import antiSpamFilter.AntiSpamFilterProblem;
 
 public class Extensions {
 
@@ -22,10 +16,12 @@ public class Extensions {
 
 		DefaultTableModel model = new DefaultTableModel(new Object[] { "Rules", "Weight" }, 0);
 		for (Map.Entry<?, ?> entry : map.entrySet()) {
-			if(firstLoad)
+			if(firstLoad) {
 			model.addRow(new Object[] { entry.getKey(), 0.0 });
-			else
+			
+			}else {
 			model.addRow(new Object[] { entry.getKey(), entry.getValue() });
+			}
 		}
 		return model;
 	}

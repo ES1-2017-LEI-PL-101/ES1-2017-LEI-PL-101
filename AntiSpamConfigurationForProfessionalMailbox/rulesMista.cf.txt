@@ -1,1 +1,0 @@
-ficheiro gerado pelo software desenvolvido pelos grupos que implementam a variante do projeto para filtragem antispam de caixas de email de utilização mista (profissional/lazer);
